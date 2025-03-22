@@ -16,7 +16,7 @@ export const AppShell = () => {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <MantineProvider theme={theme}>
+    <MantineProvider theme={theme} defaultColorScheme="auto">
       <MantineAppShell
         header={{ height: headerHeight }}
         navbar={{

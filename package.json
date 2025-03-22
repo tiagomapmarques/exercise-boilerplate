@@ -15,12 +15,14 @@
     "test:ci": "vitest --run",
     "format": "prettier . --write",
     "lint": "oxlint . --deny-warnings --fix",
-    "check": "pnpm format && pnpm lint && pnpm build && pnpm test:ci"
+    "check": "pnpm dedupe && pnpm format && pnpm lint && pnpm build && pnpm test:ci"
   },
   "dependencies": {
     "@mantine/core": "^7.17.2",
+    "@mantine/hooks": "^7.17.2",
     "@tanstack/react-router": "^1.114.27",
     "@vitejs/plugin-react": "^4.3.4",
+    "lucide-react": "^0.483.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "typescript": "^5.8.2",

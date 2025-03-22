@@ -1,4 +1,7 @@
-import { renderApp, screen, userEvent } from '@/testing';
+import { useMantineColorScheme } from '@mantine/core';
+import { Mock } from 'vitest';
+
+import { act, renderApp, screen, userEvent } from '@/testing';
 
 import { Navigation } from './navigation';
 
@@ -11,36 +14,118 @@ vi.mock('@mantine/core', async (importOriginal) => {
 });
 
 describe(Navigation, () => {
-  test('displays links', () => {
-    renderApp(<Navigation />, {
-      providers: { router: true },
+  describe('navigation links', () => {
+    test('displays links', () => {
+      renderApp(<Navigation />, {
+        providers: { router: true },
+      });
+
+      expect(screen.getByRole('link', { name: 'Home' })).toBeVisible();
+      expect(screen.getByRole('link', { name: 'About' })).toBeVisible();
     });
 
-    expect(screen.getByRole('link', { name: 'Home' })).toBeVisible();
-    expect(screen.getByRole('link', { name: 'About' })).toBeVisible();
+    test('navigates to home page', async () => {
+      renderApp(<Navigation />, {
+        providers: { router: true },
+      });
+
+      expect(location.pathname).not.toBe('/');
+
+      await act(async () => {
+        await userEvent.click(screen.getByRole('link', { name: 'Home' }));
+      });
+
+      expect(location.pathname).toBe('/');
+    });
+
+    test('navigates to about page', async () => {
+      renderApp(<Navigation />, {
+        providers: { router: true },
+      });
+
+      expect(location.pathname).not.toBe('/about');
+
+      await act(async () => {
+        await userEvent.click(screen.getByRole('link', { name: 'About' }));
+      });
+
+      expect(location.pathname).toBe('/about');
+    });
   });
 
-  test('navigates to home page', async () => {
-    renderApp(<Navigation />, {
-      providers: { router: true },
+  describe('color scheme toggle', () => {
+    const setColorScheme = vi.fn();
+
+    beforeEach(() => {
+      (useMantineColorScheme as Mock).mockImplementation(() => ({
+        setColorScheme,
+      }));
     });
 
-    expect(location.pathname).not.toBe('/');
+    test('displays light scheme', () => {
+      renderApp(<Navigation />, {
+        providers: {
+          router: true,
+          mantine: { forceColorScheme: 'light' },
+        },
+      });
 
-    await userEvent.click(screen.getByRole('link', { name: 'Home' }));
+      expect(screen.getByRole('switch')).toBeInTheDocument();
+      expect(screen.getByRole('switch')).toBeChecked();
 
-    expect(location.pathname).toBe('/');
-  });
-
-  test('navigates to about page', async () => {
-    renderApp(<Navigation />, {
-      providers: { router: true },
+      expect(screen.getByTestId('Navigation-Switch-Sun')).toBeVisible();
+      expect(
+        screen.queryByTestId('Navigation-Switch-Moon'),
+      ).not.toBeInTheDocument();
     });
 
-    expect(location.pathname).not.toBe('/about');
+    test('displays dark scheme', () => {
+      renderApp(<Navigation />, {
+        providers: {
+          router: true,
+          mantine: { forceColorScheme: 'dark' },
+        },
+      });
 
-    await userEvent.click(screen.getByRole('link', { name: 'About' }));
+      expect(screen.getByRole('switch')).toBeInTheDocument();
+      expect(screen.getByRole('switch')).not.toBeChecked();
 
-    expect(location.pathname).toBe('/about');
+      expect(screen.getByTestId('Navigation-Switch-Moon')).toBeVisible();
+      expect(
+        screen.queryByTestId('Navigation-Switch-Sun'),
+      ).not.toBeInTheDocument();
+    });
+
+    test('toggles to light scheme', async () => {
+      renderApp(<Navigation />, {
+        providers: {
+          router: true,
+          mantine: { forceColorScheme: 'dark' },
+        },
+      });
+
+      expect(setColorScheme).not.toBeCalled();
+
+      await userEvent.click(screen.getByTestId('Navigation-Switch-Moon'));
+
+      expect(setColorScheme).toBeCalledTimes(1);
+      expect(setColorScheme).toBeCalledWith('light');
+    });
+
+    test('toggles to dark scheme', async () => {
+      renderApp(<Navigation />, {
+        providers: {
+          router: true,
+          mantine: { forceColorScheme: 'light' },
+        },
+      });
+
+      expect(setColorScheme).not.toBeCalled();
+
+      await userEvent.click(screen.getByTestId('Navigation-Switch-Sun'));
+
+      expect(setColorScheme).toBeCalledTimes(1);
+      expect(setColorScheme).toBeCalledWith('dark');
+    });
   });
 });
