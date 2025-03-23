@@ -1,6 +1,3 @@
-import { useMantineColorScheme } from '@mantine/core';
-import { Mock } from 'vitest';
-
 import { act, renderApp, screen, userEvent } from '@/testing';
 
 import { Navigation } from './navigation';
@@ -53,79 +50,22 @@ describe(Navigation, () => {
     });
   });
 
-  describe('color scheme toggle', () => {
-    const setColorScheme = vi.fn();
-
-    beforeEach(() => {
-      (useMantineColorScheme as Mock).mockImplementation(() => ({
-        setColorScheme,
-      }));
+  test('displays locale picker', () => {
+    renderApp(<Navigation />, {
+      providers: { router: true },
     });
 
-    test('displays light scheme', () => {
-      renderApp(<Navigation />, {
-        providers: {
-          router: true,
-          mantine: { forceColorScheme: 'light' },
-        },
-      });
+    expect(screen.getByTestId('LocalePicker')).toBeVisible();
+  });
 
-      expect(screen.getByRole('switch')).toBeInTheDocument();
-      expect(screen.getByRole('switch')).toBeChecked();
-
-      expect(screen.getByTestId('Navigation-Switch-Sun')).toBeVisible();
-      expect(
-        screen.queryByTestId('Navigation-Switch-Moon'),
-      ).not.toBeInTheDocument();
+  test('displays color scheme picker', () => {
+    renderApp(<Navigation />, {
+      providers: {
+        router: true,
+        mantine: { forceColorScheme: 'light' },
+      },
     });
 
-    test('displays dark scheme', () => {
-      renderApp(<Navigation />, {
-        providers: {
-          router: true,
-          mantine: { forceColorScheme: 'dark' },
-        },
-      });
-
-      expect(screen.getByRole('switch')).toBeInTheDocument();
-      expect(screen.getByRole('switch')).not.toBeChecked();
-
-      expect(screen.getByTestId('Navigation-Switch-Moon')).toBeVisible();
-      expect(
-        screen.queryByTestId('Navigation-Switch-Sun'),
-      ).not.toBeInTheDocument();
-    });
-
-    test('toggles to light scheme', async () => {
-      renderApp(<Navigation />, {
-        providers: {
-          router: true,
-          mantine: { forceColorScheme: 'dark' },
-        },
-      });
-
-      expect(setColorScheme).not.toBeCalled();
-
-      await userEvent.click(screen.getByTestId('Navigation-Switch-Moon'));
-
-      expect(setColorScheme).toBeCalledTimes(1);
-      expect(setColorScheme).toBeCalledWith('light');
-    });
-
-    test('toggles to dark scheme', async () => {
-      renderApp(<Navigation />, {
-        providers: {
-          router: true,
-          mantine: { forceColorScheme: 'light' },
-        },
-      });
-
-      expect(setColorScheme).not.toBeCalled();
-
-      await userEvent.click(screen.getByTestId('Navigation-Switch-Sun'));
-
-      expect(setColorScheme).toBeCalledTimes(1);
-      expect(setColorScheme).toBeCalledWith('dark');
-    });
+    expect(screen.getByTestId('ColorSchemePicker-Sun')).toBeVisible();
   });
 });

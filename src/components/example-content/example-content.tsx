@@ -1,9 +1,12 @@
+import { Trans } from '@lingui/react';
 import { Box, Text } from '@mantine/core';
 
 export const ExampleContent = () => {
   return (
     <Box>
-      <Text>Place your UI here</Text>
+      <Text>
+        <Trans id="boilerplate.home.instructions" />
+      </Text>
     </Box>
   );
 };

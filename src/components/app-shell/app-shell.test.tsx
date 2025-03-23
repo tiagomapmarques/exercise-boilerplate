@@ -22,11 +22,24 @@ describe(AppShell, () => {
     ));
   });
 
+  test('adds i18n provider', () => {
+    expect(() =>
+      renderApp(<AppShell />, {
+        providers: {
+          router: true,
+          i18n: false,
+          mantine: false,
+        },
+      }),
+    ).not.throw();
+  });
+
   test('adds Mantine provider', () => {
     expect(() =>
       renderApp(<AppShell />, {
         providers: {
           router: true,
+          i18n: false,
           mantine: false,
         },
       }),
@@ -37,6 +50,7 @@ describe(AppShell, () => {
     renderApp(<AppShell />, {
       providers: {
         router: true,
+        i18n: false,
         mantine: false,
       },
     });
@@ -50,6 +64,7 @@ describe(AppShell, () => {
     renderApp(<AppShell />, {
       providers: {
         router: true,
+        i18n: false,
         mantine: false,
       },
     });
@@ -62,6 +77,7 @@ describe(AppShell, () => {
       renderApp(<AppShell />, {
         providers: {
           router: true,
+          i18n: false,
           mantine: false,
         },
       });
@@ -73,13 +89,14 @@ describe(AppShell, () => {
       renderApp(<AppShell />, {
         providers: {
           router: true,
+          i18n: false,
           mantine: false,
         },
       });
 
-      await userEvent.click(screen.getByRole('button'));
+      await userEvent.click(screen.getByRole('button', { name: '' }));
 
-      expect(screen.getByRole('button')).toBeVisible();
+      expect(screen.getByRole('button', { name: '' })).toBeVisible();
     });
   });
 });

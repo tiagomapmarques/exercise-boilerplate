@@ -3,6 +3,7 @@ Thumbs.db
 .DS_Store
 
 # Node + Build
+.swc
 coverage
 dist
 node_modules

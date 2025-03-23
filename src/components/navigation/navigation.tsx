@@ -1,14 +1,11 @@
-import {
-  Flex,
-  Stack,
-  Switch,
-  Text,
-  useComputedColorScheme,
-  useMantineColorScheme,
-} from '@mantine/core';
+import { Divider, Flex, Stack, Text } from '@mantine/core';
 import { Link, LinkProps, useLocation } from '@tanstack/react-router';
-import { Home, Info, Moon, Sun } from 'lucide-react';
+import { Home, Info } from 'lucide-react';
 import { PropsWithChildren, useEffect } from 'react';
+
+import { ColorSchemePicker } from '@/components/color-scheme-picker';
+import { LocalePicker } from '@/components/locale-picker';
+import { useLocale } from '@/utilities/locale';
 
 const NavigationLink = ({
   children,
@@ -35,53 +32,40 @@ const NavigationLink = ({
 };
 
 export type NavigationProps = {
-  onNavigate?: () => void;
+  onInterfaceRerender?: () => void;
 };
 
-export const Navigation = ({ onNavigate }: NavigationProps) => {
+export const Navigation = ({ onInterfaceRerender }: NavigationProps) => {
+  const [locale] = useLocale();
   const location = useLocation();
-  const colorScheme = useComputedColorScheme();
-  const { setColorScheme } = useMantineColorScheme();
 
   useEffect(() => {
-    onNavigate?.();
-  }, [location.pathname]);
+    onInterfaceRerender?.();
+  }, [location.pathname, locale]);
 
   return (
     <Stack style={{ flexGrow: 1 }}>
       <NavigationLink to="/">
         <Home size="20" />
+
         <Text>Home</Text>
       </NavigationLink>
 
       <NavigationLink to="/about">
         <Info size="20" />
+
         <Text>About</Text>
       </NavigationLink>
 
       <Flex align="end" style={{ flexGrow: 1 }}>
-        <Switch
-          checked={colorScheme === 'light'}
-          size="md"
-          thumbIcon={
-            colorScheme === 'light' ? (
-              <Sun
-                data-slot="Navigation-Switch-Sun"
-                size="14"
-                style={{ color: 'var(--mantine-primary-color-filled)' }}
-              />
-            ) : (
-              <Moon
-                data-slot="Navigation-Switch-Moon"
-                size="14"
-                style={{ color: 'var(--mantine-color-body)' }}
-              />
-            )
-          }
-          onChange={({ currentTarget }) =>
-            setColorScheme(currentTarget.checked ? 'light' : 'dark')
-          }
-        />
+        <Stack gap="lg" style={{ width: '100%' }}>
+          <LocalePicker />
+
+          <Stack gap="sm">
+            <Divider />
+            <ColorSchemePicker />
+          </Stack>
+        </Stack>
       </Flex>
     </Stack>
   );

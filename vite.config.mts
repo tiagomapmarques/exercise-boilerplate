@@ -1,18 +1,21 @@
 /// <reference types="vitest/config" />
+import { lingui } from '@lingui/vite-plugin';
 import { TanStackRouterVite } from '@tanstack/router-plugin/vite';
-import react from '@vitejs/plugin-react';
+import react from '@vitejs/plugin-react-swc';
 import { defineConfig } from 'vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
 
 export default defineConfig({
   plugins: [
     TanStackRouterVite({ target: 'react', autoCodeSplitting: true }),
-    react(),
+    react({ plugins: [['@lingui/swc-plugin', {}]] }),
+    lingui(),
     tsconfigPaths(),
   ],
   test: {
     globals: true,
     setupFiles: './src/testing/setup.tsx',
+    mockReset: true,
 
     browser: {
       enabled: true,
@@ -23,11 +26,13 @@ export default defineConfig({
     coverage: {
       enabled: true,
       provider: 'istanbul',
+      reporter: ['text-summary', 'json', 'html'],
       include: ['src/**'],
       exclude: [
+        'src/locales/**',
         'src/routes/**',
         'src/testing/**',
-        'src/**/*.gen.ts',
+        'src/*.gen.ts',
         'src/main.tsx',
       ],
     },

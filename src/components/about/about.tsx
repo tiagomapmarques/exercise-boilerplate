@@ -1,3 +1,4 @@
+import { Trans } from '@lingui/react';
 import { Text } from '@mantine/core';
 
 import { license, name, version } from '../../../package.json';
@@ -7,7 +8,9 @@ export const About = () => {
     <>
       <Text>{name}</Text>
       <Text>v{version}</Text>
-      <Text>License: {license}</Text>
+      <Text>
+        <Trans id="boilerplate.about.license" values={{ license }} />
+      </Text>
     </>
   );
 };

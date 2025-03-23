@@ -1,3 +1,5 @@
+import { Trans } from '@lingui/react';
+import { I18nProvider as LinguiProvider } from '@lingui/react';
 import {
   Burger,
   Flex,
@@ -8,52 +10,57 @@ import {
 import { Outlet } from '@tanstack/react-router';
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
 import { useState } from 'react';
+import { PropsWithChildren } from 'react';
 
 import { Navigation } from '@/components/navigation';
-import { headerHeight, theme } from '@/theme';
+import { i18n } from '@/i18n';
+import { theme } from '@/theme';
+
+const I18nProvider = ({ children }: PropsWithChildren) => {
+  return <LinguiProvider i18n={i18n}>{children}</LinguiProvider>;
+};
 
 export const AppShell = () => {
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [menuOpened, setMenuOpened] = useState(false);
 
   return (
-    <MantineProvider theme={theme} defaultColorScheme="auto">
-      <MantineAppShell
-        header={{ height: headerHeight }}
-        navbar={{
-          width: '16em',
-          breakpoint: 'sm',
-          collapsed: { mobile: !menuOpen },
-        }}
-        padding="md"
-      >
-        <MantineAppShell.Header>
-          <Flex
-            h={headerHeight}
-            gap="sm"
-            align="center"
-            pl={{ base: 'sm', sm: 'md' }}
-          >
-            <Burger
-              opened={menuOpen}
-              onClick={() => setMenuOpen((currentOpen) => !currentOpen)}
-              hiddenFrom="sm"
-              size="sm"
-            />
+    <I18nProvider>
+      <MantineProvider theme={theme} defaultColorScheme="auto">
+        <MantineAppShell
+          header={{ height: '3em' }}
+          navbar={{
+            width: '16em',
+            breakpoint: 'sm',
+            collapsed: { mobile: !menuOpened },
+          }}
+          padding="md"
+        >
+          <MantineAppShell.Header>
+            <Flex h="3em" gap="sm" align="center" pl={{ base: 'sm', sm: 'md' }}>
+              <Burger
+                opened={menuOpened}
+                onClick={() => setMenuOpened((opened) => !opened)}
+                hiddenFrom="sm"
+                size="sm"
+              />
 
-            <Text>Exercise boilerplate</Text>
-          </Flex>
-        </MantineAppShell.Header>
+              <Text>
+                <Trans id="boilerplate.header.logo" />
+              </Text>
+            </Flex>
+          </MantineAppShell.Header>
 
-        <MantineAppShell.Navbar p="md">
-          <Navigation onNavigate={() => setMenuOpen(false)} />
-        </MantineAppShell.Navbar>
+          <MantineAppShell.Navbar p="md">
+            <Navigation onInterfaceRerender={() => setMenuOpened(false)} />
+          </MantineAppShell.Navbar>
 
-        <MantineAppShell.Main>
-          <Outlet />
+          <MantineAppShell.Main>
+            <Outlet />
 
-          <TanStackRouterDevtools position="bottom-right" />
-        </MantineAppShell.Main>
-      </MantineAppShell>
-    </MantineProvider>
+            <TanStackRouterDevtools position="bottom-right" />
+          </MantineAppShell.Main>
+        </MantineAppShell>
+      </MantineProvider>
+    </I18nProvider>
   );
 };
