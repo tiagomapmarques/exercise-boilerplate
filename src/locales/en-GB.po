@@ -13,17 +13,17 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
-#. js-lingui-explicit-id
-#: src/components/example-content/example-content.tsx:8
-msgid "boilerplate.home.instructions"
-msgstr "Place your UI here"
+msgid "boilerplate.about.license"
+msgstr "License: {license}"
 
-#. js-lingui-explicit-id
-#: src/components/app-shell/app-shell.tsx:48
+msgid "boilerplate.about.title"
+msgstr "About"
+
 msgid "boilerplate.header.logo"
 msgstr "Exercise boilerplate"
 
-#. js-lingui-explicit-id
-#: src/components/about/about.tsx:12
-msgid "boilerplate.about.license"
-msgstr "License: {license}"
+msgid "boilerplate.home.instructions"
+msgstr "Place your UI here"
+
+msgid "boilerplate.home.title"
+msgstr "Home"

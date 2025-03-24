@@ -1,9 +1,26 @@
 import { setupI18n } from '@lingui/core';
+import { fromNavigator } from '@lingui/detect-locale';
+import { Mock } from 'vitest';
 
 import { messages } from '@/locales/de-DE.po';
 import { act, disableConsoleError, renderAppHook } from '@/testing';
 
-import { LanguageMap, Locale, localeLabels, useLocale } from './locale';
+import {
+  LanguageMap,
+  Locale,
+  getInitialLocale,
+  localeLabels,
+  useLocale,
+} from './locale';
+
+vi.mock('@lingui/detect-locale', async (importOriginal) => {
+  const original =
+    await importOriginal<typeof import('@lingui/detect-locale')>();
+  return {
+    ...original,
+    fromNavigator: vi.fn(original.fromNavigator),
+  };
+});
 
 describe('Locale and language maps', () => {
   test('defines labels for all locales', () => {
@@ -21,6 +38,27 @@ describe('Locale and language maps', () => {
       de: expect.stringMatching(anyLocale),
     });
   });
+});
+
+describe(getInitialLocale, () => {
+  test.each`
+    browser      | result
+    ${undefined} | ${'en-GB'}
+    ${null}      | ${'en-GB'}
+    ${'en-GB'}   | ${'en-GB'}
+    ${'en-US'}   | ${'en-GB'}
+    ${'en'}      | ${'en-GB'}
+    ${'de-AT'}   | ${'de-DE'}
+    ${'uk-UA'}   | ${'en-GB'}
+    ${'uk'}      | ${'en-GB'}
+  `(
+    'browser with $browser locale, initial locale becomes $result',
+    ({ browser, result }) => {
+      (fromNavigator as Mock).mockReturnValue(browser);
+
+      expect(getInitialLocale()).toBe(result);
+    },
+  );
 });
 
 describe(useLocale, () => {

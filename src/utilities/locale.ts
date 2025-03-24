@@ -1,6 +1,9 @@
 import { I18n } from '@lingui/core';
+import { detect, fromNavigator } from '@lingui/detect-locale';
 import { useLingui } from '@lingui/react';
 import { useCallback } from 'react';
+
+import { defaultLocale } from '@/i18n';
 
 /** Maps Languages to their default Locales */
 export const LanguageMap = {
@@ -44,4 +47,25 @@ export const useLocale = () => {
   );
 
   return [localI18n.locale as Locale, setLocale] as const;
+};
+
+const isLocale = (locale = ''): locale is Locale => {
+  return !!locale && !!locales.includes(locale as Locale);
+};
+
+const isLanguage = (locale = ''): locale is Language => {
+  const language = locale.split('-')[0];
+  return !!language && !!languages.includes(language as Language);
+};
+
+export const getInitialLocale = () => {
+  const userPreference = detect(fromNavigator()) || undefined;
+
+  if (isLocale(userPreference)) {
+    return userPreference;
+  }
+  if (isLanguage(userPreference)) {
+    return LanguageMap[userPreference.split('-')[0] as Language];
+  }
+  return defaultLocale;
 };

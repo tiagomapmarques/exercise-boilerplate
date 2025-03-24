@@ -1,3 +1,6 @@
+import { setupI18n } from '@lingui/core';
+
+import { defaultLocale } from '@/i18n';
 import { act, renderApp, screen, userEvent } from '@/testing';
 
 import { Navigation } from './navigation';
@@ -11,6 +14,38 @@ vi.mock('@mantine/core', async (importOriginal) => {
 });
 
 describe(Navigation, () => {
+  test('displays locale picker', () => {
+    renderApp(<Navigation />, {
+      providers: { router: true },
+    });
+
+    expect(screen.getByTestId('LocalePicker')).toBeVisible();
+  });
+
+  test('displays color scheme picker', () => {
+    renderApp(<Navigation />, {
+      providers: {
+        router: true,
+        mantine: { forceColorScheme: 'light' },
+      },
+    });
+
+    expect(screen.getByTestId('ColorSchemePicker-Sun')).toBeVisible();
+  });
+
+  test('does not change document title without initial messages', () => {
+    const i18n = setupI18n({
+      locale: defaultLocale,
+      messages: { [defaultLocale]: {} },
+    });
+
+    renderApp(<Navigation />, {
+      providers: { router: true, i18n: { i18n } },
+    });
+
+    expect(document.title).toBe('Exercise boilerplate');
+  });
+
   describe('navigation links', () => {
     test('displays links', () => {
       renderApp(<Navigation />, {
@@ -33,6 +68,7 @@ describe(Navigation, () => {
       });
 
       expect(location.pathname).toBe('/');
+      expect(document.title).toBe('Exercise boilerplate - Home');
     });
 
     test('navigates to about page', async () => {
@@ -47,25 +83,7 @@ describe(Navigation, () => {
       });
 
       expect(location.pathname).toBe('/about');
+      expect(document.title).toBe('Exercise boilerplate - About');
     });
-  });
-
-  test('displays locale picker', () => {
-    renderApp(<Navigation />, {
-      providers: { router: true },
-    });
-
-    expect(screen.getByTestId('LocalePicker')).toBeVisible();
-  });
-
-  test('displays color scheme picker', () => {
-    renderApp(<Navigation />, {
-      providers: {
-        router: true,
-        mantine: { forceColorScheme: 'light' },
-      },
-    });
-
-    expect(screen.getByTestId('ColorSchemePicker-Sun')).toBeVisible();
   });
 });

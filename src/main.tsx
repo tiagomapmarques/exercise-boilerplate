@@ -7,9 +7,9 @@ import { router } from './router';
 import '@mantine/core/styles.css';
 
 import { i18n } from '@/i18n';
-import { loadMessages } from '@/utilities/locale';
+import { getInitialLocale, loadMessages } from '@/utilities/locale';
 
-loadMessages(i18n, 'en-GB');
+loadMessages(i18n, getInitialLocale());
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

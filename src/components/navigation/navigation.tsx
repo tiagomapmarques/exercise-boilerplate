@@ -1,3 +1,4 @@
+import { Trans, useLingui } from '@lingui/react';
 import { Divider, Flex, Stack, Text } from '@mantine/core';
 import { Link, LinkProps, useLocation } from '@tanstack/react-router';
 import { Home, Info } from 'lucide-react';
@@ -36,8 +37,24 @@ export type NavigationProps = {
 };
 
 export const Navigation = ({ onInterfaceRerender }: NavigationProps) => {
+  const { i18n } = useLingui();
   const [locale] = useLocale();
   const location = useLocation();
+
+  if (Object.keys(i18n.messages).length) {
+    let pageTitle = i18n.t({ id: 'boilerplate.header.logo' });
+
+    switch (location.pathname) {
+      case '/about':
+        pageTitle += ` - ${i18n.t({ id: 'boilerplate.about.title' })}`;
+        break;
+      case '/':
+        pageTitle += ` - ${i18n.t({ id: 'boilerplate.home.title' })}`;
+        break;
+    }
+
+    document.title = pageTitle;
+  }
 
   useEffect(() => {
     onInterfaceRerender?.();
@@ -48,13 +65,17 @@ export const Navigation = ({ onInterfaceRerender }: NavigationProps) => {
       <NavigationLink to="/">
         <Home size="20" />
 
-        <Text>Home</Text>
+        <Text>
+          <Trans id="boilerplate.home.title" />
+        </Text>
       </NavigationLink>
 
       <NavigationLink to="/about">
         <Info size="20" />
 
-        <Text>About</Text>
+        <Text>
+          <Trans id="boilerplate.about.title" />
+        </Text>
       </NavigationLink>
 
       <Flex align="end" style={{ flexGrow: 1 }}>

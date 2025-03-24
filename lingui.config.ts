@@ -1,7 +1,10 @@
 import { defineConfig } from '@lingui/cli';
+import { formatter } from '@lingui/format-po';
+
+import { defaultLocale } from './src/i18n';
 
 export default defineConfig({
-  sourceLocale: 'en-GB',
+  sourceLocale: defaultLocale,
   locales: ['en-GB', 'de-DE'],
   catalogs: [
     {
@@ -9,4 +12,6 @@ export default defineConfig({
       include: ['src'],
     },
   ],
+  format: formatter({ explicitIdAsDefault: true, origins: false }),
+  orderBy: 'messageId',
 });
