@@ -1,5 +1,5 @@
-import { Trans } from '@lingui/react';
-import { I18nProvider as LinguiProvider } from '@lingui/react';
+import { PropsWithChildren, useState } from 'react';
+import { I18nProvider as LinguiProvider, Trans } from '@lingui/react';
 import {
   Burger,
   Flex,
@@ -9,8 +9,6 @@ import {
 } from '@mantine/core';
 import { Outlet } from '@tanstack/react-router';
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
-import { useState } from 'react';
-import { PropsWithChildren } from 'react';
 
 import { Navigation } from '@/components/navigation';
 import { i18n } from '@/i18n';

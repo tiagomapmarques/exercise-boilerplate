@@ -1,7 +1,7 @@
+import { useCallback } from 'react';
 import { I18n } from '@lingui/core';
 import { detect, fromNavigator } from '@lingui/detect-locale';
 import { useLingui } from '@lingui/react';
-import { useCallback } from 'react';
 
 import { defaultLocale } from '@/i18n';
 

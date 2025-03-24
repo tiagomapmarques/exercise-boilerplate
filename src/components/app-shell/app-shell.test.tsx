@@ -1,6 +1,6 @@
+import { Mock } from 'vitest';
 import { Text } from '@mantine/core';
 import { Outlet } from '@tanstack/react-router';
-import { Mock } from 'vitest';
 
 import { renderApp, screen, userEvent } from '@/testing';
 

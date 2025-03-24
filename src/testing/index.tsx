@@ -1,3 +1,5 @@
+import { Mock } from 'vitest';
+import { ComponentProps, Fragment, PropsWithChildren, ReactNode } from 'react';
 import { Messages, setupI18n } from '@lingui/core';
 import { I18nProvider, I18nProviderProps } from '@lingui/react';
 import { MantineProvider, MantineProviderProps } from '@mantine/core';
@@ -14,8 +16,6 @@ import {
   renderHook as baseRenderHook,
 } from '@testing-library/react';
 import { userEvent } from '@vitest/browser/context';
-import { ComponentProps, Fragment, PropsWithChildren, ReactNode } from 'react';
-import { Mock } from 'vitest';
 
 import { defaultLocale } from '@/i18n';
 import { messages as messagesDeDe } from '@/locales/de-DE.po';

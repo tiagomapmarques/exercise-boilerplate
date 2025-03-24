@@ -9,9 +9,21 @@
   "trailingComma": "all",
   "bracketSpacing": true,
 
-  "plugins": ["@trivago/prettier-plugin-sort-imports"],
-  "importOrder": ["^@/(.*)$", "^[./]"],
-  "importOrderSeparation": true,
-  "importOrderSortSpecifiers": true,
-  "importOrderSideEffects": false
+  "plugins": ["@ianvs/prettier-plugin-sort-imports"],
+  "importOrder": [
+    "<BUILTIN_MODULES>",
+    "",
+    "^vitest$",
+    "^react(-dom(/[A-z-\\.]*)?)?$",
+    "<THIRD_PARTY_MODULES>",
+    "",
+    "^@/",
+    "",
+    "^[.]",
+    "",
+    "^(?!.*[.]css$)[./].*$",
+    ".css$"
+  ],
+  "importOrderCaseSensitive": true,
+  "importOrderTypeScriptVersion": "5.8.2"
 }

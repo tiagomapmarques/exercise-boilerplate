@@ -1,5 +1,5 @@
-import { useMantineColorScheme } from '@mantine/core';
 import { Mock } from 'vitest';
+import { useMantineColorScheme } from '@mantine/core';
 
 import { renderApp, screen, userEvent } from '@/testing';
 
