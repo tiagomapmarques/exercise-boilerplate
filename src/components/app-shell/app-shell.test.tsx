@@ -1,8 +1,10 @@
 import { Mock } from 'vitest';
+import { setupI18n } from '@lingui/core';
 import { Text } from '@mantine/core';
 import { Outlet } from '@tanstack/react-router';
 
 import { renderApp, screen, userEvent } from '@/testing';
+import { I18n, fallbackLocale, getAppI18n } from '@/utilities/locale';
 
 import { AppShell } from './app-shell';
 
@@ -15,11 +17,29 @@ vi.mock('@tanstack/react-router', async (importOriginal) => {
   };
 });
 
+vi.mock('@/utilities/locale', async (importOriginal) => {
+  const original = await importOriginal<typeof import('@/utilities/locale')>();
+  return {
+    ...original,
+    getAppI18n: vi.fn(original.getAppI18n),
+  };
+});
+
 describe(AppShell, () => {
-  beforeEach(() => {
+  let i18n: I18n;
+
+  beforeEach(async () => {
     (Outlet as unknown as Mock).mockImplementation(() => (
       <Text data-slot="Content" />
     ));
+
+    const { messages } = await import(`../../locales/${fallbackLocale}.po`);
+
+    i18n = setupI18n({
+      locale: fallbackLocale,
+      messages: { [fallbackLocale]: messages },
+    });
+    (getAppI18n as Mock<typeof getAppI18n>).mockImplementation(() => i18n);
   });
 
   test('adds i18n provider', () => {
@@ -27,8 +47,8 @@ describe(AppShell, () => {
       renderApp(<AppShell />, {
         providers: {
           router: true,
-          i18n: false,
           mantine: false,
+          i18n: false,
         },
       }),
     ).not.throw();
@@ -39,8 +59,8 @@ describe(AppShell, () => {
       renderApp(<AppShell />, {
         providers: {
           router: true,
-          i18n: false,
           mantine: false,
+          i18n: false,
         },
       }),
     ).not.throw();
@@ -50,8 +70,8 @@ describe(AppShell, () => {
     renderApp(<AppShell />, {
       providers: {
         router: true,
-        i18n: false,
         mantine: false,
+        i18n: false,
       },
     });
 
@@ -64,8 +84,8 @@ describe(AppShell, () => {
     renderApp(<AppShell />, {
       providers: {
         router: true,
-        i18n: false,
         mantine: false,
+        i18n: false,
       },
     });
 
@@ -77,8 +97,8 @@ describe(AppShell, () => {
       renderApp(<AppShell />, {
         providers: {
           router: true,
-          i18n: false,
           mantine: false,
+          i18n: false,
         },
       });
 
@@ -89,8 +109,8 @@ describe(AppShell, () => {
       renderApp(<AppShell />, {
         providers: {
           router: true,
-          i18n: false,
           mantine: false,
+          i18n: false,
         },
       });
 

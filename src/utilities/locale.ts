@@ -1,64 +1,75 @@
 import { useCallback } from 'react';
-import { I18n } from '@lingui/core';
+import { I18n, setupI18n } from '@lingui/core';
 import { detect, fromNavigator } from '@lingui/detect-locale';
 import { useLingui } from '@lingui/react';
 
-import { defaultLocale } from '@/i18n';
+export type { I18n };
 
-/** Maps Languages to their default Locales */
+const appI18n = setupI18n();
+
+/** Gets the i18n instance for the app. */
+export const getAppI18n = () => appI18n;
+
+/** Maps Languages to their default Locales. */
 export const LanguageMap = {
   en: 'en-GB',
   de: 'de-DE',
 } as const;
 
-/** Supported language */
+/** Supported language. */
 export type Language = keyof typeof LanguageMap;
 
-/** Maps Locale to their labels */
+/** Maps Locale to their labels. */
 export const localeLabels = {
   'en-GB': 'English (GB)',
   'de-DE': 'Deutsch (DE)',
 } as const;
 
-/** Supported locale */
+/** Supported locale. */
 export type Locale = keyof typeof localeLabels;
 
+/** List of supported locales. */
 export const locales = Object.keys(localeLabels) as Locale[];
 
+/** List of supported languages. */
 export const languages = Object.keys(LanguageMap) as Language[];
 
-export const loadMessages = async (localI18n: I18n, locale: Locale) => {
+/** Fallback locale for the app. */
+export const fallbackLocale = 'en-GB' satisfies Locale;
+
+const loadMessages = async (i18n: I18n, locale: Locale) => {
   try {
     const { messages } = await import(`../locales/${locale}.po`);
 
-    localI18n.load(locale, messages);
-    localI18n.activate(locale);
+    i18n.load(locale, messages);
+    i18n.activate(locale);
   } catch {
     console.error(`Unable to load messages from "../locales/${locale}"`);
   }
 };
 
+/** Gets and sets the locale in the app i18n provider. */
 export const useLocale = () => {
-  const { i18n: localI18n } = useLingui();
+  const { i18n } = useLingui();
 
   const setLocale = useCallback(
-    (locale: Locale) => loadMessages(localI18n, locale),
+    (locale: Locale) => loadMessages(i18n, locale),
     [],
   );
 
-  return [localI18n.locale as Locale, setLocale] as const;
+  return [i18n.locale as Locale, setLocale] as const;
 };
 
 const isLocale = (locale = ''): locale is Locale => {
   return !!locale && !!locales.includes(locale as Locale);
 };
 
-const isLanguage = (locale = ''): locale is Language => {
-  const language = locale.split('-')[0];
+const isLanguage = (localeOrLanguage = ''): localeOrLanguage is Language => {
+  const language = localeOrLanguage.split('-')[0];
   return !!language && !!languages.includes(language as Language);
 };
 
-export const getInitialLocale = () => {
+const getInitialLocale = () => {
   const userPreference = detect(fromNavigator()) || undefined;
 
   if (isLocale(userPreference)) {
@@ -67,5 +78,18 @@ export const getInitialLocale = () => {
   if (isLanguage(userPreference)) {
     return LanguageMap[userPreference.split('-')[0] as Language];
   }
-  return defaultLocale;
+  return fallbackLocale;
+};
+
+/**
+ * Preloads a locale onto an i18n instance.
+ *
+ * Be default, it tries to guess the locale from the browser settings (falls
+ * back to the `fallbackLocale`).
+ */
+export const preloadLocale = async (
+  i18n: I18n,
+  locale = getInitialLocale(),
+) => {
+  await loadMessages(i18n, locale);
 };

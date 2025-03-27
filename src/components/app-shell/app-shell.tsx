@@ -1,5 +1,5 @@
-import { PropsWithChildren, useState } from 'react';
-import { I18nProvider as LinguiProvider, Trans } from '@lingui/react';
+import { useState } from 'react';
+import { Trans } from '@lingui/react';
 import {
   Burger,
   Flex,
@@ -11,19 +11,16 @@ import { Outlet } from '@tanstack/react-router';
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
 
 import { Navigation } from '@/components/navigation';
-import { i18n } from '@/i18n';
 import { theme } from '@/theme';
 
-const I18nProvider = ({ children }: PropsWithChildren) => {
-  return <LinguiProvider i18n={i18n}>{children}</LinguiProvider>;
-};
+import { LocaleProvider } from './locale-provider';
 
 export const AppShell = () => {
   const [menuOpened, setMenuOpened] = useState(false);
 
   return (
-    <I18nProvider>
-      <MantineProvider theme={theme} defaultColorScheme="auto">
+    <MantineProvider theme={theme} defaultColorScheme="auto">
+      <LocaleProvider>
         <MantineAppShell
           header={{ height: '3em' }}
           navbar={{
@@ -58,7 +55,7 @@ export const AppShell = () => {
             <TanStackRouterDevtools position="bottom-right" />
           </MantineAppShell.Main>
         </MantineAppShell>
-      </MantineProvider>
-    </I18nProvider>
+      </LocaleProvider>
+    </MantineProvider>
   );
 };

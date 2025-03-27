@@ -17,10 +17,9 @@ import {
 } from '@testing-library/react';
 import { userEvent } from '@vitest/browser/context';
 
-import { defaultLocale } from '@/i18n';
 import { messages as messagesDeDe } from '@/locales/de-DE.po';
 import { messages as messagesEnGb } from '@/locales/en-GB.po';
-import type { Locale } from '@/utilities/locale';
+import { fallbackLocale, type Locale } from '@/utilities/locale';
 
 export * from '@testing-library/react';
 
@@ -57,6 +56,22 @@ const createRouterRenderProvider = (
   );
 };
 
+const createMantineRenderProvider = (
+  props: Omit<MantineProviderProps, 'children'> | boolean | undefined,
+) => {
+  if (!props) {
+    return Fragment;
+  }
+
+  const parsedProps = {
+    ...(typeof props === 'object' ? props : {}),
+  };
+
+  return ({ children }: PropsWithChildren) => (
+    <MantineProvider {...parsedProps}>{children}</MantineProvider>
+  );
+};
+
 type CustomI18nProps = Partial<Omit<I18nProviderProps, 'children'>> & {
   locale?: Locale;
 };
@@ -74,7 +89,7 @@ const createI18nRenderProvider = (
   };
 
   const {
-    locale = defaultLocale,
+    locale = fallbackLocale,
     i18n = setupI18n({
       locale,
       messages: { [locale]: i18nMessages[locale] },
@@ -92,27 +107,11 @@ const createI18nRenderProvider = (
   };
 };
 
-const createMantineRenderProvider = (
-  props: Omit<MantineProviderProps, 'children'> | boolean | undefined,
-) => {
-  if (!props) {
-    return Fragment;
-  }
-
-  const parsedProps = {
-    ...(typeof props === 'object' ? props : {}),
-  };
-
-  return ({ children }: PropsWithChildren) => (
-    <MantineProvider {...parsedProps}>{children}</MantineProvider>
-  );
-};
-
 type ProviderOptions = {
   providers?: {
     router?: Parameters<typeof createRouterRenderProvider>[0];
-    i18n?: Parameters<typeof createI18nRenderProvider>[0];
     mantine?: Parameters<typeof createMantineRenderProvider>[0];
+    i18n?: Parameters<typeof createI18nRenderProvider>[0];
   };
 };
 
@@ -121,35 +120,50 @@ const createWrapper = (
   providers: ProviderOptions['providers'] = {},
 ) => {
   const RouterRenderProvider = createRouterRenderProvider(providers.router);
-  const I18nRenderProvider = createI18nRenderProvider(providers.i18n);
   const MantineRenderProvider = createMantineRenderProvider(providers.mantine);
+  const I18nRenderProvider = createI18nRenderProvider(providers.i18n);
 
   return ({ children }: PropsWithChildren) => {
     return (
       <RouterRenderProvider>
-        <I18nRenderProvider>
-          <MantineRenderProvider>
+        <MantineRenderProvider>
+          <I18nRenderProvider>
             <Wrapper>{children}</Wrapper>
-          </MantineRenderProvider>
-        </I18nRenderProvider>
+          </I18nRenderProvider>
+        </MantineRenderProvider>
       </RouterRenderProvider>
     );
   };
 };
 
+/**
+ * Renders a component similarly to the `render` function from
+ * `@testing-library/react`.
+ *
+ * It also takes in a `providers` object to auto-wrap the component in the
+ * selected app providers. By default, it adds the `i18n` and `mantine`
+ * providers.
+ */
 export const renderApp = (
   ui: ReactNode,
   { providers = {}, ...options }: RenderOptions & ProviderOptions = {},
 ) => {
   const wrapper = createWrapper(options.wrapper, {
-    i18n: true,
     mantine: true,
+    i18n: true,
     ...providers,
   });
 
   return baseRender(ui, { ...options, wrapper });
 };
 
+/**
+ * Renders a hook similarly to the `renderHook` function from
+ * `@testing-library/react`.
+ *
+ * It also takes in a `providers` object to auto-wrap the component in the
+ * selected app providers. By default, it does not add any app providers.
+ */
 export const renderAppHook = <HookReturn, HookProps>(
   hook: (initialProps: HookProps) => HookReturn,
   {
@@ -164,13 +178,14 @@ export const renderAppHook = <HookReturn, HookProps>(
   return baseRenderHook(hook, { ...options, wrapper });
 };
 
-export const disableConsoleError = (fn?: Mock) => {
-  let original = console.error;
+/** Mocks the `console.error` function. */
+export const disableConsoleError = (consoleErrorMock?: Mock) => {
+  let original: typeof console.error;
 
   beforeEach(() => {
     original = console.error;
     Object.defineProperty(console, 'error', {
-      value: fn || vi.fn(),
+      value: consoleErrorMock || vi.fn(),
       configurable: true,
     });
   });

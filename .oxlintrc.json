@@ -8,7 +8,8 @@
     "vitest",
     "jsx-a11y",
     "react-perf",
-    "promise"
+    "promise",
+    "import"
   ],
   "categories": {},
   "rules": {

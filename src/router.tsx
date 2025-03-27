@@ -4,7 +4,7 @@ import { NotFoundContainer } from '@/containers';
 
 import { routeTree } from './routeTree.gen';
 
-// Create a new router instance
+/** Router instance for the app */
 export const router = createRouter({
   routeTree,
   defaultPreload: 'intent',

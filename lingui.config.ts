@@ -1,10 +1,10 @@
 import { defineConfig } from '@lingui/cli';
 import { formatter } from '@lingui/format-po';
 
-import { defaultLocale } from './src/i18n';
+import { fallbackLocale } from './src/utilities/locale';
 
 export default defineConfig({
-  sourceLocale: defaultLocale,
+  sourceLocale: fallbackLocale,
   locales: ['en-GB', 'de-DE'],
   catalogs: [
     {

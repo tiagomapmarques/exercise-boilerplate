@@ -1,7 +1,7 @@
 import { setupI18n } from '@lingui/core';
 
-import { defaultLocale } from '@/i18n';
 import { act, renderApp, screen, userEvent } from '@/testing';
+import { fallbackLocale } from '@/utilities/locale';
 
 import { Navigation } from './navigation';
 
@@ -35,8 +35,8 @@ describe(Navigation, () => {
 
   test('does not change document title without initial messages', () => {
     const i18n = setupI18n({
-      locale: defaultLocale,
-      messages: { [defaultLocale]: {} },
+      locale: fallbackLocale,
+      messages: { [fallbackLocale]: {} },
     });
 
     renderApp(<Navigation />, {

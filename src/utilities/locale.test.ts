@@ -1,15 +1,19 @@
 import { Mock } from 'vitest';
-import { setupI18n } from '@lingui/core';
-import { fromNavigator } from '@lingui/detect-locale';
+import { I18n, setupI18n } from '@lingui/core';
+import { detect, fromNavigator } from '@lingui/detect-locale';
 
-import { messages } from '@/locales/de-DE.po';
+import { messages as messagesDeDe } from '@/locales/de-DE.po';
+import { messages as messagesEnGb } from '@/locales/en-GB.po';
 import { act, disableConsoleError, renderAppHook } from '@/testing';
 
 import {
   LanguageMap,
   Locale,
-  getInitialLocale,
+  fallbackLocale,
+  getAppI18n,
   localeLabels,
+  locales,
+  preloadLocale,
   useLocale,
 } from './locale';
 
@@ -18,11 +22,12 @@ vi.mock('@lingui/detect-locale', async (importOriginal) => {
     await importOriginal<typeof import('@lingui/detect-locale')>();
   return {
     ...original,
+    detect: vi.fn(original.detect),
     fromNavigator: vi.fn(original.fromNavigator),
   };
 });
 
-describe('Locale and language maps', () => {
+describe('locale and language maps', () => {
   test('defines labels for all locales', () => {
     expect(localeLabels).toStrictEqual({
       'en-GB': expect.stringMatching(/./),
@@ -38,27 +43,69 @@ describe('Locale and language maps', () => {
       de: expect.stringMatching(anyLocale),
     });
   });
+
+  test('defines a valid default locale', () => {
+    expect(locales.includes(fallbackLocale)).toBeTruthy();
+  });
 });
 
-describe(getInitialLocale, () => {
-  test.each`
-    browser      | result
-    ${undefined} | ${'en-GB'}
-    ${null}      | ${'en-GB'}
-    ${'en-GB'}   | ${'en-GB'}
-    ${'en-US'}   | ${'en-GB'}
-    ${'en'}      | ${'en-GB'}
-    ${'de-AT'}   | ${'de-DE'}
-    ${'uk-UA'}   | ${'en-GB'}
-    ${'uk'}      | ${'en-GB'}
-  `(
-    'browser with $browser locale, initial locale becomes $result',
-    ({ browser, result }) => {
-      (fromNavigator as Mock).mockReturnValue(browser);
+describe(getAppI18n, () => {
+  test('gets an I18n instance', () => {
+    const i18n = getAppI18n();
 
-      expect(getInitialLocale()).toBe(result);
-    },
-  );
+    expect(i18n).toBeInstanceOf(I18n);
+  });
+});
+
+describe(preloadLocale, () => {
+  test('loads en-GB messages', async () => {
+    const i18n = setupI18n();
+
+    await preloadLocale(i18n, 'en-GB');
+
+    expect(i18n.locale).toBe('en-GB');
+    expect(i18n.messages).toBe(messagesEnGb);
+  });
+
+  test('loads de-DE messages', async () => {
+    const i18n = setupI18n();
+
+    await preloadLocale(i18n, 'de-DE');
+
+    expect(i18n.locale).toBe('de-DE');
+    expect(i18n.messages).toBe(messagesDeDe);
+  });
+
+  describe('guessing the locale', () => {
+    test.each`
+      browser      | locale
+      ${undefined} | ${'en-GB'}
+      ${null}      | ${'en-GB'}
+      ${'en-GB'}   | ${'en-GB'}
+      ${'en-US'}   | ${'en-GB'}
+      ${'en'}      | ${'en-GB'}
+      ${'de-DE'}   | ${'de-DE'}
+      ${'de-AT'}   | ${'de-DE'}
+      ${'uk-UA'}   | ${'en-GB'}
+      ${'uk'}      | ${'en-GB'}
+    `(
+      'browser with $browser locale, initial locale becomes $locale',
+      async ({ browser, locale }) => {
+        (detect as Mock<typeof detect>).mockImplementation(
+          (firstOption) => firstOption,
+        );
+        (fromNavigator as Mock<typeof fromNavigator>).mockImplementation(
+          () => browser,
+        );
+
+        const i18n = setupI18n();
+
+        await preloadLocale(i18n);
+
+        expect(i18n.locale).toBe(locale);
+      },
+    );
+  });
 });
 
 describe(useLocale, () => {
@@ -67,28 +114,35 @@ describe(useLocale, () => {
       providers: { i18n: true },
     });
 
-    expect(result.current[0]).toBe('en-GB');
+    const [locale] = result.current;
+
+    expect(locale).toBe(fallbackLocale);
   });
 
   test('loads and sets a new locale', async () => {
     const i18n = setupI18n({
       locale: 'en-GB',
-      messages: { 'en-GB': messages },
+      messages: { 'en-GB': messagesEnGb },
     });
-    const i18nLoad = vi.spyOn(i18n, 'load');
 
     const { result } = renderAppHook(() => useLocale(), {
       providers: { i18n: { i18n } },
     });
 
-    expect(i18nLoad).not.lastCalledWith('de-DE', messages);
+    const [locale, setLocale] = result.current;
+
+    expect(locale).toBe('en-GB');
+    expect(i18n.messages).toBe(messagesEnGb);
 
     await act(async () => {
-      await result.current[1]('de-DE');
+      await setLocale('de-DE');
     });
 
-    expect(result.current[0]).toBe('de-DE');
-    expect(i18nLoad).lastCalledWith('de-DE', messages);
+    const [updatedLocale, updatedSetLocale] = result.current;
+
+    expect(updatedLocale).toBe('de-DE');
+    expect(updatedSetLocale).toBe(setLocale);
+    expect(i18n.messages).toBe(messagesDeDe);
   });
 
   describe('setting an unknown locale', () => {
@@ -99,15 +153,21 @@ describe(useLocale, () => {
         providers: { i18n: true },
       });
 
+      const [locale, setLocale] = result.current;
+
+      expect(locale).toBe(fallbackLocale);
+
       await act(async () => {
-        await result.current[1]('de-AT' as Locale);
+        await setLocale('de-AT' as Locale);
       });
 
       expect(console.error).toBeCalledWith(
         'Unable to load messages from "../locales/de-AT"',
       );
 
-      expect(result.current[0]).toBe('en-GB');
+      const [updatedLocale] = result.current;
+
+      expect(updatedLocale).toBe(locale);
     });
   });
 });
