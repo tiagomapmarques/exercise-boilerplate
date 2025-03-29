@@ -22,14 +22,12 @@ describe(NotFoundContainer, () => {
   });
 
   test('navigates to start', async () => {
-    renderApp(<NotFoundContainer />, {
-      providers: { router: true },
+    const { providers } = renderApp(<NotFoundContainer />, {
+      providers: { router: { initialEntries: ['/unknown'] } },
     });
-
-    expect(window.location.pathname).not.toEqual('/');
 
     await userEvent.click(screen.getByRole('button', { name: 'Go to start' }));
 
-    expect(window.location.pathname).toEqual('/');
+    expect(providers.router?.latestLocation.pathname).toEqual('/');
   });
 });

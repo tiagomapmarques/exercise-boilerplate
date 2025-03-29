@@ -6,3 +6,8 @@ import { configure } from '@testing-library/react';
 configure({
   testIdAttribute: 'data-slot',
 });
+
+const originalDocumentTitle = document.title;
+afterEach(() => {
+  document.title = originalDocumentTitle;
+});

@@ -16,8 +16,15 @@ vi.mock('@mantine/core', async (importOriginal) => {
 describe(ColorSchemePicker, () => {
   const setColorScheme = vi.fn();
 
-  beforeEach(() => {
-    (useMantineColorScheme as Mock).mockImplementation(() => ({
+  beforeEach(async () => {
+    const useOriginal = (
+      await vi.importActual<typeof import('@mantine/core')>('@mantine/core')
+    ).useMantineColorScheme;
+
+    (
+      useMantineColorScheme as Mock<typeof useMantineColorScheme>
+    ).mockImplementation((props) => ({
+      ...useOriginal(props),
       setColorScheme,
     }));
   });

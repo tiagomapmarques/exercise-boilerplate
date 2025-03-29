@@ -5,14 +5,6 @@ import { fallbackLocale } from '@/utilities/locale';
 
 import { Navigation } from './navigation';
 
-vi.mock('@mantine/core', async (importOriginal) => {
-  const original = await importOriginal<typeof import('@mantine/core')>();
-  return {
-    ...original,
-    useMantineColorScheme: vi.fn(original.useMantineColorScheme),
-  };
-});
-
 describe(Navigation, () => {
   test('displays locale picker', () => {
     renderApp(<Navigation />, {
@@ -43,46 +35,45 @@ describe(Navigation, () => {
       providers: { router: true, i18n: { i18n } },
     });
 
-    expect(document.title).toBe('Exercise boilerplate');
+    expect(document.title).toBe('Vitest Browser Tester');
   });
 
   describe('navigation links', () => {
     test('displays links', () => {
-      renderApp(<Navigation />, {
-        providers: { router: true },
+      const { providers } = renderApp(<Navigation />, {
+        providers: { router: { initialEntries: ['/unknown'] } },
       });
 
       expect(screen.getByRole('link', { name: 'Home' })).toBeVisible();
       expect(screen.getByRole('link', { name: 'About' })).toBeVisible();
+
+      expect(providers.router?.latestLocation.pathname).toBe('/unknown');
+      expect(document.title).toBe('Exercise boilerplate');
     });
 
     test('navigates to home page', async () => {
-      renderApp(<Navigation />, {
-        providers: { router: true },
+      const { providers } = renderApp(<Navigation />, {
+        providers: { router: { initialEntries: ['/unknown'] } },
       });
-
-      expect(location.pathname).not.toBe('/');
 
       await act(async () => {
         await userEvent.click(screen.getByRole('link', { name: 'Home' }));
       });
 
-      expect(location.pathname).toBe('/');
+      expect(providers.router?.latestLocation.pathname).toBe('/');
       expect(document.title).toBe('Exercise boilerplate - Home');
     });
 
     test('navigates to about page', async () => {
-      renderApp(<Navigation />, {
-        providers: { router: true },
+      const { providers } = renderApp(<Navigation />, {
+        providers: { router: { initialEntries: ['/unknown'] } },
       });
-
-      expect(location.pathname).not.toBe('/about');
 
       await act(async () => {
         await userEvent.click(screen.getByRole('link', { name: 'About' }));
       });
 
-      expect(location.pathname).toBe('/about');
+      expect(providers.router?.latestLocation.pathname).toBe('/about');
       expect(document.title).toBe('Exercise boilerplate - About');
     });
   });

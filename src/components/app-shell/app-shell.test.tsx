@@ -1,10 +1,9 @@
 import { Mock } from 'vitest';
 import { setupI18n } from '@lingui/core';
 import { Text } from '@mantine/core';
-import { Outlet } from '@tanstack/react-router';
 
 import { renderApp, screen, userEvent } from '@/testing';
-import { I18n, fallbackLocale, getAppI18n } from '@/utilities/locale';
+import { fallbackLocale, getAppI18n } from '@/utilities/locale';
 
 import { AppShell } from './app-shell';
 
@@ -13,7 +12,7 @@ vi.mock('@tanstack/react-router', async (importOriginal) => {
     await importOriginal<typeof import('@tanstack/react-router')>();
   return {
     ...original,
-    Outlet: vi.fn(),
+    Outlet: vi.fn(() => <Text data-slot="Content" />),
   };
 });
 
@@ -26,16 +25,9 @@ vi.mock('@/utilities/locale', async (importOriginal) => {
 });
 
 describe(AppShell, () => {
-  let i18n: I18n;
-
   beforeEach(async () => {
-    (Outlet as unknown as Mock).mockImplementation(() => (
-      <Text data-slot="Content" />
-    ));
-
     const { messages } = await import(`../../locales/${fallbackLocale}.po`);
-
-    i18n = setupI18n({
+    const i18n = setupI18n({
       locale: fallbackLocale,
       messages: { [fallbackLocale]: messages },
     });

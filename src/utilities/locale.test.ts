@@ -120,19 +120,14 @@ describe(useLocale, () => {
   });
 
   test('loads and sets a new locale', async () => {
-    const i18n = setupI18n({
-      locale: 'en-GB',
-      messages: { 'en-GB': messagesEnGb },
-    });
-
-    const { result } = renderAppHook(() => useLocale(), {
-      providers: { i18n: { i18n } },
+    const { result, providers } = renderAppHook(() => useLocale(), {
+      providers: { i18n: true },
     });
 
     const [locale, setLocale] = result.current;
 
     expect(locale).toBe('en-GB');
-    expect(i18n.messages).toBe(messagesEnGb);
+    expect(providers.i18n?.messages).toBe(messagesEnGb);
 
     await act(async () => {
       await setLocale('de-DE');
@@ -141,8 +136,8 @@ describe(useLocale, () => {
     const [updatedLocale, updatedSetLocale] = result.current;
 
     expect(updatedLocale).toBe('de-DE');
+    expect(providers.i18n?.messages).toBe(messagesDeDe);
     expect(updatedSetLocale).toBe(setLocale);
-    expect(i18n.messages).toBe(messagesDeDe);
   });
 
   describe('setting an unknown locale', () => {
