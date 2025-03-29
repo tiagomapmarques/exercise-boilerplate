@@ -6,12 +6,11 @@
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "module": "ESNext",
     "skipLibCheck": true,
-    "strictNullChecks": true,
-    "strictBindCallApply": true,
-    "strictFunctionTypes": true,
-    "strictPropertyInitialization": true,
     "noImplicitAny": true,
-    "noFallthroughCasesInSwitch": true,
+    "strictNullChecks": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "noImplicitThis": true,
 
     /* Imports */
     "baseUrl": "./",
@@ -32,5 +31,5 @@
     /* Compatibility */
     "useDefineForClassFields": true
   },
-  "include": ["src"]
+  "include": ["./src", "./*.js", "./*.mjs", "./*.ts", "./*.mts"]
 }

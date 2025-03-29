@@ -1,4 +1,3 @@
-/// <reference types="vitest/config" />
 import { lingui } from '@lingui/vite-plugin';
 import { TanStackRouterVite } from '@tanstack/router-plugin/vite';
 import react from '@vitejs/plugin-react-swc';

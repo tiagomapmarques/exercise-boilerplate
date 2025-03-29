@@ -37,7 +37,7 @@ export const languages = Object.keys(LanguageMap) as Language[];
 /** Fallback locale for the app. */
 export const fallbackLocale = 'en-GB' satisfies Locale;
 
-const loadMessages = async (i18n: I18n, locale: Locale) => {
+const loadAndActivateLocale = async (i18n: I18n, locale: Locale) => {
   try {
     const { messages } = await import(`../locales/${locale}.po`);
 
@@ -52,10 +52,9 @@ const loadMessages = async (i18n: I18n, locale: Locale) => {
 export const useLocale = () => {
   const { i18n } = useLingui();
 
-  const setLocale = useCallback(
-    (locale: Locale) => loadMessages(i18n, locale),
-    [],
-  );
+  const setLocale = useCallback(async (locale: Locale) => {
+    await loadAndActivateLocale(i18n, locale);
+  }, []);
 
   return [i18n.locale as Locale, setLocale] as const;
 };
@@ -91,5 +90,5 @@ export const preloadLocale = async (
   i18n: I18n,
   locale = getInitialLocale(),
 ) => {
-  await loadMessages(i18n, locale);
+  await loadAndActivateLocale(i18n, locale);
 };

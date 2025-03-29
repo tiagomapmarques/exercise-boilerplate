@@ -10,6 +10,7 @@ node_modules
 __screenshots__
 
 # Local
-*.gen.ts
-.env
 TODO
+.env
+licenses.json
+routeTree.gen.ts

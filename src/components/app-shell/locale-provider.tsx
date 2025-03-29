@@ -24,5 +24,5 @@ export const LocaleProvider = ({ children }: PropsWithChildren) => {
     };
   });
 
-  return <I18nProvider i18n={appI18n}>{ready ? children : null}</I18nProvider>;
+  return ready ? <I18nProvider i18n={appI18n}>{children}</I18nProvider> : null;
 };
