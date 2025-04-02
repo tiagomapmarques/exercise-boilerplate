@@ -1,5 +1,8 @@
+engineStrict: true
+
 onlyBuiltDependencies:
   - '@swc/core'
   - esbuild
   - msw
+
 ignoredBuiltDependencies:

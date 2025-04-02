@@ -9,4 +9,4 @@
 
 - pnpm i
 - pnpm build
-- pnpm preview
+- pnpm serve

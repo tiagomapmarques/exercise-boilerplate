@@ -15,7 +15,6 @@ export default defineConfig({
     globals: true,
     setupFiles: './src/testing/setup.tsx',
     mockReset: true,
-
     browser: {
       enabled: true,
       headless: true,
