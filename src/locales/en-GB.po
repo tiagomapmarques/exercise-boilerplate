@@ -19,6 +19,9 @@ msgstr "License: {license}"
 msgid "boilerplate.about.title"
 msgstr "About"
 
+msgid "boilerplate.actions.go-to-start"
+msgstr "Go to start"
+
 msgid "boilerplate.header.logo"
 msgstr "Exercise boilerplate"
 
@@ -27,3 +30,9 @@ msgstr "Place your UI here"
 
 msgid "boilerplate.home.title"
 msgstr "Home"
+
+msgid "boilerplate.not-found.content"
+msgstr "Oops… something went wrong on our end"
+
+msgid "boilerplate.not-found.title"
+msgstr "404 Not found"

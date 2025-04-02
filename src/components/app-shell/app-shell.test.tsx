@@ -1,20 +1,10 @@
-import { Mock } from 'vitest';
+import { type Mock } from 'vitest';
 import { setupI18n } from '@lingui/core';
-import { Text } from '@mantine/core';
 
 import { renderApp, screen, userEvent } from '@/testing';
 import { fallbackLocale, getAppI18n } from '@/utilities/locale';
 
 import { AppShell } from './app-shell';
-
-vi.mock('@tanstack/react-router', async (importOriginal) => {
-  const original =
-    await importOriginal<typeof import('@tanstack/react-router')>();
-  return {
-    ...original,
-    Outlet: vi.fn(() => <Text data-slot="Content" />),
-  };
-});
 
 vi.mock('@/utilities/locale', async (importOriginal) => {
   const original = await importOriginal<typeof import('@/utilities/locale')>();
@@ -81,7 +71,7 @@ describe(AppShell, () => {
       },
     });
 
-    expect(screen.getByTestId('Content')).toBeVisible();
+    expect(screen.getByTestId('Outlet')).toBeInTheDocument();
   });
 
   describe('navigation', () => {

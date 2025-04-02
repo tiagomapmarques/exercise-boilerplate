@@ -1,6 +1,6 @@
 import { setupI18n } from '@lingui/core';
 
-import { act, renderApp, screen, userEvent } from '@/testing';
+import { renderApp, screen, userEvent } from '@/testing';
 import { fallbackLocale } from '@/utilities/locale';
 
 import { Navigation } from './navigation';
@@ -56,9 +56,7 @@ describe(Navigation, () => {
         providers: { router: { initialEntries: ['/unknown'] } },
       });
 
-      await act(async () => {
-        await userEvent.click(screen.getByRole('link', { name: 'Home' }));
-      });
+      await userEvent.click(screen.getByRole('link', { name: 'Home' }));
 
       expect(providers.router?.latestLocation.pathname).toBe('/');
       expect(document.title).toBe('Exercise boilerplate - Home');
@@ -69,9 +67,7 @@ describe(Navigation, () => {
         providers: { router: { initialEntries: ['/unknown'] } },
       });
 
-      await act(async () => {
-        await userEvent.click(screen.getByRole('link', { name: 'About' }));
-      });
+      await userEvent.click(screen.getByRole('link', { name: 'About' }));
 
       expect(providers.router?.latestLocation.pathname).toBe('/about');
       expect(document.title).toBe('Exercise boilerplate - About');

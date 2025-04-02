@@ -5,6 +5,6 @@ import { router } from './router';
 describe('router', () => {
   test('exports a router', () => {
     expect(router).toBeDefined();
-    expect(router instanceof Router);
+    expect(router).toBeInstanceOf(Router);
   });
 });

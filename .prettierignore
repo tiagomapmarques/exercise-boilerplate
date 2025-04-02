@@ -12,6 +12,7 @@ __screenshots__
 # Local
 TODO
 .env
+src/locales/*.ts
 licenses.json
 routeTree.gen.ts
 

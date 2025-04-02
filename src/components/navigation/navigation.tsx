@@ -1,7 +1,7 @@
-import { PropsWithChildren, useEffect } from 'react';
+import { useEffect, type PropsWithChildren } from 'react';
 import { Trans, useLingui } from '@lingui/react';
 import { Divider, Flex, Stack, Text } from '@mantine/core';
-import { Link, LinkProps, useLocation } from '@tanstack/react-router';
+import { Link, useLocation, type LinkProps } from '@tanstack/react-router';
 import { Home, Info } from 'lucide-react';
 
 import { ColorSchemePicker } from '@/components/color-scheme-picker';

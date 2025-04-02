@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Button, Group, Image, Menu, Text } from '@mantine/core';
 import { ChevronDown } from 'lucide-react';
 
-import { Locale, localeLabels, useLocale } from '@/utilities/locale';
+import { localeLabels, useLocale, type Locale } from '@/utilities/locale';
 
 type LanguageData = {
   label: string;

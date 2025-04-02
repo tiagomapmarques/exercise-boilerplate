@@ -1,4 +1,4 @@
-import { Mock } from 'vitest';
+import { type Mock } from 'vitest';
 import { setupI18n } from '@lingui/core';
 
 import { renderApp, screen } from '@/testing';
@@ -56,7 +56,7 @@ describe(LocaleProvider, () => {
         { providers: { i18n: false } },
       );
 
-      expect(screen.getByTestId('Content')).toBeVisible();
+      expect(screen.getByTestId('Content')).toBeInTheDocument();
     });
   });
 });

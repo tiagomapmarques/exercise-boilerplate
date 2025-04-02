@@ -1,8 +1,13 @@
-import { Mock } from 'vitest';
-import { ComponentProps, Fragment, PropsWithChildren, ReactNode } from 'react';
-import { Messages, setupI18n } from '@lingui/core';
-import { I18nProvider, I18nProviderProps } from '@lingui/react';
-import { MantineProvider, MantineProviderProps } from '@mantine/core';
+import { type Mock } from 'vitest';
+import {
+  Fragment,
+  type ComponentProps,
+  type PropsWithChildren,
+  type ReactNode,
+} from 'react';
+import { setupI18n, type Messages } from '@lingui/core';
+import { I18nProvider, type I18nProviderProps } from '@lingui/react';
+import { MantineProvider, type MantineProviderProps } from '@mantine/core';
 import {
   RouterProvider,
   createMemoryHistory,
@@ -10,29 +15,18 @@ import {
   createRouter,
 } from '@tanstack/react-router';
 import {
-  RenderHookOptions,
-  RenderOptions,
-  act,
   render as baseRender,
   renderHook as baseRenderHook,
+  type RenderHookOptions,
+  type RenderOptions,
 } from '@testing-library/react';
-import { userEvent } from '@vitest/browser/context';
 
 import { messages as messagesDeDe } from '@/locales/de-DE.po';
 import { messages as messagesEnGb } from '@/locales/en-GB.po';
-import { fallbackLocale, type Locale } from '@/utilities/locale';
+import { type Locale } from '@/utilities/locale';
 
 export * from '@testing-library/react';
-
-const userEventClick = userEvent.click;
-userEvent.click = async function (...args) {
-  // This `act` wrapper is needed due to some inner state changes in the router
-  await act(async () => {
-    await userEventClick(...args);
-  });
-};
-
-export { userEvent };
+export * from '@vitest/browser/context';
 
 const createRouterRenderProvider = (
   props:
@@ -91,6 +85,8 @@ type CustomI18nProps = Partial<Omit<I18nProviderProps, 'children'>> & {
   locale?: Locale;
 };
 
+const testingFallbackLocale: Locale = 'en-GB';
+
 const createI18nRenderProvider = (
   props: CustomI18nProps | boolean | undefined,
 ) => {
@@ -104,7 +100,7 @@ const createI18nRenderProvider = (
   };
 
   const {
-    locale = fallbackLocale,
+    locale = testingFallbackLocale,
     i18n = setupI18n({
       locale,
       messages: { [locale]: i18nMessages[locale] },

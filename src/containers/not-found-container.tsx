@@ -1,4 +1,5 @@
-import { Button, Stack, Text } from '@mantine/core';
+import { Trans } from '@lingui/react';
+import { Button, Stack, Text, Title } from '@mantine/core';
 import { useNavigate } from '@tanstack/react-router';
 
 export const NotFoundContainer = () => {
@@ -6,9 +7,17 @@ export const NotFoundContainer = () => {
 
   return (
     <Stack align="start">
-      <Text>Oops… Something went wrong on our end</Text>
+      <Title>
+        <Trans id="boilerplate.not-found.title" />
+      </Title>
 
-      <Button onClick={() => navigate({ to: '/' })}>Go to start</Button>
+      <Text>
+        <Trans id="boilerplate.not-found.content" />
+      </Text>
+
+      <Button onClick={() => navigate({ to: '/' })}>
+        <Trans id="boilerplate.actions.go-to-start" />
+      </Button>
     </Stack>
   );
 };
