@@ -26,8 +26,9 @@ export default defineConfig({
       provider: 'istanbul',
       include: ['src/**'],
       exclude: [
-        'src/locales/**',
+        'src/components/dev-tools/**',
         'src/routes/**',
+        'src/locales/**',
         'src/testing/**',
         'src/*.gen.ts',
         'src/main.tsx',

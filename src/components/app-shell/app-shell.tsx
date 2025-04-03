@@ -8,8 +8,8 @@ import {
   Text,
 } from '@mantine/core';
 import { Outlet } from '@tanstack/react-router';
-import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
 
+import { DevTools } from '@/components/dev-tools';
 import { Navigation } from '@/components/navigation';
 import { theme } from '@/theme';
 
@@ -52,7 +52,7 @@ export const AppShell = () => {
           <MantineAppShell.Main>
             <Outlet />
 
-            <TanStackRouterDevtools position="bottom-right" />
+            <DevTools />
           </MantineAppShell.Main>
         </MantineAppShell>
       </LocaleProvider>
