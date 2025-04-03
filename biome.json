@@ -1,0 +1,55 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.0.0-beta.1/schema.json",
+  "files": {
+    "includes": [
+      "**/*",
+      "!**/.swc",
+      "!**/coverage",
+      "!**/dist",
+      "!**/node_modules",
+      "!**/src/locales/*.ts",
+      "!**/licenses.json",
+      "!**/routeTree.gen.ts"
+    ]
+  },
+  "formatter": {
+    "enabled": true,
+    "indentStyle": "space"
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "recommended": true
+    }
+  },
+  "javascript": {
+    "formatter": {
+      "quoteStyle": "single"
+    }
+  },
+  "assist": {
+    "actions": {
+      "source": {
+        "organizeImports": {
+          "level": "on",
+          "options": {
+            "groups": [
+              ":NODE:",
+              ":BLANK_LINE:",
+              "vitest",
+              "react",
+              "react-dom",
+              "react-dom/client",
+              ":PACKAGE:",
+              ":BLANK_LINE:",
+              "@/testing",
+              ":ALIAS:",
+              ":BLANK_LINE:",
+              ":PATH:"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

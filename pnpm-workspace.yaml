@@ -1,8 +1,7 @@
 engineStrict: true
-
 onlyBuiltDependencies:
+  - '@biomejs/biome'
   - '@swc/core'
   - esbuild
   - msw
-
-ignoredBuiltDependencies:
+ignoredBuiltDependencies: null

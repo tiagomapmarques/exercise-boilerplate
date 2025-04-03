@@ -11,7 +11,7 @@ configure({
 
 // Wrap `userEvent.click` in an `act` due to inner state changes in the router
 const userEventClick = userEvent.click;
-userEvent.click = async function (...args) {
+userEvent.click = async (...args) => {
   await act(async () => {
     await userEventClick(...args);
   });

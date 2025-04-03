@@ -2,7 +2,7 @@ import { type Mock } from 'vitest';
 import { setupI18n } from '@lingui/core';
 
 import { renderApp, screen } from '@/testing';
-import { I18n, fallbackLocale, getAppI18n } from '@/utilities/locale';
+import { fallbackLocale, getAppI18n, type I18n } from '@/utilities/locale';
 
 import { LocaleProvider } from './locale-provider';
 

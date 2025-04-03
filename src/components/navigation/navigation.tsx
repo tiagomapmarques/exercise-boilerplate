@@ -1,7 +1,7 @@
-import { useEffect, type PropsWithChildren } from 'react';
+import { type PropsWithChildren, useEffect } from 'react';
 import { Trans, useLingui } from '@lingui/react';
 import { Divider, Flex, Stack, Text } from '@mantine/core';
-import { Link, useLocation, type LinkProps } from '@tanstack/react-router';
+import { Link, type LinkProps, useLocation } from '@tanstack/react-router';
 import { Home, Info } from 'lucide-react';
 
 import { ColorSchemePicker } from '@/components/color-scheme-picker';
@@ -56,6 +56,7 @@ export const Navigation = ({ onInterfaceRerender }: NavigationProps) => {
     document.title = pageTitle;
   }
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies:
   useEffect(() => {
     onInterfaceRerender?.();
   }, [location.pathname, locale]);

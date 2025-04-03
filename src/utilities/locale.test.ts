@@ -1,16 +1,16 @@
-import { Mock } from 'vitest';
+import type { Mock } from 'vitest';
 import { I18n, setupI18n } from '@lingui/core';
 import { detect, fromNavigator } from '@lingui/detect-locale';
 
+import { act, disableConsoleError, renderAppHook } from '@/testing';
 import { messages as messagesDeDe } from '@/locales/de-DE.po';
 import { messages as messagesEnGb } from '@/locales/en-GB.po';
-import { act, disableConsoleError, renderAppHook } from '@/testing';
 
 import {
-  LanguageMap,
-  Locale,
   fallbackLocale,
   getAppI18n,
+  LanguageMap,
+  type Locale,
   localeLabels,
   locales,
   preloadLocale,

@@ -1,18 +1,18 @@
-import { type Mock } from 'vitest';
+import type { Mock } from 'vitest';
 import {
-  Fragment,
   type ComponentProps,
+  Fragment,
   type PropsWithChildren,
   type ReactNode,
 } from 'react';
-import { setupI18n, type Messages } from '@lingui/core';
+import { type Messages, setupI18n } from '@lingui/core';
 import { I18nProvider, type I18nProviderProps } from '@lingui/react';
 import { MantineProvider, type MantineProviderProps } from '@mantine/core';
 import {
-  RouterProvider,
   createMemoryHistory,
   createRootRoute,
   createRouter,
+  RouterProvider,
 } from '@tanstack/react-router';
 import {
   render as baseRender,
@@ -23,7 +23,7 @@ import {
 
 import { messages as messagesDeDe } from '@/locales/de-DE.po';
 import { messages as messagesEnGb } from '@/locales/en-GB.po';
-import { type Locale } from '@/utilities/locale';
+import type { Locale } from '@/utilities/locale';
 
 export * from '@testing-library/react';
 export * from '@vitest/browser/context';

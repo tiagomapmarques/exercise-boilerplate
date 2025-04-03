@@ -32,9 +32,9 @@ describe(LocalePicker, () => {
       expect(screen.getByRole('menu')).toBeVisible();
     });
 
-    Object.values(localeLabels).forEach((name) => {
+    for (const name of Object.values(localeLabels)) {
       expect(screen.getByRole('menuitem', { name })).toBeVisible();
-    });
+    }
   });
 
   test('displays selected locale in dropdown menu', async () => {

@@ -1,4 +1,4 @@
-import { useEffect, useState, type PropsWithChildren } from 'react';
+import { type PropsWithChildren, useEffect, useState } from 'react';
 import { I18nProvider } from '@lingui/react';
 
 import { getAppI18n } from '@/utilities/locale';

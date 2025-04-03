@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { I18n, setupI18n } from '@lingui/core';
+import { type I18n, setupI18n } from '@lingui/core';
 import { detect, fromNavigator } from '@lingui/detect-locale';
 import { useLingui } from '@lingui/react';
 
@@ -52,9 +52,12 @@ const loadAndActivateLocale = async (i18n: I18n, locale: Locale) => {
 export const useLocale = () => {
   const { i18n } = useLingui();
 
-  const setLocale = useCallback(async (locale: Locale) => {
-    await loadAndActivateLocale(i18n, locale);
-  }, []);
+  const setLocale = useCallback(
+    async (locale: Locale) => {
+      await loadAndActivateLocale(i18n, locale);
+    },
+    [i18n],
+  );
 
   return [i18n.locale as Locale, setLocale] as const;
 };
