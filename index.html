@@ -2,6 +2,8 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <title>Exercise boilerplate</title>
+    <meta name="description" content="Seed project for a modern React app" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link
       rel="apple-touch-icon"
@@ -21,9 +23,55 @@
       href="/favicons/favicon-16x16.png"
     />
     <link rel="manifest" href="/favicons/site.webmanifest" />
-    <title>Exercise boilerplate</title>
+    <style>
+      @keyframes spin {
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      body {
+        margin: 0px;
+      }
+
+      #global-throbber {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        display: grid;
+        align-content: center;
+        justify-content: center;
+        opacity: 0;
+      }
+
+      #global-throbber::after {
+        content: '';
+        box-sizing: border-box;
+        width: 3rem;
+        height: 3rem;
+        border-radius: 100%;
+        border: 0.4rem solid #FE8800;
+        border-top-color: transparent;
+        animation: spin 0.7s infinite linear;
+      }
+
+      #global-throbber+#root {
+        opacity: 1;
+        transition: opacity 0.25s;
+      }
+
+      #global-throbber.active {
+        opacity: 1;
+        transition: opacity 0.25s;
+      }
+
+      #global-throbber.active+#root {
+        opacity: 0;
+      }
+    </style>
   </head>
   <body>
+    <div id="global-throbber" class="active"></div>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

@@ -1,9 +1,13 @@
+import fastifyCompress from '@fastify/compress';
 import fastifyStatic from '@fastify/static';
 import fastify from 'fastify';
 
 const server = fastify({
   logger: true,
 });
+
+// Serve all files compressed
+server.register(fastifyCompress);
 
 // Serve all static files
 server.register(fastifyStatic, {

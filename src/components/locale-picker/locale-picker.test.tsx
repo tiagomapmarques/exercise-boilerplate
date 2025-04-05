@@ -7,7 +7,9 @@ describe(LocalePicker, () => {
   test('displays dropdown menu', () => {
     renderApp(<LocalePicker />);
 
-    expect(screen.getByRole('button', { name: 'English (GB)' })).toBeVisible();
+    expect(
+      screen.getByRole('button', { name: 'Great Britain English (GB)' }),
+    ).toBeVisible();
   });
 
   test('displays selected locale in dropdown menu', () => {
@@ -15,9 +17,11 @@ describe(LocalePicker, () => {
       providers: { i18n: { locale: 'de-DE' } },
     });
 
-    expect(screen.getByRole('button', { name: 'Deutsch (DE)' })).toBeVisible();
     expect(
-      screen.queryByRole('button', { name: 'English (GB)' }),
+      screen.getByRole('button', { name: 'Deutschland Deutsch (DE)' }),
+    ).toBeVisible();
+    expect(
+      screen.queryByRole('button', { name: 'Great Britain English (GB)' }),
     ).not.toBeInTheDocument();
   });
 
@@ -26,14 +30,18 @@ describe(LocalePicker, () => {
 
     expect(screen.queryByRole('menu')).not.toBeInTheDocument();
 
-    await userEvent.click(screen.getByRole('button', { name: 'English (GB)' }));
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Great Britain English (GB)' }),
+    );
 
     await waitFor(() => {
       expect(screen.getByRole('menu')).toBeVisible();
     });
 
-    for (const name of Object.values(localeLabels)) {
-      expect(screen.getByRole('menuitem', { name })).toBeVisible();
+    for (const { label, country } of Object.values(localeLabels)) {
+      expect(
+        screen.getByRole('menuitem', { name: `${country} ${label}` }),
+      ).toBeVisible();
     }
   });
 
@@ -42,19 +50,21 @@ describe(LocalePicker, () => {
       providers: { i18n: { locale: 'de-DE' } },
     });
 
-    await userEvent.click(screen.getByRole('button', { name: 'Deutsch (DE)' }));
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Deutschland Deutsch (DE)' }),
+    );
 
     await waitFor(() => {
       expect(screen.getByRole('menu')).toBeVisible();
     });
 
     await userEvent.click(
-      screen.getByRole('menuitem', { name: 'English (GB)' }),
+      screen.getByRole('menuitem', { name: 'Great Britain English (GB)' }),
     );
 
     await waitFor(() => {
       expect(
-        screen.getByRole('button', { name: 'English (GB)' }),
+        screen.getByRole('button', { name: 'Great Britain English (GB)' }),
       ).toBeVisible();
     });
   });

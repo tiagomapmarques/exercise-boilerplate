@@ -29,9 +29,14 @@ vi.mock('@lingui/detect-locale', async (importOriginal) => {
 
 describe('locale and language maps', () => {
   test('defines labels for all locales', () => {
+    const configMatch = {
+      label: expect.stringMatching(/./),
+      country: expect.stringMatching(/./),
+    };
+
     expect(localeLabels).toStrictEqual({
-      'en-GB': expect.stringMatching(/./),
-      'de-DE': expect.stringMatching(/./),
+      'en-GB': configMatch,
+      'de-DE': configMatch,
     });
   });
 

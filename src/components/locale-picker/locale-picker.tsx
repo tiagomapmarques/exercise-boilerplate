@@ -6,13 +6,18 @@ import { type Locale, localeLabels, useLocale } from '@/utilities/locale';
 
 type LanguageData = {
   label: string;
+  country: string;
   flagUrl: string;
 };
 
 const languageData = Object.fromEntries(
-  Object.entries(localeLabels).map(([locale, label]) => [
+  Object.entries(localeLabels).map(([locale, { label, country }]) => [
     locale,
-    { label, flagUrl: `/flags/${locale.split('-')[1].toLowerCase()}.svg` },
+    {
+      label,
+      country,
+      flagUrl: `/flags/${locale.split('-')[1].toLowerCase()}.svg`,
+    },
   ]),
 ) as Record<Locale, LanguageData>;
 
@@ -23,16 +28,21 @@ export const LocalePicker = () => {
   return (
     <Menu
       data-slot="LocalePicker"
-      onOpen={() => setOpen(true)}
-      onClose={() => setOpen(false)}
       radius="md"
       width="target"
       withinPortal
+      onOpen={() => setOpen(true)}
+      onClose={() => setOpen(false)}
     >
       <Menu.Target>
         <Button variant="default" data-expanded={open || undefined}>
           <Group gap="xs">
-            <Image src={languageData[locale].flagUrl} height="16" radius="sm" />
+            <Image
+              height="16"
+              radius="sm"
+              src={languageData[locale].flagUrl}
+              alt={languageData[locale].country}
+            />
 
             <Text size="sm">{languageData[locale].label}</Text>
 
@@ -43,9 +53,11 @@ export const LocalePicker = () => {
 
       <Menu.Dropdown>
         {(Object.entries(languageData) as [Locale, LanguageData][]).map(
-          ([key, { label, flagUrl }]) => (
+          ([key, { label, country, flagUrl }]) => (
             <Menu.Item
-              leftSection={<Image src={flagUrl} height="16" radius="sm" />}
+              leftSection={
+                <Image height="16" radius="sm" src={flagUrl} alt={country} />
+              }
               onClick={() => setLocale(key)}
               key={`LanguagePicker-Dropdown-Item-${key}`}
             >

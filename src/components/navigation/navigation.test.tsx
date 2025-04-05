@@ -51,6 +51,31 @@ describe(Navigation, () => {
       expect(document.title).toBe('Exercise boilerplate');
     });
 
+    test('displays active route', () => {
+      renderApp(<Navigation />, {
+        providers: { router: { initialEntries: ['/about'] } },
+      });
+
+      expect(screen.getByRole('link', { name: 'Home' })).not.toHaveAttribute(
+        'data-status',
+      );
+      expect(screen.getByRole('link', { name: 'About' })).toHaveAttribute(
+        'data-status',
+        'active',
+      );
+    });
+
+    test('navigates to home page', async () => {
+      const { providers } = renderApp(<Navigation />, {
+        providers: { router: { initialEntries: ['/unknown'] } },
+      });
+
+      await userEvent.click(screen.getByRole('link', { name: 'Home' }));
+
+      expect(providers.router?.latestLocation.pathname).toBe('/');
+      expect(document.title).toBe('Exercise boilerplate - Home');
+    });
+
     test('navigates to home page', async () => {
       const { providers } = renderApp(<Navigation />, {
         providers: { router: { initialEntries: ['/unknown'] } },

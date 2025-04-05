@@ -26,7 +26,7 @@ describe(ColorSchemePicker, () => {
       providers: { mantine: { forceColorScheme: 'light' } },
     });
 
-    expect(screen.getByRole('switch')).toBeChecked();
+    expect(screen.getByRole('switch', { name: 'Dark mode' })).toBeChecked();
 
     expect(screen.getByTestId('ColorSchemePicker-Sun')).toBeVisible();
     expect(
@@ -39,7 +39,7 @@ describe(ColorSchemePicker, () => {
       providers: { mantine: { forceColorScheme: 'dark' } },
     });
 
-    expect(screen.getByRole('switch')).not.toBeChecked();
+    expect(screen.getByRole('switch', { name: 'Dark mode' })).not.toBeChecked();
 
     expect(screen.getByTestId('ColorSchemePicker-Moon')).toBeVisible();
     expect(

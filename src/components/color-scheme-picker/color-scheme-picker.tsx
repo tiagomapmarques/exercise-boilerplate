@@ -1,3 +1,4 @@
+import { useLingui } from '@lingui/react';
 import {
   Switch,
   useComputedColorScheme,
@@ -6,12 +7,14 @@ import {
 import { Moon, Sun } from 'lucide-react';
 
 export const ColorSchemePicker = () => {
+  const { i18n } = useLingui();
   const colorScheme = useComputedColorScheme();
   const { setColorScheme } = useMantineColorScheme();
 
   return (
     <Switch
       size="md"
+      aria-label={i18n.t({ id: 'boilerplate.navigation.dark-mode' })}
       checked={colorScheme === 'light'}
       thumbIcon={
         colorScheme === 'light' ? (

@@ -21,8 +21,8 @@ export type Language = keyof typeof LanguageMap;
 
 /** Maps Locale to their labels. */
 export const localeLabels = {
-  'en-GB': 'English (GB)',
-  'de-DE': 'Deutsch (DE)',
+  'en-GB': { label: 'English (GB)', country: 'Great Britain' },
+  'de-DE': { label: 'Deutsch (DE)', country: 'Deutschland' },
 } as const;
 
 /** Supported locale. */

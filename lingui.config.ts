@@ -1,11 +1,11 @@
 import { defineConfig } from '@lingui/cli';
 import { formatter } from '@lingui/format-po';
 
-import { fallbackLocale } from './src/utilities/locale';
+import { fallbackLocale, locales } from './src/utilities/locale';
 
 export default defineConfig({
   sourceLocale: fallbackLocale,
-  locales: ['en-GB', 'de-DE'],
+  locales: locales,
   catalogs: [
     {
       path: '<rootDir>/src/locales/{locale}',

@@ -74,6 +74,20 @@ describe(AppShell, () => {
     expect(screen.getByTestId('Outlet')).toBeInTheDocument();
   });
 
+  test('adds router progress', () => {
+    renderApp(<AppShell />, {
+      providers: {
+        router: true,
+        mantine: false,
+        i18n: false,
+      },
+    });
+
+    expect(
+      screen.getByRole('progressbar', { name: 'Page loading' }),
+    ).toBeInTheDocument();
+  });
+
   describe('navigation', () => {
     test('displays navigation', () => {
       renderApp(<AppShell />, {
@@ -87,7 +101,7 @@ describe(AppShell, () => {
       expect(screen.getByRole('navigation')).toBeVisible();
     });
 
-    test('navigation menu is clickable', async () => {
+    test('menu can be opened', async () => {
       renderApp(<AppShell />, {
         providers: {
           router: true,
@@ -96,9 +110,41 @@ describe(AppShell, () => {
         },
       });
 
-      await userEvent.click(screen.getByRole('button', { name: '' }));
+      expect(screen.getByRole('navigation')).toHaveAttribute(
+        'data-open',
+        'false',
+      );
 
-      expect(screen.getByRole('button', { name: '' })).toBeVisible();
+      await userEvent.click(screen.getByRole('button', { name: 'Menu' }));
+
+      expect(screen.getByRole('navigation')).toHaveAttribute(
+        'data-open',
+        'true',
+      );
+    });
+
+    test('menu closes when user navigates', async () => {
+      renderApp(<AppShell />, {
+        providers: {
+          router: true,
+          mantine: false,
+          i18n: false,
+        },
+      });
+
+      await userEvent.click(screen.getByRole('button', { name: 'Menu' }));
+
+      expect(screen.getByRole('navigation')).toHaveAttribute(
+        'data-open',
+        'true',
+      );
+
+      await userEvent.click(screen.getByRole('link', { name: 'About' }));
+
+      expect(screen.getByRole('navigation')).toHaveAttribute(
+        'data-open',
+        'false',
+      );
     });
   });
 });

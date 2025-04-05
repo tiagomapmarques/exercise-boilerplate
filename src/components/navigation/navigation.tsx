@@ -6,7 +6,23 @@ import { Home, Info } from 'lucide-react';
 
 import { ColorSchemePicker } from '@/components/color-scheme-picker';
 import { LocalePicker } from '@/components/locale-picker';
-import { useLocale } from '@/utilities/locale';
+import { I18n } from '@/utilities/locale';
+
+const updateDocumentTitle = (i18n: I18n, pathname: string) => {
+  if (!Object.keys(i18n.messages).length) {
+    return;
+  }
+
+  let pageTitle = i18n.t({ id: 'boilerplate.header.logo' });
+
+  if (pathname === '/about') {
+    pageTitle += ` - ${i18n.t({ id: 'boilerplate.about.title' })}`;
+  } else if (pathname === '/') {
+    pageTitle += ` - ${i18n.t({ id: 'boilerplate.home.title' })}`;
+  }
+
+  document.title = pageTitle;
+};
 
 const NavigationLink = ({
   children,
@@ -32,34 +48,13 @@ const NavigationLink = ({
   );
 };
 
-export type NavigationProps = {
-  onInterfaceRerender?: () => void;
-};
-
-export const Navigation = ({ onInterfaceRerender }: NavigationProps) => {
+export const Navigation = () => {
   const { i18n } = useLingui();
-  const [locale] = useLocale();
-  const location = useLocation();
+  const { pathname } = useLocation();
 
-  if (Object.keys(i18n.messages).length) {
-    let pageTitle = i18n.t({ id: 'boilerplate.header.logo' });
-
-    switch (location.pathname) {
-      case '/about':
-        pageTitle += ` - ${i18n.t({ id: 'boilerplate.about.title' })}`;
-        break;
-      case '/':
-        pageTitle += ` - ${i18n.t({ id: 'boilerplate.home.title' })}`;
-        break;
-    }
-
-    document.title = pageTitle;
-  }
-
-  // biome-ignore lint/correctness/useExhaustiveDependencies:
   useEffect(() => {
-    onInterfaceRerender?.();
-  }, [location.pathname, locale]);
+    updateDocumentTitle(i18n, pathname);
+  }, [i18n, i18n.messages, pathname]);
 
   return (
     <Stack style={{ flexGrow: 1 }}>
@@ -83,10 +78,9 @@ export const Navigation = ({ onInterfaceRerender }: NavigationProps) => {
         <Stack gap="lg" style={{ width: '100%' }}>
           <LocalePicker />
 
-          <Stack gap="sm">
-            <Divider />
-            <ColorSchemePicker />
-          </Stack>
+          <Divider />
+
+          <ColorSchemePicker />
         </Stack>
       </Flex>
     </Stack>
