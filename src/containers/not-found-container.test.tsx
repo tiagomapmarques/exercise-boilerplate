@@ -18,9 +18,7 @@ describe(NotFoundContainer, () => {
       providers: { router: true },
     });
 
-    expect(
-      screen.getByText('Oops… something went wrong on our end'),
-    ).toBeVisible();
+    expect(screen.getByText('This page does not exist')).toBeVisible();
   });
 
   test('navigates to start', async () => {

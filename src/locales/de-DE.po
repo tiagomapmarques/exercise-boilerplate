@@ -19,6 +19,9 @@ msgstr "Licenz: {license}"
 msgid "boilerplate.about.title"
 msgstr "Über"
 
+msgid "boilerplate.actions.go-back"
+msgstr "Zurückgehen"
+
 msgid "boilerplate.actions.go-to-start"
 msgstr "Zum Start gehen"
 
@@ -41,7 +44,13 @@ msgid "boilerplate.navigation.dark-mode"
 msgstr "Dunkelmodus"
 
 msgid "boilerplate.not-found.content"
-msgstr "Ups… da ist etwas auf unserer Seite schief gelaufen"
+msgstr "Diese Seite existiert nicht"
 
 msgid "boilerplate.not-found.title"
 msgstr "404 Not found"
+
+msgid "boilerplate.unexpected-error.content"
+msgstr "Ups… da ist etwas auf unserer Seite schief gelaufen"
+
+msgid "boilerplate.unexpected-error.title"
+msgstr "Unerwarteter Fehler"

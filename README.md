@@ -8,5 +8,4 @@
 ## Quick start production
 
 - pnpm i
-- pnpm build
-- pnpm serve
+- pnpm build:watch

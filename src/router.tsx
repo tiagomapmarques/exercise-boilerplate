@@ -1,6 +1,6 @@
 import { createRouter } from '@tanstack/react-router';
 
-import { NotFoundContainer } from '@/containers';
+import { NotFoundContainer, UnexpectedErrorContainer } from '@/containers';
 
 import { routeTree } from './routeTree.gen';
 
@@ -9,6 +9,7 @@ export const router = createRouter({
   routeTree,
   defaultPreload: 'intent',
   defaultNotFoundComponent: NotFoundContainer,
+  defaultErrorComponent: UnexpectedErrorContainer,
 });
 
 // Register the router instance for type safety

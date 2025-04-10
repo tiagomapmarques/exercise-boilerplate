@@ -1,6 +1,6 @@
 FROM node:22-alpine
 
-RUN npm i -g pnpm@10.7.1
+RUN npm i -g pnpm@10.8.0
 
 COPY . /app
 WORKDIR /app

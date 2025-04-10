@@ -31,7 +31,7 @@ export * from '@vitest/browser/context';
 const createRouterRenderProvider = (
   props:
     | (Partial<Omit<ComponentProps<typeof RouterProvider>, 'children'>> &
-        Parameters<typeof createMemoryHistory>[0])
+        Partial<Parameters<typeof createMemoryHistory>[0]>)
     | boolean
     | undefined,
 ) => {

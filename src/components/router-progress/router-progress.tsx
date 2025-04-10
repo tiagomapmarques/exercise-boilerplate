@@ -1,13 +1,14 @@
 import { useEffect } from 'react';
 import { useLingui } from '@lingui/react';
 import { NavigationProgress, nprogress } from '@mantine/nprogress';
+import { Throttler } from '@tanstack/react-pacer';
 import { useRouter } from '@tanstack/react-router';
-import { throttle } from 'throttle-debounce';
 
-const nprogressComplete = throttle(50, () => {
-  requestAnimationFrame(() => {
-    nprogress.complete();
-  });
+import './router-progress.css';
+
+const nprogressComplete = new Throttler(nprogress.complete, {
+  trailing: false,
+  wait: 50,
 });
 
 export const RouterProgress = () => {
@@ -19,7 +20,9 @@ export const RouterProgress = () => {
       nprogress.start();
     });
     router.subscribe('onResolved', () => {
-      nprogressComplete();
+      requestAnimationFrame(() => {
+        nprogressComplete.maybeExecute();
+      });
     });
   }, [router]);
 

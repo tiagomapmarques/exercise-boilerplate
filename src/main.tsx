@@ -6,8 +6,7 @@ import { getAppI18n, preloadLocale } from '@/utilities/locale';
 
 import { router } from './router';
 
-import '@mantine/core/styles.css';
-import '@mantine/nprogress/styles.css';
+import './main.css';
 
 preloadLocale(getAppI18n());
 
