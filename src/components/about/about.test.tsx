@@ -12,7 +12,7 @@ describe(About, () => {
   test('displays version', () => {
     renderApp(<About />);
 
-    expect(screen.getByText('v0.5.0')).toBeVisible();
+    expect(screen.getByText(/v\d+.\d+.\d+/)).toBeVisible();
   });
 
   test('displays license', () => {

@@ -5,6 +5,7 @@ import { detect, fromNavigator } from '@lingui/detect-locale';
 import { act, disableConsoleError, renderAppHook } from '@/testing';
 import { messages as messagesDeDe } from '@/locales/de-DE.po';
 import { messages as messagesEnGb } from '@/locales/en-GB.po';
+import { messages as messagesFrFr } from '@/locales/fr-FR.po';
 
 import {
   fallbackLocale,
@@ -36,15 +37,17 @@ describe('locale and language maps', () => {
 
     expect(localeLabels).toStrictEqual({
       'en-GB': configMatch,
+      'fr-FR': configMatch,
       'de-DE': configMatch,
     });
   });
 
   test('defines default locales for all languages', () => {
-    const anyLocale = /(en-GB)|(de-DE)/;
+    const anyLocale = /(en-GB)|(fr-FR)|(de-DE)/;
 
     expect(LanguageMap).toStrictEqual({
       en: expect.stringMatching(anyLocale),
+      fr: expect.stringMatching(anyLocale),
       de: expect.stringMatching(anyLocale),
     });
   });
@@ -72,6 +75,15 @@ describe(preloadLocale, () => {
     expect(i18n.messages).toBe(messagesEnGb);
   });
 
+  test('loads fr-FR messages', async () => {
+    const i18n = setupI18n();
+
+    await preloadLocale(i18n, 'fr-FR');
+
+    expect(i18n.locale).toBe('fr-FR');
+    expect(i18n.messages).toBe(messagesFrFr);
+  });
+
   test('loads de-DE messages', async () => {
     const i18n = setupI18n();
 
@@ -89,6 +101,7 @@ describe(preloadLocale, () => {
       ${'en-GB'}   | ${'en-GB'}
       ${'en-US'}   | ${'en-GB'}
       ${'en'}      | ${'en-GB'}
+      ${'fr'}      | ${'fr-FR'}
       ${'de-DE'}   | ${'de-DE'}
       ${'de-AT'}   | ${'de-DE'}
       ${'uk-UA'}   | ${'en-GB'}

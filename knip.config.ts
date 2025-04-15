@@ -9,8 +9,13 @@ const config: KnipConfig = {
     'types',
   ],
   ignoreDependencies: [
-    // Ignored as it's used in the react vite config
+    // Ignored as it's used in the vite config
     '@lingui/swc-plugin',
+    '@vitest/coverage-istanbul',
+  ],
+  ignore: [
+    // Ignored as it's the testing setup file
+    'src/testing/setup.tsx',
   ],
 };
 

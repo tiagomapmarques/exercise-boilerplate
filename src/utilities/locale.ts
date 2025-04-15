@@ -13,6 +13,7 @@ export const getAppI18n = () => appI18n;
 /** Maps Languages to their default Locales. */
 export const LanguageMap = {
   en: 'en-GB',
+  fr: 'fr-FR',
   de: 'de-DE',
 } as const;
 
@@ -22,6 +23,7 @@ export type Language = keyof typeof LanguageMap;
 /** Maps Locale to their labels. */
 export const localeLabels = {
   'en-GB': { label: 'English (GB)', country: 'Great Britain' },
+  'fr-FR': { label: 'Français (FR)', country: 'France' },
   'de-DE': { label: 'Deutsch (DE)', country: 'Deutschland' },
 } as const;
 

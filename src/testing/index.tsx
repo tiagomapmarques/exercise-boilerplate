@@ -23,6 +23,7 @@ import {
 
 import { messages as messagesDeDe } from '@/locales/de-DE.po';
 import { messages as messagesEnGb } from '@/locales/en-GB.po';
+import { messages as messagesFrFr } from '@/locales/fr-FR.po';
 import type { Locale } from '@/utilities/locale';
 
 export * from '@testing-library/react';
@@ -96,6 +97,7 @@ const createI18nRenderProvider = (
 
   const i18nMessages: Record<Locale, Messages> = {
     'en-GB': messagesEnGb,
+    'fr-FR': messagesFrFr,
     'de-DE': messagesDeDe,
   };
 
