@@ -28,6 +28,7 @@ export const RouterProgress = () => {
 
   return (
     <NavigationProgress
+      data-slot="RouterProgress"
       aria-label={i18n.t({ id: 'boilerplate.header.page-loading' })}
     />
   );

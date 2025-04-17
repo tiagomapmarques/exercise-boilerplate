@@ -39,7 +39,9 @@ describe(RouterProgress, () => {
 
     expect(
       screen.getByRole('progressbar', { name: 'Page loading' }),
-    ).toBeInTheDocument();
+    ).not.toBeVisible();
+
+    expect(screen.getByTestId('RouterProgress')).toBeVisible();
   });
 
   test('does not start progress on the first run', async () => {
