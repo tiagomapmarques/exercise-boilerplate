@@ -1,10 +1,10 @@
-import { renderApp, screen, userEvent } from '@/testing';
+import { render, screen, userEvent } from '@/testing';
 
 import { NotFoundContainer } from './not-found-container';
 
 describe(NotFoundContainer, () => {
   test('displays a title', async () => {
-    renderApp(<NotFoundContainer />, {
+    render(<NotFoundContainer />, {
       providers: { router: true },
     });
 
@@ -14,7 +14,7 @@ describe(NotFoundContainer, () => {
   });
 
   test('displays error text', () => {
-    renderApp(<NotFoundContainer />, {
+    render(<NotFoundContainer />, {
       providers: { router: true },
     });
 
@@ -22,7 +22,7 @@ describe(NotFoundContainer, () => {
   });
 
   test('navigates to start', async () => {
-    const { providers } = renderApp(<NotFoundContainer />, {
+    const { providers } = render(<NotFoundContainer />, {
       providers: { router: { initialEntries: ['/unknown'] } },
     });
 

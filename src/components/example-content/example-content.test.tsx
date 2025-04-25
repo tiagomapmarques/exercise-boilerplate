@@ -1,10 +1,10 @@
-import { renderApp, screen } from '@/testing';
+import { render, screen } from '@/testing';
 
 import { ExampleContent } from './example-content';
 
 describe(ExampleContent, () => {
   test('displays content', () => {
-    renderApp(<ExampleContent />);
+    render(<ExampleContent />);
 
     expect(screen.getByText('Place your UI here')).toBeVisible();
   });

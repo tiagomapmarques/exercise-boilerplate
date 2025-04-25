@@ -9,31 +9,29 @@ import { Moon, Sun } from 'lucide-react';
 export const ColorSchemePicker = () => {
   const { i18n } = useLingui();
   const colorScheme = useComputedColorScheme();
-  const { setColorScheme } = useMantineColorScheme();
+  const { toggleColorScheme } = useMantineColorScheme();
 
   return (
     <Switch
       size="md"
       aria-label={i18n.t({ id: 'boilerplate.navigation.dark-mode' })}
-      checked={colorScheme === 'light'}
+      checked={colorScheme === 'dark'}
       thumbIcon={
-        colorScheme === 'light' ? (
-          <Sun
-            data-slot="ColorSchemePicker-Sun"
-            size="14"
-            style={{ color: 'var(--mantine-primary-color-filled)' }}
-          />
-        ) : (
+        colorScheme === 'dark' ? (
           <Moon
             data-slot="ColorSchemePicker-Moon"
             size="14"
             style={{ color: 'var(--mantine-color-body)' }}
           />
+        ) : (
+          <Sun
+            data-slot="ColorSchemePicker-Sun"
+            size="14"
+            style={{ color: 'var(--mantine-primary-color-filled)' }}
+          />
         )
       }
-      onChange={({ currentTarget }) =>
-        setColorScheme(currentTarget.checked ? 'light' : 'dark')
-      }
+      onChange={toggleColorScheme}
     />
   );
 };

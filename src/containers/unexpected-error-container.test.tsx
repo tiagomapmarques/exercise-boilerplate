@@ -1,10 +1,10 @@
-import { act, renderApp, screen, userEvent } from '@/testing';
+import { act, render, screen, userEvent } from '@/testing';
 
 import { UnexpectedErrorContainer } from './unexpected-error-container';
 
 describe(UnexpectedErrorContainer, () => {
   test('displays a title', async () => {
-    renderApp(<UnexpectedErrorContainer />, {
+    render(<UnexpectedErrorContainer />, {
       providers: { router: true },
     });
 
@@ -14,7 +14,7 @@ describe(UnexpectedErrorContainer, () => {
   });
 
   test('displays error text', () => {
-    renderApp(<UnexpectedErrorContainer />, {
+    render(<UnexpectedErrorContainer />, {
       providers: { router: true },
     });
 
@@ -24,7 +24,7 @@ describe(UnexpectedErrorContainer, () => {
   });
 
   test('goes back to the previous page', async () => {
-    const { providers } = renderApp(<UnexpectedErrorContainer />, {
+    const { providers } = render(<UnexpectedErrorContainer />, {
       providers: { router: { initialEntries: ['/initial-route'] } },
     });
 

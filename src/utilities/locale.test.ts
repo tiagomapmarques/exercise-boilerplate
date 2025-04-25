@@ -2,7 +2,7 @@ import type { Mock } from 'vitest';
 import { I18n, setupI18n } from '@lingui/core';
 import { detect, fromNavigator } from '@lingui/detect-locale';
 
-import { act, disableConsoleError, renderAppHook } from '@/testing';
+import { act, disableConsoleError, renderHook } from '@/testing';
 import { messages as messagesDeDe } from '@/locales/de-DE.po';
 import { messages as messagesEnGb } from '@/locales/en-GB.po';
 import { messages as messagesFrFr } from '@/locales/fr-FR.po';
@@ -128,7 +128,7 @@ describe(preloadLocale, () => {
 
 describe(useLocale, () => {
   test('gets the current locale', () => {
-    const { result } = renderAppHook(() => useLocale(), {
+    const { result } = renderHook(() => useLocale(), {
       providers: { i18n: true },
     });
 
@@ -138,7 +138,7 @@ describe(useLocale, () => {
   });
 
   test('loads and sets a new locale', async () => {
-    const { result, providers } = renderAppHook(() => useLocale(), {
+    const { result, providers } = renderHook(() => useLocale(), {
       providers: { i18n: true },
     });
 
@@ -162,7 +162,7 @@ describe(useLocale, () => {
     disableConsoleError();
 
     test('log error if locale is unknown', async () => {
-      const { result } = renderAppHook(() => useLocale(), {
+      const { result } = renderHook(() => useLocale(), {
         providers: { i18n: true },
       });
 

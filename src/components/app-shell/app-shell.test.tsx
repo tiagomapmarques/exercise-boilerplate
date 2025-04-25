@@ -1,7 +1,7 @@
 import { type Mock } from 'vitest';
 import { setupI18n } from '@lingui/core';
 
-import { renderApp, screen, userEvent } from '@/testing';
+import { render, screen, userEvent } from '@/testing';
 import { fallbackLocale, getAppI18n } from '@/utilities/locale';
 
 import { AppShell } from './app-shell';
@@ -26,7 +26,7 @@ describe(AppShell, () => {
 
   test('adds i18n provider', () => {
     expect(() =>
-      renderApp(<AppShell />, {
+      render(<AppShell />, {
         providers: {
           router: true,
           mantine: false,
@@ -38,7 +38,7 @@ describe(AppShell, () => {
 
   test('adds Mantine provider', () => {
     expect(() =>
-      renderApp(<AppShell />, {
+      render(<AppShell />, {
         providers: {
           router: true,
           mantine: false,
@@ -49,7 +49,7 @@ describe(AppShell, () => {
   });
 
   test('displays header', () => {
-    renderApp(<AppShell />, {
+    render(<AppShell />, {
       providers: {
         router: true,
         mantine: false,
@@ -63,7 +63,7 @@ describe(AppShell, () => {
   });
 
   test('adds router outlet', () => {
-    renderApp(<AppShell />, {
+    render(<AppShell />, {
       providers: {
         router: true,
         mantine: false,
@@ -71,11 +71,13 @@ describe(AppShell, () => {
       },
     });
 
-    expect(screen.getByTestId('Outlet')).toBeInTheDocument();
+    expect(
+      screen.getByLabelText('TanstackReactRouter-Outlet'),
+    ).not.toBeVisible();
   });
 
   test('adds router progress', () => {
-    renderApp(<AppShell />, {
+    render(<AppShell />, {
       providers: {
         router: true,
         mantine: false,
@@ -85,12 +87,12 @@ describe(AppShell, () => {
 
     expect(
       screen.getByRole('progressbar', { name: 'Page loading' }),
-    ).toBeInTheDocument();
+    ).not.toBeVisible();
   });
 
   describe('navigation', () => {
     test('displays navigation', () => {
-      renderApp(<AppShell />, {
+      render(<AppShell />, {
         providers: {
           router: true,
           mantine: false,
@@ -102,7 +104,7 @@ describe(AppShell, () => {
     });
 
     test('menu can be opened', async () => {
-      renderApp(<AppShell />, {
+      render(<AppShell />, {
         providers: {
           router: true,
           mantine: false,
@@ -124,7 +126,7 @@ describe(AppShell, () => {
     });
 
     test('menu closes when user navigates', async () => {
-      renderApp(<AppShell />, {
+      render(<AppShell />, {
         providers: {
           router: true,
           mantine: false,

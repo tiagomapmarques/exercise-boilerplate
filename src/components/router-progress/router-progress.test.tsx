@@ -1,7 +1,7 @@
 import { Mock } from 'vitest';
 import { nprogress } from '@mantine/nprogress';
 
-import { act, renderApp, screen, waitFor } from '@/testing';
+import { act, render, screen, waitFor } from '@/testing';
 
 import { RouterProgress } from './router-progress';
 
@@ -33,7 +33,7 @@ describe(RouterProgress, () => {
   });
 
   test('displays the progress bar', () => {
-    renderApp(<RouterProgress />, {
+    render(<RouterProgress />, {
       providers: { router: true },
     });
 
@@ -45,7 +45,7 @@ describe(RouterProgress, () => {
   });
 
   test('does not start progress on the first run', async () => {
-    renderApp(<RouterProgress />, {
+    render(<RouterProgress />, {
       providers: { router: true },
     });
 
@@ -57,7 +57,7 @@ describe(RouterProgress, () => {
   });
 
   test('starts and completes progress when user navigates', async () => {
-    const { providers } = renderApp(<RouterProgress />, {
+    const { providers } = render(<RouterProgress />, {
       providers: { router: true },
     });
 

@@ -1,32 +1,14 @@
-import { type Mock } from 'vitest';
-import { useMantineColorScheme } from '@mantine/core';
-
-import { renderApp, screen, userEvent } from '@/testing';
+import { render, screen, userEvent } from '@/testing';
 
 import { ColorSchemePicker } from './color-scheme-picker';
 
 describe(ColorSchemePicker, () => {
-  const setColorScheme = vi.fn();
-
-  beforeEach(async () => {
-    const useOriginal = (
-      await vi.importActual<typeof import('@mantine/core')>('@mantine/core')
-    ).useMantineColorScheme;
-
-    (
-      useMantineColorScheme as Mock<typeof useMantineColorScheme>
-    ).mockImplementation((props) => ({
-      ...useOriginal(props),
-      setColorScheme,
-    }));
-  });
-
   test('displays light scheme', () => {
-    renderApp(<ColorSchemePicker />, {
-      providers: { mantine: { forceColorScheme: 'light' } },
+    render(<ColorSchemePicker />, {
+      providers: { mantine: { defaultColorScheme: 'light' } },
     });
 
-    expect(screen.getByRole('switch', { name: 'Dark mode' })).toBeChecked();
+    expect(screen.getByRole('switch', { name: 'Dark mode' })).not.toBeChecked();
 
     expect(screen.getByTestId('ColorSchemePicker-Sun')).toBeVisible();
     expect(
@@ -35,11 +17,11 @@ describe(ColorSchemePicker, () => {
   });
 
   test('displays dark scheme', () => {
-    renderApp(<ColorSchemePicker />, {
-      providers: { mantine: { forceColorScheme: 'dark' } },
+    render(<ColorSchemePicker />, {
+      providers: { mantine: { defaultColorScheme: 'dark' } },
     });
 
-    expect(screen.getByRole('switch', { name: 'Dark mode' })).not.toBeChecked();
+    expect(screen.getByRole('switch', { name: 'Dark mode' })).toBeChecked();
 
     expect(screen.getByTestId('ColorSchemePicker-Moon')).toBeVisible();
     expect(
@@ -47,29 +29,15 @@ describe(ColorSchemePicker, () => {
     ).not.toBeInTheDocument();
   });
 
-  test('toggles to light scheme', async () => {
-    renderApp(<ColorSchemePicker />, {
-      providers: { mantine: { forceColorScheme: 'dark' } },
+  test('toggles to color scheme', async () => {
+    render(<ColorSchemePicker />, {
+      providers: { mantine: { defaultColorScheme: 'dark' } },
     });
 
-    expect(setColorScheme).not.toBeCalled();
+    expect(screen.getByTestId('ColorSchemePicker-Moon')).toBeVisible();
 
     await userEvent.click(screen.getByTestId('ColorSchemePicker-Moon'));
 
-    expect(setColorScheme).toBeCalledTimes(1);
-    expect(setColorScheme).toBeCalledWith('light');
-  });
-
-  test('toggles to dark scheme', async () => {
-    renderApp(<ColorSchemePicker />, {
-      providers: { mantine: { forceColorScheme: 'light' } },
-    });
-
-    expect(setColorScheme).not.toBeCalled();
-
-    await userEvent.click(screen.getByTestId('ColorSchemePicker-Sun'));
-
-    expect(setColorScheme).toBeCalledTimes(1);
-    expect(setColorScheme).toBeCalledWith('dark');
+    expect(screen.getByTestId('ColorSchemePicker-Sun')).toBeVisible();
   });
 });

@@ -1,11 +1,11 @@
-import { renderApp, screen, userEvent, waitFor } from '@/testing';
+import { render, screen, userEvent, waitFor } from '@/testing';
 import { localeLabels } from '@/utilities/locale';
 
 import { LocalePicker } from './locale-picker';
 
 describe(LocalePicker, () => {
   test('displays dropdown menu', () => {
-    renderApp(<LocalePicker />);
+    render(<LocalePicker />);
 
     expect(
       screen.getByRole('button', { name: 'Great Britain English (GB)' }),
@@ -13,7 +13,7 @@ describe(LocalePicker, () => {
   });
 
   test('displays selected locale in dropdown menu', () => {
-    renderApp(<LocalePicker />, {
+    render(<LocalePicker />, {
       providers: { i18n: { locale: 'de-DE' } },
     });
 
@@ -26,7 +26,7 @@ describe(LocalePicker, () => {
   });
 
   test('shows all locales in dropdown', async () => {
-    renderApp(<LocalePicker />);
+    render(<LocalePicker />);
 
     expect(screen.queryByRole('menu')).not.toBeInTheDocument();
 
@@ -46,7 +46,7 @@ describe(LocalePicker, () => {
   });
 
   test('displays selected locale in dropdown menu', async () => {
-    renderApp(<LocalePicker />, {
+    render(<LocalePicker />, {
       providers: { i18n: { locale: 'de-DE' } },
     });
 

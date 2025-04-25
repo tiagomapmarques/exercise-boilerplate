@@ -1,13 +1,13 @@
 import { setupI18n } from '@lingui/core';
 
-import { renderApp, screen, userEvent } from '@/testing';
+import { render, screen, userEvent } from '@/testing';
 import { fallbackLocale } from '@/utilities/locale';
 
 import { Navigation } from './navigation';
 
 describe(Navigation, () => {
   test('displays locale picker', () => {
-    renderApp(<Navigation />, {
+    render(<Navigation />, {
       providers: { router: true },
     });
 
@@ -15,7 +15,7 @@ describe(Navigation, () => {
   });
 
   test('displays color scheme picker', () => {
-    renderApp(<Navigation />, {
+    render(<Navigation />, {
       providers: {
         router: true,
         mantine: { forceColorScheme: 'light' },
@@ -31,7 +31,7 @@ describe(Navigation, () => {
       messages: { [fallbackLocale]: {} },
     });
 
-    renderApp(<Navigation />, {
+    render(<Navigation />, {
       providers: { router: true, i18n: { i18n } },
     });
 
@@ -40,7 +40,7 @@ describe(Navigation, () => {
 
   describe('navigation links', () => {
     test('displays links', () => {
-      const { providers } = renderApp(<Navigation />, {
+      const { providers } = render(<Navigation />, {
         providers: { router: { initialEntries: ['/unknown'] } },
       });
 
@@ -52,7 +52,7 @@ describe(Navigation, () => {
     });
 
     test('displays active route', () => {
-      renderApp(<Navigation />, {
+      render(<Navigation />, {
         providers: { router: { initialEntries: ['/about'] } },
       });
 
@@ -66,7 +66,7 @@ describe(Navigation, () => {
     });
 
     test('navigates to home page', async () => {
-      const { providers } = renderApp(<Navigation />, {
+      const { providers } = render(<Navigation />, {
         providers: { router: { initialEntries: ['/unknown'] } },
       });
 
@@ -77,7 +77,7 @@ describe(Navigation, () => {
     });
 
     test('navigates to home page', async () => {
-      const { providers } = renderApp(<Navigation />, {
+      const { providers } = render(<Navigation />, {
         providers: { router: { initialEntries: ['/unknown'] } },
       });
 
@@ -88,7 +88,7 @@ describe(Navigation, () => {
     });
 
     test('navigates to about page', async () => {
-      const { providers } = renderApp(<Navigation />, {
+      const { providers } = render(<Navigation />, {
         providers: { router: { initialEntries: ['/unknown'] } },
       });
 

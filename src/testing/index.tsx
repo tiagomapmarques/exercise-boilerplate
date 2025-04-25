@@ -1,5 +1,6 @@
 import type { Mock } from 'vitest';
 import {
+  act,
   type ComponentProps,
   Fragment,
   type PropsWithChildren,
@@ -17,6 +18,7 @@ import {
 import {
   render as baseRender,
   renderHook as baseRenderHook,
+  screen as baseScreen,
   type RenderHookOptions,
   type RenderOptions,
 } from '@testing-library/react';
@@ -28,6 +30,7 @@ import type { Locale } from '@/utilities/locale';
 
 export * from '@testing-library/react';
 export * from '@vitest/browser/context';
+export { act };
 
 const createRouterRenderProvider = (
   props:
@@ -43,20 +46,23 @@ const createRouterRenderProvider = (
   const {
     initialEntries = ['/'],
     initialIndex,
+    router: customRouter,
     ...providerProps
   } = typeof props === 'object' ? props : {};
 
-  const router = createRouter({
-    routeTree: createRootRoute(),
-    history: createMemoryHistory({ initialEntries, initialIndex }),
-  });
+  const router =
+    customRouter ||
+    createRouter({
+      routeTree: createRootRoute(),
+      history: createMemoryHistory({ initialEntries, initialIndex }),
+    });
 
   const Provider = ({ children }: PropsWithChildren) => {
     return (
       <RouterProvider
         router={router}
-        {...providerProps}
         defaultComponent={() => children}
+        {...providerProps}
       />
     );
   };
@@ -71,7 +77,8 @@ const createMantineRenderProvider = (
     return { Provider: Fragment, result: {} };
   }
 
-  const parsedProps = {
+  const parsedProps: NonNullable<typeof props> = {
+    defaultColorScheme: 'light',
     ...(typeof props === 'object' ? props : {}),
   };
 
@@ -156,6 +163,14 @@ const createWrapper = (
   };
 };
 
+type Screen = typeof baseScreen & {
+  render: typeof baseRender;
+  renderHook: typeof baseRenderHook;
+};
+export const screen = baseScreen as Screen;
+screen.render = baseRender;
+screen.renderHook = baseRenderHook;
+
 /**
  * Renders a component similarly to the `render` function from
  * `@testing-library/react`.
@@ -164,7 +179,7 @@ const createWrapper = (
  * selected app providers. By default, it adds the `i18n` and `mantine`
  * providers.
  */
-export const renderApp = (
+export const render = (
   ui: ReactNode,
   { providers, ...options }: RenderOptions & { providers?: Providers } = {},
 ) => {
@@ -186,7 +201,7 @@ export const renderApp = (
  * It also takes in a `providers` object to auto-wrap the component in the
  * selected app providers. By default, it does not add any app providers.
  */
-export const renderAppHook = <HookReturn, HookProps>(
+export const renderHook = <HookReturn, HookProps>(
   hook: (initialProps: HookProps) => HookReturn,
   {
     providers,

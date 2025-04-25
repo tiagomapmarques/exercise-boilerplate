@@ -1,9 +1,9 @@
 import '@testing-library/react';
 import '@mantine/core/styles.css';
 
-import { act, configure } from '@testing-library/react';
+import { configure } from '@testing-library/react';
 
-import { userEvent } from '@/testing';
+import { act, userEvent } from '@/testing';
 
 configure({
   testIdAttribute: 'data-slot',
@@ -18,14 +18,14 @@ userEvent.click = async (...args) => {
 };
 
 // Since `@tanstack/react-router` and `@mantine/core` are needed when creating
-// the `@/testing` utilities and because some component tests require them to
-// be mocked, these dependencies need to be mocked globally instead of locally
+// the `@/testing` utilities and because some component tests may need to mock
+// them, these dependencies need to be mocked globally instead of locally
 vi.mock('@tanstack/react-router', async (importOriginal) => {
   const original =
     await importOriginal<typeof import('@tanstack/react-router')>();
   return {
     ...original,
-    Outlet: vi.fn(() => <div data-slot="Outlet" />),
+    Outlet: vi.fn(() => <div aria-label="TanstackReactRouter-Outlet" />),
   };
 });
 vi.mock('@mantine/core', async (importOriginal) => {

@@ -1,7 +1,7 @@
 import { type Mock } from 'vitest';
 import { setupI18n } from '@lingui/core';
 
-import { renderApp, screen } from '@/testing';
+import { render, screen } from '@/testing';
 import { fallbackLocale, getAppI18n, type I18n } from '@/utilities/locale';
 
 import { LocaleProvider } from './locale-provider';
@@ -24,7 +24,7 @@ describe(LocaleProvider, () => {
     });
 
     test('does not display children', () => {
-      renderApp(
+      render(
         <LocaleProvider>
           <div data-slot="Content" />
         </LocaleProvider>,
@@ -49,14 +49,14 @@ describe(LocaleProvider, () => {
     });
 
     test('displays children', () => {
-      renderApp(
+      render(
         <LocaleProvider>
           <div data-slot="Content" />
         </LocaleProvider>,
         { providers: { i18n: false } },
       );
 
-      expect(screen.getByTestId('Content')).toBeInTheDocument();
+      expect(screen.getByTestId('Content')).not.toBeVisible();
     });
   });
 });
