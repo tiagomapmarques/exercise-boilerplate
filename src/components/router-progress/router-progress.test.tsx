@@ -1,13 +1,11 @@
-import { Mock } from 'vitest';
 import { nprogress } from '@mantine/nprogress';
 
-import { act, render, screen, waitFor } from '@/testing';
+import { render, screen, waitFor } from '@/testing';
 
 import { RouterProgress } from './router-progress';
 
 vi.mock('@mantine/nprogress', async (importOriginal) => {
   const original = await importOriginal<typeof import('@mantine/nprogress')>();
-
   return {
     ...original,
     nprogress: {
@@ -19,59 +17,35 @@ vi.mock('@mantine/nprogress', async (importOriginal) => {
 });
 
 describe(RouterProgress, () => {
-  let mockCalls: string[];
-
-  beforeEach(() => {
-    mockCalls = [];
-
-    (nprogress.start as Mock<typeof nprogress.start>).mockImplementation(() =>
-      mockCalls.push('start'),
-    );
-    (nprogress.complete as Mock<typeof nprogress.complete>).mockImplementation(
-      () => mockCalls.push('complete'),
-    );
-  });
-
-  test('displays the progress bar', () => {
+  it('displays the progress bar', async () => {
     render(<RouterProgress />, {
-      providers: { router: true },
+      providers: { router: { initialEntries: ['/about'] } },
     });
 
     expect(
-      screen.getByRole('progressbar', { name: 'Page loading' }),
+      await screen.findByRole('progressbar', { name: 'Page loading' }),
     ).not.toBeVisible();
 
     expect(screen.getByTestId('RouterProgress')).toBeVisible();
   });
 
-  test('does not start progress on the first run', async () => {
-    render(<RouterProgress />, {
-      providers: { router: true },
-    });
-
-    await waitFor(() => {
-      expect(mockCalls.includes('complete')).toBeTruthy();
-    });
-
-    expect(mockCalls.includes('start')).toBeFalsy();
-  });
-
-  test('starts and completes progress when user navigates', async () => {
+  it('starts and completes progress when user navigates', async () => {
     const { providers } = render(<RouterProgress />, {
-      providers: { router: true },
+      providers: { router: { initialEntries: ['/about'] } },
     });
+
+    await providers.router?.waitForLoad();
+
+    expect(nprogress.start).not.toHaveBeenCalled();
+    expect(nprogress.complete).not.toHaveBeenCalled();
+
+    await providers.router?.navigate({ to: '/' });
+
+    expect(nprogress.start).toHaveBeenCalledTimes(1);
+    expect(nprogress.complete).not.toHaveBeenCalled();
 
     await waitFor(() => {
-      expect(mockCalls).toEqual(['complete']);
-    });
-    mockCalls = [];
-
-    act(() => {
-      providers.router?.navigate({ to: '/' });
-    });
-
-    await waitFor(() => {
-      expect(mockCalls).toEqual(['start', 'complete']);
+      expect(nprogress.complete).toHaveBeenCalledTimes(1);
     });
   });
 });

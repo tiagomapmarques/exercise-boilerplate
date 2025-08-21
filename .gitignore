@@ -13,5 +13,6 @@ __screenshots__
 TODO
 .env
 src/locales/*.ts
+!src/locales/*.d.ts
 licenses.json
 routeTree.gen.ts

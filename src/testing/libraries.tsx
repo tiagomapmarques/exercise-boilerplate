@@ -1,6 +1,4 @@
-import type { Mock } from 'vitest';
 import {
-  act,
   type ComponentProps,
   Fragment,
   type PropsWithChildren,
@@ -10,18 +8,21 @@ import { type Messages, setupI18n } from '@lingui/core';
 import { I18nProvider, type I18nProviderProps } from '@lingui/react';
 import { MantineProvider, type MantineProviderProps } from '@mantine/core';
 import {
+  type AnyRouter,
   createMemoryHistory,
   createRootRoute,
   createRouter,
   RouterProvider,
 } from '@tanstack/react-router';
 import {
+  act,
   render as baseRender,
   renderHook as baseRenderHook,
   screen as baseScreen,
   type RenderHookOptions,
   type RenderOptions,
 } from '@testing-library/react';
+import { userEvent } from '@vitest/browser/context';
 
 import { messages as messagesDeDe } from '@/locales/de-DE.po';
 import { messages as messagesEnGb } from '@/locales/en-GB.po';
@@ -30,14 +31,31 @@ import type { Locale } from '@/utilities/locale';
 
 export * from '@testing-library/react';
 export * from '@vitest/browser/context';
-export { act };
+
+// Wrap `userEvent.click` in an `act` due to inner state changes in the router
+const userEventClick = userEvent.click;
+userEvent.click = async (...args) => {
+  await act(() => userEventClick(...args));
+};
+
+// Attach `render` and `renderHook` to screen
+export const screen = baseScreen as typeof baseScreen & {
+  render: typeof baseRender;
+  renderHook: typeof baseRenderHook;
+};
+screen.render = baseRender;
+screen.renderHook = baseRenderHook;
+
+type RouterHistoryProps = Partial<Parameters<typeof createMemoryHistory>[0]>;
+type RouterProviderProps = Partial<
+  Omit<
+    ComponentProps<typeof RouterProvider>,
+    'defaultComponent' | 'routeTree' | 'history'
+  >
+>;
 
 const createRouterRenderProvider = (
-  props:
-    | (Partial<Omit<ComponentProps<typeof RouterProvider>, 'children'>> &
-        Partial<Parameters<typeof createMemoryHistory>[0]>)
-    | boolean
-    | undefined,
+  props: RouterHistoryProps | RouterProviderProps | boolean | undefined,
 ) => {
   if (!props) {
     return { Provider: Fragment, result: {} };
@@ -47,86 +65,89 @@ const createRouterRenderProvider = (
     initialEntries = ['/'],
     initialIndex,
     router: customRouter,
-    ...providerProps
-  } = typeof props === 'object' ? props : {};
+    ...parsedProps
+  }: RouterHistoryProps & RouterProviderProps = typeof props === 'object'
+    ? props
+    : {};
 
-  const router =
-    customRouter ||
+  const router = (customRouter ||
     createRouter({
-      routeTree: createRootRoute(),
+      routeTree: createRootRoute({}),
       history: createMemoryHistory({ initialEntries, initialIndex }),
-    });
+    })) as AnyRouter & { waitForLoad: () => Promise<void> };
 
-  const Provider = ({ children }: PropsWithChildren) => {
+  router.waitForLoad = async () => {
+    await act(() => router.latestLoadPromise);
+  };
+
+  const originalNavigate = router.navigate;
+  router.navigate = async (...args) => {
+    await act(() => originalNavigate.bind(router)(...args));
+  };
+
+  function RouterRenderProvider({ children }: PropsWithChildren) {
     return (
       <RouterProvider
         router={router}
         defaultComponent={() => children}
-        {...providerProps}
+        {...parsedProps}
       />
     );
-  };
+  }
 
-  return { Provider, result: { router } };
+  return { Provider: RouterRenderProvider, result: { router } };
 };
 
+type MantineProps = Omit<MantineProviderProps, 'children'>;
+
 const createMantineRenderProvider = (
-  props: Omit<MantineProviderProps, 'children'> | boolean | undefined,
+  props: MantineProps | boolean | undefined,
 ) => {
   if (!props) {
     return { Provider: Fragment, result: {} };
   }
 
-  const parsedProps: NonNullable<typeof props> = {
-    defaultColorScheme: 'light',
-    ...(typeof props === 'object' ? props : {}),
-  };
+  const parsedProps = typeof props === 'object' ? props : {};
 
-  const Provider = ({ children }: PropsWithChildren) => (
-    <MantineProvider {...parsedProps}>{children}</MantineProvider>
-  );
+  function MantineRenderProvider({ children }: PropsWithChildren) {
+    return <MantineProvider {...parsedProps}>{children}</MantineProvider>;
+  }
 
-  return { Provider, result: {} };
+  return { Provider: MantineRenderProvider, result: {} };
 };
 
-type CustomI18nProps = Partial<Omit<I18nProviderProps, 'children'>> & {
+type I18nProps = Partial<Omit<I18nProviderProps, 'children'>> & {
   locale?: Locale;
 };
 
-const testingFallbackLocale: Locale = 'en-GB';
-
-const createI18nRenderProvider = (
-  props: CustomI18nProps | boolean | undefined,
-) => {
+const createI18nRenderProvider = (props: I18nProps | boolean | undefined) => {
   if (!props) {
     return { Provider: Fragment, result: {} };
   }
 
-  const i18nMessages: Record<Locale, Messages> = {
+  const messages: Record<Locale, Messages> = {
     'en-GB': messagesEnGb,
     'fr-FR': messagesFrFr,
     'de-DE': messagesDeDe,
   };
 
   const {
-    locale = testingFallbackLocale,
-    i18n = setupI18n({
-      locale,
-      messages: { [locale]: i18nMessages[locale] },
-    }),
-    ...otherProps
+    locale = 'en-GB',
+    i18n: customI18n,
+    ...parsedProps
   } = typeof props === 'object' ? props : {};
 
-  const parsedProps = {
-    i18n,
-    ...otherProps,
-  };
+  const i18n = customI18n || setupI18n({ locale, messages });
 
-  const Provider = ({ children }: PropsWithChildren) => {
-    return <I18nProvider {...parsedProps}>{children}</I18nProvider>;
-  };
+  function I18nRenderProvider({ children }: PropsWithChildren) {
+    return (
+      <I18nProvider i18n={i18n} {...parsedProps}>
+        {children}
+      </I18nProvider>
+    );
+  }
 
-  return { Provider, result: { i18n } };
+  return { Provider: I18nRenderProvider, result: { i18n } };
 };
 
 type Providers = {
@@ -136,16 +157,17 @@ type Providers = {
 };
 
 const createWrapper = (
-  Wrapper: RenderOptions['wrapper'] = Fragment,
+  OuterWrapper: RenderOptions['wrapper'] = Fragment,
   providers: Providers = {},
+  Wrapper: RenderOptions['wrapper'] = Fragment,
 ) => {
   const RouterRender = createRouterRenderProvider(providers.router);
   const MantineRender = createMantineRenderProvider(providers.mantine);
   const I18nRender = createI18nRenderProvider(providers.i18n);
 
   return {
-    wrapper: ({ children }: PropsWithChildren) => {
-      return (
+    wrapper: ({ children }: PropsWithChildren) => (
+      <OuterWrapper>
         <RouterRender.Provider>
           <MantineRender.Provider>
             <I18nRender.Provider>
@@ -153,8 +175,8 @@ const createWrapper = (
             </I18nRender.Provider>
           </MantineRender.Provider>
         </RouterRender.Provider>
-      );
-    },
+      </OuterWrapper>
+    ),
     result: {
       ...RouterRender.result,
       ...MantineRender.result,
@@ -163,13 +185,10 @@ const createWrapper = (
   };
 };
 
-type Screen = typeof baseScreen & {
-  render: typeof baseRender;
-  renderHook: typeof baseRenderHook;
+const defaultRenderProviders: Providers = {
+  i18n: true,
+  mantine: true,
 };
-export const screen = baseScreen as Screen;
-screen.render = baseRender;
-screen.renderHook = baseRenderHook;
 
 /**
  * Renders a component similarly to the `render` function from
@@ -181,15 +200,21 @@ screen.renderHook = baseRenderHook;
  */
 export const render = (
   ui: ReactNode,
-  { providers, ...options }: RenderOptions & { providers?: Providers } = {},
+  {
+    providers,
+    ...options
+  }: RenderOptions & {
+    providers?: Providers;
+    outerWrapper?: RenderOptions['wrapper'];
+  } = {},
 ) => {
-  const { wrapper, result } = createWrapper(options.wrapper, {
-    mantine: true,
-    i18n: true,
-    ...providers,
-  });
+  const { wrapper, result } = createWrapper(
+    options.outerWrapper,
+    { ...defaultRenderProviders, ...providers },
+    options.wrapper,
+  );
 
-  const renderResult = baseRender(ui, { ...options, wrapper });
+  const renderResult = screen.render(ui, { ...options, wrapper });
 
   return { ...renderResult, providers: result };
 };
@@ -206,33 +231,18 @@ export const renderHook = <HookReturn, HookProps>(
   {
     providers,
     ...options
-  }: RenderHookOptions<HookProps> & { providers?: Providers } = {},
+  }: RenderHookOptions<HookProps> & {
+    providers?: Providers;
+    outerWrapper?: RenderOptions['wrapper'];
+  } = {},
 ) => {
-  const { wrapper, result } = createWrapper(options.wrapper, {
-    ...providers,
-  });
+  const { wrapper, result } = createWrapper(
+    options.outerWrapper,
+    providers,
+    options.wrapper,
+  );
 
-  const renderResult = baseRenderHook(hook, { ...options, wrapper });
+  const renderResult = screen.renderHook(hook, { ...options, wrapper });
 
   return { ...renderResult, providers: result };
-};
-
-/** Mocks the `console.error` function. */
-export const disableConsoleError = (consoleErrorMock?: Mock) => {
-  let original: typeof console.error;
-
-  beforeEach(() => {
-    original = console.error;
-    Object.defineProperty(console, 'error', {
-      value: consoleErrorMock || vi.fn(),
-      configurable: true,
-    });
-  });
-
-  afterEach(() => {
-    Object.defineProperty(console, 'error', {
-      value: original,
-      configurable: true,
-    });
-  });
 };

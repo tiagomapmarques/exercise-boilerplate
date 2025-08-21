@@ -38,7 +38,7 @@ msgid "boilerplate.home.instructions"
 msgstr "Platzieren Sie Ihre UI hier"
 
 msgid "boilerplate.home.title"
-msgstr "Home"
+msgstr "Startseite"
 
 msgid "boilerplate.navigation.dark-mode"
 msgstr "Dunkelmodus"

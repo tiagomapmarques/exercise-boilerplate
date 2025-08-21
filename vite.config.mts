@@ -1,19 +1,30 @@
 import { lingui } from '@lingui/vite-plugin';
-import { TanStackRouterVite } from '@tanstack/router-plugin/vite';
+import { tanstackRouter } from '@tanstack/router-plugin/vite';
 import react from '@vitejs/plugin-react-swc';
 import { defineConfig } from 'vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
 
 export default defineConfig({
   plugins: [
-    TanStackRouterVite({ target: 'react', autoCodeSplitting: true }),
+    tanstackRouter({ target: 'react', autoCodeSplitting: true }),
     react({ plugins: [['@lingui/swc-plugin', {}]] }),
     lingui(),
     tsconfigPaths(),
   ],
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (/\/node_modules\/react(?:-dom)?\//.test(id)) {
+            return 'vendor';
+          }
+        },
+      },
+    },
+  },
   test: {
     globals: true,
-    setupFiles: './src/testing/setup.tsx',
+    setupFiles: './vitest.environment.mts',
     mockReset: true,
     browser: {
       enabled: true,

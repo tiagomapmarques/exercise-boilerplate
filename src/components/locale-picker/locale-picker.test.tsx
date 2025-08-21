@@ -1,10 +1,10 @@
-import { render, screen, userEvent, waitFor } from '@/testing';
+import { render, screen, userEvent } from '@/testing';
 import { localeLabels } from '@/utilities/locale';
 
 import { LocalePicker } from './locale-picker';
 
 describe(LocalePicker, () => {
-  test('displays dropdown menu', () => {
+  it('displays dropdown menu', () => {
     render(<LocalePicker />);
 
     expect(
@@ -12,7 +12,7 @@ describe(LocalePicker, () => {
     ).toBeVisible();
   });
 
-  test('displays selected locale in dropdown menu', () => {
+  it('displays selected locale in dropdown menu', () => {
     render(<LocalePicker />, {
       providers: { i18n: { locale: 'de-DE' } },
     });
@@ -25,7 +25,7 @@ describe(LocalePicker, () => {
     ).not.toBeInTheDocument();
   });
 
-  test('shows all locales in dropdown', async () => {
+  it('shows all locales in dropdown', async () => {
     render(<LocalePicker />);
 
     expect(screen.queryByRole('menu')).not.toBeInTheDocument();
@@ -34,9 +34,7 @@ describe(LocalePicker, () => {
       screen.getByRole('button', { name: 'Great Britain English (GB)' }),
     );
 
-    await waitFor(() => {
-      expect(screen.getByRole('menu')).toBeVisible();
-    });
+    expect(screen.getByRole('menu')).toBeVisible();
 
     for (const { label, country } of Object.values(localeLabels)) {
       expect(
@@ -45,7 +43,7 @@ describe(LocalePicker, () => {
     }
   });
 
-  test('displays selected locale in dropdown menu', async () => {
+  it('displays selected locale in dropdown menu', async () => {
     render(<LocalePicker />, {
       providers: { i18n: { locale: 'de-DE' } },
     });
@@ -54,18 +52,14 @@ describe(LocalePicker, () => {
       screen.getByRole('button', { name: 'Deutschland Deutsch (DE)' }),
     );
 
-    await waitFor(() => {
-      expect(screen.getByRole('menu')).toBeVisible();
-    });
+    expect(screen.getByRole('menu')).toBeVisible();
 
     await userEvent.click(
       screen.getByRole('menuitem', { name: 'Great Britain English (GB)' }),
     );
 
-    await waitFor(() => {
-      expect(
-        screen.getByRole('button', { name: 'Great Britain English (GB)' }),
-      ).toBeVisible();
-    });
+    expect(
+      screen.getByRole('button', { name: 'Great Britain English (GB)' }),
+    ).toBeVisible();
   });
 });

@@ -1,15 +1,14 @@
 import type { Mock } from 'vitest';
-import { I18n, setupI18n } from '@lingui/core';
+import { setupI18n } from '@lingui/core';
 import { detect, fromNavigator } from '@lingui/detect-locale';
 
-import { act, disableConsoleError, renderHook } from '@/testing';
+import { act, mockConsole, renderHook } from '@/testing';
 import { messages as messagesDeDe } from '@/locales/de-DE.po';
 import { messages as messagesEnGb } from '@/locales/en-GB.po';
 import { messages as messagesFrFr } from '@/locales/fr-FR.po';
 
 import {
   fallbackLocale,
-  getAppI18n,
   LanguageMap,
   type Locale,
   localeLabels,
@@ -29,7 +28,7 @@ vi.mock('@lingui/detect-locale', async (importOriginal) => {
 });
 
 describe('locale and language maps', () => {
-  test('defines labels for all locales', () => {
+  it('defines labels for all locales', () => {
     const configMatch = {
       label: expect.stringMatching(/./),
       country: expect.stringMatching(/./),
@@ -42,7 +41,7 @@ describe('locale and language maps', () => {
     });
   });
 
-  test('defines default locales for all languages', () => {
+  it('defines default locales for all languages', () => {
     const anyLocale = /(en-GB)|(fr-FR)|(de-DE)/;
 
     expect(LanguageMap).toStrictEqual({
@@ -52,21 +51,13 @@ describe('locale and language maps', () => {
     });
   });
 
-  test('defines a valid default locale', () => {
+  it('defines a valid default locale', () => {
     expect(locales.includes(fallbackLocale)).toBeTruthy();
   });
 });
 
-describe(getAppI18n, () => {
-  test('gets an I18n instance', () => {
-    const i18n = getAppI18n();
-
-    expect(i18n).toBeInstanceOf(I18n);
-  });
-});
-
 describe(preloadLocale, () => {
-  test('loads en-GB messages', async () => {
+  it('loads en-GB messages', async () => {
     const i18n = setupI18n();
 
     await preloadLocale(i18n, 'en-GB');
@@ -75,7 +66,7 @@ describe(preloadLocale, () => {
     expect(i18n.messages).toBe(messagesEnGb);
   });
 
-  test('loads fr-FR messages', async () => {
+  it('loads fr-FR messages', async () => {
     const i18n = setupI18n();
 
     await preloadLocale(i18n, 'fr-FR');
@@ -84,7 +75,7 @@ describe(preloadLocale, () => {
     expect(i18n.messages).toBe(messagesFrFr);
   });
 
-  test('loads de-DE messages', async () => {
+  it('loads de-DE messages', async () => {
     const i18n = setupI18n();
 
     await preloadLocale(i18n, 'de-DE');
@@ -104,14 +95,12 @@ describe(preloadLocale, () => {
       ${'fr'}      | ${'fr-FR'}
       ${'de-DE'}   | ${'de-DE'}
       ${'de-AT'}   | ${'de-DE'}
-      ${'uk-UA'}   | ${'en-GB'}
-      ${'uk'}      | ${'en-GB'}
+      ${'es-ES'}   | ${'en-GB'}
+      ${'es'}      | ${'en-GB'}
     `(
-      'browser with $browser locale, initial locale becomes $locale',
+      'browser with $browser locale, initial locale is $locale',
       async ({ browser, locale }) => {
-        (detect as Mock<typeof detect>).mockImplementation(
-          (firstOption) => firstOption,
-        );
+        (detect as Mock<typeof detect>).mockImplementation((value) => value);
         (fromNavigator as Mock<typeof fromNavigator>).mockImplementation(
           () => browser,
         );
@@ -127,8 +116,8 @@ describe(preloadLocale, () => {
 });
 
 describe(useLocale, () => {
-  test('gets the current locale', () => {
-    const { result } = renderHook(() => useLocale(), {
+  it('gets the current locale', () => {
+    const { result } = renderHook(useLocale, {
       providers: { i18n: true },
     });
 
@@ -137,8 +126,8 @@ describe(useLocale, () => {
     expect(locale).toBe(fallbackLocale);
   });
 
-  test('loads and sets a new locale', async () => {
-    const { result, providers } = renderHook(() => useLocale(), {
+  it('loads and sets a new locale', async () => {
+    const { result, providers } = renderHook(useLocale, {
       providers: { i18n: true },
     });
 
@@ -147,9 +136,7 @@ describe(useLocale, () => {
     expect(locale).toBe('en-GB');
     expect(providers.i18n?.messages).toBe(messagesEnGb);
 
-    await act(async () => {
-      await setLocale('de-DE');
-    });
+    await act(() => setLocale('de-DE'));
 
     const [updatedLocale, updatedSetLocale] = result.current;
 
@@ -159,10 +146,10 @@ describe(useLocale, () => {
   });
 
   describe('setting an unknown locale', () => {
-    disableConsoleError();
+    mockConsole('error');
 
-    test('log error if locale is unknown', async () => {
-      const { result } = renderHook(() => useLocale(), {
+    it('logs error if locale is unknown', async () => {
+      const { result } = renderHook(useLocale, {
         providers: { i18n: true },
       });
 
@@ -170,12 +157,10 @@ describe(useLocale, () => {
 
       expect(locale).toBe(fallbackLocale);
 
-      await act(async () => {
-        await setLocale('de-AT' as Locale);
-      });
+      await act(() => setLocale('de-AT' as Locale));
 
       expect(console.error).toBeCalledWith(
-        'Unable to load messages from "../locales/de-AT"',
+        'Unable to load messages for "de-AT"',
       );
 
       const [updatedLocale] = result.current;

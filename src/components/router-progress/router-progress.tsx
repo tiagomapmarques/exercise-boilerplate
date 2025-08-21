@@ -6,10 +6,7 @@ import { useRouter } from '@tanstack/react-router';
 
 import './router-progress.css';
 
-const nprogressComplete = new Throttler(nprogress.complete, {
-  trailing: false,
-  wait: 50,
-});
+const nprogressComplete = new Throttler(nprogress.complete, { wait: 50 });
 
 export const RouterProgress = () => {
   const router = useRouter();

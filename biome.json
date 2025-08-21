@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.0.0-beta.1/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.2.0/schema.json",
   "files": {
     "ignoreUnknown": false,
     "includes": [
@@ -20,7 +20,23 @@
   "linter": {
     "enabled": true,
     "rules": {
-      "recommended": true
+      "recommended": true,
+      "correctness": {
+        "useUniqueElementIds": {
+          "level": "error",
+          "options": {
+            "excludedComponents": ["Trans"]
+          }
+        }
+      },
+      "style": {
+        "noRestrictedImports": {
+          "level": "error",
+          "options": {
+            "patterns": [{ "group": ["**/i18n"] }]
+          }
+        }
+      }
     }
   },
   "javascript": {

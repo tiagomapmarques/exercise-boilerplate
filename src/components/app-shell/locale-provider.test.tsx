@@ -1,13 +1,15 @@
-import { type Mock } from 'vitest';
+import type { Mock } from 'vitest';
 import { setupI18n } from '@lingui/core';
 
 import { render, screen } from '@/testing';
-import { fallbackLocale, getAppI18n, type I18n } from '@/utilities/locale';
+import { fallbackLocale, type I18n } from '@/utilities/locale';
 
+// biome-ignore lint/style/noRestrictedImports: Intended use
+import { getAppI18n } from './i18n';
 import { LocaleProvider } from './locale-provider';
 
-vi.mock('@/utilities/locale', async (importOriginal) => {
-  const original = await importOriginal<typeof import('@/utilities/locale')>();
+vi.mock('./i18n', async (importOriginal) => {
+  const original = await importOriginal<typeof import('./i18n')>();
   return {
     ...original,
     getAppI18n: vi.fn(original.getAppI18n),
@@ -15,15 +17,18 @@ vi.mock('@/utilities/locale', async (importOriginal) => {
 });
 
 describe(LocaleProvider, () => {
-  describe('without messages loaded', () => {
-    let i18n: I18n;
+  let i18n: I18n;
 
+  beforeEach(() => {
+    (getAppI18n as Mock<typeof getAppI18n>).mockImplementation(() => i18n);
+  });
+
+  describe('without messages loaded', () => {
     beforeEach(() => {
       i18n = setupI18n();
-      (getAppI18n as Mock<typeof getAppI18n>).mockImplementation(() => i18n);
     });
 
-    test('does not display children', () => {
+    it('does not display children', () => {
       render(
         <LocaleProvider>
           <div data-slot="Content" />
@@ -36,8 +41,6 @@ describe(LocaleProvider, () => {
   });
 
   describe('with messages loaded', () => {
-    let i18n: I18n;
-
     beforeEach(async () => {
       const { messages } = await import(`../../locales/${fallbackLocale}.po`);
 
@@ -45,10 +48,9 @@ describe(LocaleProvider, () => {
         locale: fallbackLocale,
         messages: { [fallbackLocale]: messages },
       });
-      (getAppI18n as Mock<typeof getAppI18n>).mockImplementation(() => i18n);
     });
 
-    test('displays children', () => {
+    it('displays children', () => {
       render(
         <LocaleProvider>
           <div data-slot="Content" />

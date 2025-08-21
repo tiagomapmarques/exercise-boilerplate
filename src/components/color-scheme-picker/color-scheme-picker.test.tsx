@@ -3,7 +3,7 @@ import { render, screen, userEvent } from '@/testing';
 import { ColorSchemePicker } from './color-scheme-picker';
 
 describe(ColorSchemePicker, () => {
-  test('displays light scheme', () => {
+  it('displays light scheme', () => {
     render(<ColorSchemePicker />, {
       providers: { mantine: { defaultColorScheme: 'light' } },
     });
@@ -16,7 +16,7 @@ describe(ColorSchemePicker, () => {
     ).not.toBeInTheDocument();
   });
 
-  test('displays dark scheme', () => {
+  it('displays dark scheme', () => {
     render(<ColorSchemePicker />, {
       providers: { mantine: { defaultColorScheme: 'dark' } },
     });
@@ -29,7 +29,7 @@ describe(ColorSchemePicker, () => {
     ).not.toBeInTheDocument();
   });
 
-  test('toggles to color scheme', async () => {
+  it('toggles to color scheme', async () => {
     render(<ColorSchemePicker />, {
       providers: { mantine: { defaultColorScheme: 'dark' } },
     });

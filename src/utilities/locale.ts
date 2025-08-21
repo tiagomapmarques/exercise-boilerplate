@@ -1,14 +1,9 @@
 import { useCallback } from 'react';
-import { type I18n, setupI18n } from '@lingui/core';
+import type { I18n } from '@lingui/core';
 import { detect, fromNavigator } from '@lingui/detect-locale';
 import { useLingui } from '@lingui/react';
 
 export type { I18n };
-
-const appI18n = setupI18n();
-
-/** Gets the i18n instance for the app. */
-export const getAppI18n = () => appI18n;
 
 /** Maps Languages to their default Locales. */
 export const LanguageMap = {
@@ -46,7 +41,7 @@ const loadAndActivateLocale = async (i18n: I18n, locale: Locale) => {
     i18n.load(locale, messages);
     i18n.activate(locale);
   } catch {
-    console.error(`Unable to load messages from "../locales/${locale}"`);
+    console.error(`Unable to load messages for "${locale}"`);
   }
 };
 

@@ -3,19 +3,19 @@ import { render, screen } from '@/testing';
 import { About } from './about';
 
 describe(About, () => {
-  test('displays name', () => {
+  it('displays name', () => {
     render(<About />);
 
     expect(screen.getByText('exercise-boilerplate')).toBeVisible();
   });
 
-  test('displays version', () => {
+  it('displays version', () => {
     render(<About />);
 
     expect(screen.getByText(/v\d+.\d+.\d+/)).toBeVisible();
   });
 
-  test('displays license', () => {
+  it('displays license', () => {
     render(<About />);
 
     expect(screen.getByText('License: MIT')).toBeVisible();

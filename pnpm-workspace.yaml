@@ -1,7 +1,10 @@
 engineStrict: true
+
+ignoredBuiltDependencies: null
+
 onlyBuiltDependencies:
   - '@biomejs/biome'
   - '@swc/core'
   - esbuild
   - msw
-ignoredBuiltDependencies: null
+  - oxc-resolver

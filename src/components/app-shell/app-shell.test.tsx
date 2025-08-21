@@ -1,13 +1,21 @@
-import { type Mock } from 'vitest';
+import type { Mock } from 'vitest';
 import { setupI18n } from '@lingui/core';
+import {
+  createRootRoute,
+  createRoute,
+  createRouter,
+  RouterProvider,
+} from '@tanstack/react-router';
 
 import { render, screen, userEvent } from '@/testing';
-import { fallbackLocale, getAppI18n } from '@/utilities/locale';
+import { fallbackLocale } from '@/utilities/locale';
 
 import { AppShell } from './app-shell';
+// biome-ignore lint/style/noRestrictedImports: Testing only
+import { getAppI18n } from './i18n';
 
-vi.mock('@/utilities/locale', async (importOriginal) => {
-  const original = await importOriginal<typeof import('@/utilities/locale')>();
+vi.mock('./i18n', async (importOriginal) => {
+  const original = await importOriginal<typeof import('./i18n')>();
   return {
     ...original,
     getAppI18n: vi.fn(original.getAppI18n),
@@ -24,31 +32,30 @@ describe(AppShell, () => {
     (getAppI18n as Mock<typeof getAppI18n>).mockImplementation(() => i18n);
   });
 
-  test('adds i18n provider', () => {
-    expect(() =>
-      render(<AppShell />, {
-        providers: {
-          router: true,
-          mantine: false,
-          i18n: false,
-        },
+  it('adds router outlet', async () => {
+    const rootRoute = createRootRoute({ component: AppShell });
+    rootRoute.addChildren({
+      indexRoute: createRoute({
+        path: '/',
+        component: () => <div data-slot="TanstackReactRouter-Outlet" />,
+        getParentRoute: () => rootRoute,
       }),
-    ).not.throw();
+    });
+    const router = createRouter({ routeTree: rootRoute });
+
+    render(<RouterProvider router={router} />, {
+      providers: {
+        mantine: false,
+        i18n: false,
+      },
+    });
+
+    expect(
+      await screen.findByTestId('TanstackReactRouter-Outlet'),
+    ).not.toBeVisible();
   });
 
-  test('adds Mantine provider', () => {
-    expect(() =>
-      render(<AppShell />, {
-        providers: {
-          router: true,
-          mantine: false,
-          i18n: false,
-        },
-      }),
-    ).not.throw();
-  });
-
-  test('displays header', () => {
+  it('displays header', async () => {
     render(<AppShell />, {
       providers: {
         router: true,
@@ -57,12 +64,12 @@ describe(AppShell, () => {
       },
     });
 
-    expect(screen.getByRole('banner')).toHaveTextContent(
+    expect(await screen.findByRole('banner')).toHaveTextContent(
       'Exercise boilerplate',
     );
   });
 
-  test('adds router outlet', () => {
+  it('displays router progress', async () => {
     render(<AppShell />, {
       providers: {
         router: true,
@@ -72,45 +79,35 @@ describe(AppShell, () => {
     });
 
     expect(
-      screen.getByLabelText('TanstackReactRouter-Outlet'),
-    ).not.toBeVisible();
-  });
-
-  test('adds router progress', () => {
-    render(<AppShell />, {
-      providers: {
-        router: true,
-        mantine: false,
-        i18n: false,
-      },
-    });
-
-    expect(
-      screen.getByRole('progressbar', { name: 'Page loading' }),
+      await screen.findByRole('progressbar', { name: 'Page loading' }),
     ).not.toBeVisible();
   });
 
   describe('navigation', () => {
-    test('displays navigation', () => {
-      render(<AppShell />, {
+    it('displays navigation', async () => {
+      const { providers } = render(<AppShell />, {
         providers: {
           router: true,
           mantine: false,
           i18n: false,
         },
       });
+
+      await providers.router?.waitForLoad();
 
       expect(screen.getByRole('navigation')).toBeVisible();
     });
 
-    test('menu can be opened', async () => {
-      render(<AppShell />, {
+    it('toggles the menu', async () => {
+      const { providers } = render(<AppShell />, {
         providers: {
           router: true,
           mantine: false,
           i18n: false,
         },
       });
+
+      await providers.router?.waitForLoad();
 
       expect(screen.getByRole('navigation')).toHaveAttribute(
         'data-open',
@@ -125,14 +122,16 @@ describe(AppShell, () => {
       );
     });
 
-    test('menu closes when user navigates', async () => {
-      render(<AppShell />, {
+    it('closes the menu when user navigates', async () => {
+      const { providers } = render(<AppShell />, {
         providers: {
           router: true,
           mantine: false,
           i18n: false,
         },
       });
+
+      await providers.router?.waitForLoad();
 
       await userEvent.click(screen.getByRole('button', { name: 'Menu' }));
 

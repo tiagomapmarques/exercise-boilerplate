@@ -6,7 +6,7 @@ import { Home, Info } from 'lucide-react';
 
 import { ColorSchemePicker } from '@/components/color-scheme-picker';
 import { LocalePicker } from '@/components/locale-picker';
-import { I18n } from '@/utilities/locale';
+import type { I18n } from '@/utilities/locale';
 
 const updateDocumentTitle = (i18n: I18n, pathname: string) => {
   if (!Object.keys(i18n.messages).length) {

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, Group, Image, Menu, Text } from '@mantine/core';
+import { Button, Image, Menu, Text } from '@mantine/core';
 import { ChevronDown } from 'lucide-react';
 
 import { type Locale, localeLabels, useLocale } from '@/utilities/locale';
@@ -35,19 +35,20 @@ export const LocalePicker = () => {
       onClose={() => setOpen(false)}
     >
       <Menu.Target>
-        <Button variant="default" data-expanded={open || undefined}>
-          <Group gap="xs">
+        <Button
+          variant="default"
+          data-expanded={open || undefined}
+          leftSection={
             <Image
               height="16"
               radius="sm"
               src={languageData[locale].flagUrl}
               alt={languageData[locale].country}
             />
-
-            <Text size="sm">{languageData[locale].label}</Text>
-
-            <ChevronDown size="16" />
-          </Group>
+          }
+          rightSection={<ChevronDown size="16" />}
+        >
+          <Text size="sm">{languageData[locale].label}</Text>
         </Button>
       </Menu.Target>
 

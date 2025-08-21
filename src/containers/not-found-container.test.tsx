@@ -3,30 +3,32 @@ import { render, screen, userEvent } from '@/testing';
 import { NotFoundContainer } from './not-found-container';
 
 describe(NotFoundContainer, () => {
-  test('displays a title', async () => {
+  it('displays a title', async () => {
     render(<NotFoundContainer />, {
       providers: { router: true },
     });
 
     expect(
-      screen.queryByRole('heading', { name: '404 Not found' }),
+      await screen.findByRole('heading', { name: '404 Not found' }),
     ).toBeVisible();
   });
 
-  test('displays error text', () => {
+  it('displays error text', async () => {
     render(<NotFoundContainer />, {
       providers: { router: true },
     });
 
-    expect(screen.getByText('This page does not exist')).toBeVisible();
+    expect(await screen.findByText('This page does not exist')).toBeVisible();
   });
 
-  test('navigates to start', async () => {
+  it('navigates to start', async () => {
     const { providers } = render(<NotFoundContainer />, {
       providers: { router: { initialEntries: ['/unknown'] } },
     });
 
-    await userEvent.click(screen.getByRole('button', { name: 'Go to start' }));
+    await userEvent.click(
+      await screen.findByRole('button', { name: 'Go to start' }),
+    );
 
     expect(providers.router?.latestLocation.pathname).toEqual('/');
   });

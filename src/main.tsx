@@ -2,8 +2,10 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { RouterProvider } from '@tanstack/react-router';
 
-import { getAppI18n, preloadLocale } from '@/utilities/locale';
+import { preloadLocale } from '@/utilities/locale';
 
+// biome-ignore lint/style/noRestrictedImports: Pre-loading translations
+import { getAppI18n } from './components/app-shell/i18n';
 import { router } from './router';
 
 import './main.css';

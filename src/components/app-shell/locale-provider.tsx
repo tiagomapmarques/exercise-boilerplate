@@ -1,7 +1,8 @@
 import { type PropsWithChildren, useEffect, useState } from 'react';
 import { I18nProvider } from '@lingui/react';
 
-import { getAppI18n } from '@/utilities/locale';
+// biome-ignore lint/style/noRestrictedImports: Intended use
+import { getAppI18n } from './i18n';
 
 export const LocaleProvider = ({ children }: PropsWithChildren) => {
   const [ready, setReady] = useState(false);
