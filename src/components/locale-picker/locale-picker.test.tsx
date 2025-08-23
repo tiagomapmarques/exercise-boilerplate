@@ -1,5 +1,5 @@
 import { render, screen, userEvent } from '@/testing';
-import { localeLabels } from '@/utilities/locale';
+import { localeLabels } from '@/components/locale-provider';
 
 import { LocalePicker } from './locale-picker';
 

@@ -10,11 +10,10 @@ import {
 import { Outlet, useRouter } from '@tanstack/react-router';
 
 import { DevTools } from '@/components/dev-tools';
+import { LocaleProvider } from '@/components/locale-provider';
 import { Navigation } from '@/components/navigation';
 import { RouterProgress } from '@/components/router-progress';
 import { theme } from '@/theme';
-
-import { LocaleProvider } from './locale-provider';
 
 const globalThrobber = document.getElementById('global-throbber');
 

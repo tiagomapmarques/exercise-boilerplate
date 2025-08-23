@@ -2,15 +2,13 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { RouterProvider } from '@tanstack/react-router';
 
-import { preloadLocale } from '@/utilities/locale';
-
-// biome-ignore lint/style/noRestrictedImports: Pre-loading translations
-import { getAppI18n } from './components/app-shell/i18n';
+import { loadLocale } from './components/locale-provider/utilities';
 import { router } from './router';
 
 import './main.css';
 
-preloadLocale(getAppI18n());
+// Start loading the initial translations as soon as possible
+loadLocale();
 
 const rootElement = document.getElementById('root');
 

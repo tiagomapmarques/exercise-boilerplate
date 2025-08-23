@@ -33,7 +33,11 @@
         "noRestrictedImports": {
           "level": "error",
           "options": {
-            "patterns": [{ "group": ["**/i18n"] }]
+            "paths": {
+              "@lingui/core": {
+                "allowImportNames": ["I18n", "Messages", "setupI18n"]
+              }
+            }
           }
         }
       }

@@ -1,7 +1,7 @@
 import { setupI18n } from '@lingui/core';
 
 import { render, screen, userEvent } from '@/testing';
-import { fallbackLocale } from '@/utilities/locale';
+import { fallbackLocale } from '@/components/locale-provider';
 
 import { Navigation } from './navigation';
 
@@ -38,7 +38,7 @@ describe(Navigation, () => {
       },
     });
 
-    await providers.router?.waitForLoad();
+    await providers.waitForRouter?.();
 
     expect(document.title).toBe('Vitest Browser Tester');
   });

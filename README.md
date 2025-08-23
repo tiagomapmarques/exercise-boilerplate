@@ -2,10 +2,14 @@
 
 ## Quick start
 
+### Development
 - pnpm i
 - pnpm start
 
-## Quick start production
-
+### Production
 - pnpm i
 - pnpm build:watch
+
+### Production (docker)
+- pnpm docker:build
+- pnpm docker:run

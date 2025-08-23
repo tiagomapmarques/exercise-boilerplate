@@ -2,7 +2,11 @@ import { useState } from 'react';
 import { Button, Image, Menu, Text } from '@mantine/core';
 import { ChevronDown } from 'lucide-react';
 
-import { type Locale, localeLabels, useLocale } from '@/utilities/locale';
+import {
+  type Locale,
+  localeLabels,
+  useLocale,
+} from '@/components/locale-provider';
 
 type LanguageData = {
   label: string;
@@ -10,7 +14,7 @@ type LanguageData = {
   flagUrl: string;
 };
 
-const languageData = Object.fromEntries(
+const localeData = Object.fromEntries(
   Object.entries(localeLabels).map(([locale, { label, country }]) => [
     locale,
     {
@@ -42,18 +46,18 @@ export const LocalePicker = () => {
             <Image
               height="16"
               radius="sm"
-              src={languageData[locale].flagUrl}
-              alt={languageData[locale].country}
+              src={localeData[locale].flagUrl}
+              alt={localeData[locale].country}
             />
           }
           rightSection={<ChevronDown size="16" />}
         >
-          <Text size="sm">{languageData[locale].label}</Text>
+          <Text size="sm">{localeData[locale].label}</Text>
         </Button>
       </Menu.Target>
 
       <Menu.Dropdown>
-        {(Object.entries(languageData) as [Locale, LanguageData][]).map(
+        {(Object.entries(localeData) as [Locale, LanguageData][]).map(
           ([key, { label, country, flagUrl }]) => (
             <Menu.Item
               leftSection={

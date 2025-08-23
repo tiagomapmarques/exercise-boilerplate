@@ -1,5 +1,3 @@
-import type { Mock } from 'vitest';
-import { setupI18n } from '@lingui/core';
 import {
   createRootRoute,
   createRoute,
@@ -8,30 +6,10 @@ import {
 } from '@tanstack/react-router';
 
 import { render, screen, userEvent } from '@/testing';
-import { fallbackLocale } from '@/utilities/locale';
 
 import { AppShell } from './app-shell';
-// biome-ignore lint/style/noRestrictedImports: Testing only
-import { getAppI18n } from './i18n';
-
-vi.mock('./i18n', async (importOriginal) => {
-  const original = await importOriginal<typeof import('./i18n')>();
-  return {
-    ...original,
-    getAppI18n: vi.fn(original.getAppI18n),
-  };
-});
 
 describe(AppShell, () => {
-  beforeEach(async () => {
-    const { messages } = await import(`../../locales/${fallbackLocale}.po`);
-    const i18n = setupI18n({
-      locale: fallbackLocale,
-      messages: { [fallbackLocale]: messages },
-    });
-    (getAppI18n as Mock<typeof getAppI18n>).mockImplementation(() => i18n);
-  });
-
   it('adds router outlet', async () => {
     const rootRoute = createRootRoute({ component: AppShell });
     rootRoute.addChildren({
@@ -93,7 +71,7 @@ describe(AppShell, () => {
         },
       });
 
-      await providers.router?.waitForLoad();
+      await providers.waitForRouter?.();
 
       expect(screen.getByRole('navigation')).toBeVisible();
     });
@@ -107,7 +85,7 @@ describe(AppShell, () => {
         },
       });
 
-      await providers.router?.waitForLoad();
+      await providers.waitForRouter?.();
 
       expect(screen.getByRole('navigation')).toHaveAttribute(
         'data-open',
@@ -131,7 +109,7 @@ describe(AppShell, () => {
         },
       });
 
-      await providers.router?.waitForLoad();
+      await providers.waitForRouter?.();
 
       await userEvent.click(screen.getByRole('button', { name: 'Menu' }));
 

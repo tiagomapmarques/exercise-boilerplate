@@ -1,4 +1,5 @@
 import { type PropsWithChildren, useEffect } from 'react';
+import type { I18n } from '@lingui/core';
 import { Trans, useLingui } from '@lingui/react';
 import { Divider, Flex, Stack, Text } from '@mantine/core';
 import { Link, type LinkProps, useLocation } from '@tanstack/react-router';
@@ -6,7 +7,6 @@ import { Home, Info } from 'lucide-react';
 
 import { ColorSchemePicker } from '@/components/color-scheme-picker';
 import { LocalePicker } from '@/components/locale-picker';
-import type { I18n } from '@/utilities/locale';
 
 const updateDocumentTitle = (i18n: I18n, pathname: string) => {
   if (!Object.keys(i18n.messages).length) {

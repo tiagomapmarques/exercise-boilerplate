@@ -8,7 +8,6 @@ import { type Messages, setupI18n } from '@lingui/core';
 import { I18nProvider, type I18nProviderProps } from '@lingui/react';
 import { MantineProvider, type MantineProviderProps } from '@mantine/core';
 import {
-  type AnyRouter,
   createMemoryHistory,
   createRootRoute,
   createRouter,
@@ -24,10 +23,10 @@ import {
 } from '@testing-library/react';
 import { userEvent } from '@vitest/browser/context';
 
+import type { Locale } from '@/components/locale-provider';
 import { messages as messagesDeDe } from '@/locales/de-DE.po';
 import { messages as messagesEnGb } from '@/locales/en-GB.po';
 import { messages as messagesFrFr } from '@/locales/fr-FR.po';
-import type { Locale } from '@/utilities/locale';
 
 export * from '@testing-library/react';
 export * from '@vitest/browser/context';
@@ -70,13 +69,15 @@ const createRouterRenderProvider = (
     ? props
     : {};
 
-  const router = (customRouter ||
+  const router =
+    customRouter ||
     createRouter({
       routeTree: createRootRoute({}),
       history: createMemoryHistory({ initialEntries, initialIndex }),
-    })) as AnyRouter & { waitForLoad: () => Promise<void> };
+    });
 
-  router.waitForLoad = async () => {
+  /** Function to wait for the router to load and display the correct page */
+  const waitForRouter = async () => {
     await act(() => router.latestLoadPromise);
   };
 
@@ -95,7 +96,7 @@ const createRouterRenderProvider = (
     );
   }
 
-  return { Provider: RouterRenderProvider, result: { router } };
+  return { Provider: RouterRenderProvider, result: { router, waitForRouter } };
 };
 
 type MantineProps = Omit<MantineProviderProps, 'children'>;
