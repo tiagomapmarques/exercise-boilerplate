@@ -2,7 +2,10 @@ import { lingui } from '@lingui/vite-plugin';
 import { tanstackRouter } from '@tanstack/router-plugin/vite';
 import react from '@vitejs/plugin-react-swc';
 import { defineConfig } from 'vite';
+import { viteStaticCopy } from 'vite-plugin-static-copy';
 import tsconfigPaths from 'vite-tsconfig-paths';
+
+import { countries } from './src/components/locale-provider/constants';
 
 export default defineConfig({
   plugins: [
@@ -10,6 +13,12 @@ export default defineConfig({
     react({ plugins: [['@lingui/swc-plugin', {}]] }),
     lingui(),
     tsconfigPaths(),
+    viteStaticCopy({
+      targets: countries.map((country) => ({
+        src: `./node_modules/country-flag-icons/1x1/${country}.svg`,
+        dest: 'flags',
+      })),
+    }),
   ],
   build: {
     rollupOptions: {
@@ -20,30 +29,6 @@ export default defineConfig({
           }
         },
       },
-    },
-  },
-  test: {
-    globals: true,
-    setupFiles: './vitest.environment.mts',
-    mockReset: true,
-    browser: {
-      enabled: true,
-      headless: true,
-      provider: 'playwright',
-      instances: [{ browser: 'chromium' }],
-    },
-    coverage: {
-      enabled: true,
-      provider: 'istanbul',
-      include: ['src/**'],
-      exclude: [
-        'src/components/dev-tools/**',
-        'src/routes/**',
-        'src/locales/**',
-        'src/testing/**',
-        'src/*.gen.ts',
-        'src/main.tsx',
-      ],
     },
   },
 });

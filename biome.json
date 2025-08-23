@@ -5,10 +5,12 @@
     "includes": [
       "**/*",
       "!**/.swc",
+      "!**/.tanstack",
+      "!**/.tmp",
       "!**/coverage",
       "!**/dist",
       "!**/node_modules",
-      "!**/src/locales/*.ts",
+      "!**/.env",
       "!**/licenses.json",
       "!**/routeTree.gen.ts"
     ]

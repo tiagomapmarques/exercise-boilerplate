@@ -4,6 +4,8 @@ Thumbs.db
 
 # Node + Build
 .swc
+.tanstack
+.tmp
 coverage
 dist
 node_modules
@@ -12,7 +14,5 @@ __screenshots__
 # Local
 TODO
 .env
-src/locales/*.ts
-!src/locales/*.d.ts
 licenses.json
 routeTree.gen.ts

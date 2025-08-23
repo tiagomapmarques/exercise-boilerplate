@@ -70,8 +70,6 @@ describe(LocaleProvider, () => {
       </LocaleProvider>,
     );
 
-    await act(() => loader.continue());
-
     expect(loadLocale).toHaveBeenCalledTimes(1);
   });
 

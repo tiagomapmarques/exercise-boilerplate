@@ -18,4 +18,5 @@ export default defineConfig({
   ],
   format: formatter({ explicitIdAsDefault: true, origins: false }),
   orderBy: 'messageId',
+  catalogsMergePath: '.tmp/locales/{locale}',
 });

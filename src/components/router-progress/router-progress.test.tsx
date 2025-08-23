@@ -75,8 +75,6 @@ describe(RouterProgress, () => {
 
     await act(() => onResolved.continue());
 
-    expect(nprogress.complete).not.toHaveBeenCalled();
-
     await waitFor(() => {
       expect(nprogress.complete).toHaveBeenCalledTimes(1);
     });

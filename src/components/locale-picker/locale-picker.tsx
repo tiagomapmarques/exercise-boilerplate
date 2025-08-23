@@ -5,25 +5,24 @@ import { ChevronDown } from 'lucide-react';
 import {
   type Locale,
   localeLabels,
+  locales,
   useLocale,
 } from '@/components/locale-provider';
 
-type LanguageData = {
-  label: string;
-  country: string;
-  flagUrl: string;
+type CountryFlagProps = {
+  locale: Locale;
 };
 
-const localeData = Object.fromEntries(
-  Object.entries(localeLabels).map(([locale, { label, country }]) => [
-    locale,
-    {
-      label,
-      country,
-      flagUrl: `/flags/${locale.split('-')[1].toLowerCase()}.svg`,
-    },
-  ]),
-) as Record<Locale, LanguageData>;
+const CountryFlag = ({ locale }: CountryFlagProps) => {
+  return (
+    <Image
+      height="16"
+      radius="sm"
+      src={`/flags/${localeLabels[locale].code}.svg`}
+      alt={localeLabels[locale].country}
+    />
+  );
+};
 
 export const LocalePicker = () => {
   const [locale, setLocale] = useLocale();
@@ -42,34 +41,23 @@ export const LocalePicker = () => {
         <Button
           variant="default"
           data-expanded={open || undefined}
-          leftSection={
-            <Image
-              height="16"
-              radius="sm"
-              src={localeData[locale].flagUrl}
-              alt={localeData[locale].country}
-            />
-          }
+          leftSection={<CountryFlag locale={locale} />}
           rightSection={<ChevronDown size="16" />}
         >
-          <Text size="sm">{localeData[locale].label}</Text>
+          <Text size="sm">{localeLabels[locale].label}</Text>
         </Button>
       </Menu.Target>
 
       <Menu.Dropdown>
-        {(Object.entries(localeData) as [Locale, LanguageData][]).map(
-          ([key, { label, country, flagUrl }]) => (
-            <Menu.Item
-              leftSection={
-                <Image height="16" radius="sm" src={flagUrl} alt={country} />
-              }
-              onClick={() => setLocale(key)}
-              key={`LanguagePicker-Dropdown-Item-${key}`}
-            >
-              {label}
-            </Menu.Item>
-          ),
-        )}
+        {locales.map((locale) => (
+          <Menu.Item
+            leftSection={<CountryFlag locale={locale} />}
+            onClick={() => setLocale(locale)}
+            key={`LanguagePicker-Dropdown-Item-${locale}`}
+          >
+            {localeLabels[locale].label}
+          </Menu.Item>
+        ))}
       </Menu.Dropdown>
     </Menu>
   );

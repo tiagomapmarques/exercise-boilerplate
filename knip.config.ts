@@ -9,8 +9,9 @@ const config: KnipConfig = {
     'types',
   ],
   ignoreDependencies: [
-    // Ignored as it's used in the vite config
+    // Ignored as these are used in the vite config
     '@lingui/swc-plugin',
+    'country-flag-icons',
   ],
 };
 

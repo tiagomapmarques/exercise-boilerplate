@@ -1,6 +1,6 @@
 import {
   fallbackLocale,
-  LanguageMap,
+  languageMap,
   localeLabels,
   locales,
 } from './constants';
@@ -10,6 +10,7 @@ describe('locale and language maps', () => {
     const configMatch = {
       label: expect.stringMatching(/./),
       country: expect.stringMatching(/./),
+      code: expect.stringMatching(/^[A-Z][A-Z]$/),
     };
 
     expect(localeLabels).toStrictEqual({
@@ -22,7 +23,7 @@ describe('locale and language maps', () => {
   it('defines default locales for all languages', () => {
     const anyLocale = /(en-GB)|(fr-FR)|(de-DE)/;
 
-    expect(LanguageMap).toStrictEqual({
+    expect(languageMap).toStrictEqual({
       en: expect.stringMatching(anyLocale),
       fr: expect.stringMatching(anyLocale),
       de: expect.stringMatching(anyLocale),
@@ -30,6 +31,8 @@ describe('locale and language maps', () => {
   });
 
   it('defines a valid default locale', () => {
+    expect(fallbackLocale).toBeTruthy();
+
     expect(locales.includes(fallbackLocale)).toBeTruthy();
   });
 });

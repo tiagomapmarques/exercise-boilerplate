@@ -4,8 +4,8 @@ import { detect, fromNavigator } from '@lingui/detect-locale';
 import {
   fallbackLocale,
   type Language,
-  LanguageMap,
   type Locale,
+  languageMap,
   languages,
   locales,
 } from './constants';
@@ -43,7 +43,7 @@ const getInitialLocale = () => {
     return userPreference;
   }
   if (isLanguage(userPreference)) {
-    return LanguageMap[userPreference.split('-')[0] as Language];
+    return languageMap[userPreference.split('-')[0] as Language];
   }
   return fallbackLocale;
 };

@@ -7,7 +7,9 @@ const server = fastify({
 });
 
 // Serve all files compressed
-server.register(fastifyCompress);
+server.register(fastifyCompress, {
+  encodings: ['gzip', 'identity'],
+});
 
 // Serve all static files
 server.register(fastifyStatic, {
