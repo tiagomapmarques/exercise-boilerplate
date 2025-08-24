@@ -26,7 +26,11 @@
     "jsx": "react-jsx",
 
     /* Testing */
-    "types": ["vitest/globals", "@vitest/browser/providers/playwright"],
+    "types": [
+      "vite/client",
+      "vitest/globals",
+      "@vitest/browser/providers/playwright"
+    ],
 
     /* Compatibility */
     "useDefineForClassFields": true

@@ -1,4 +1,4 @@
-import '@mantine/core/styles.css';
+import './src/main.css';
 
 import { configure } from '@testing-library/react';
 

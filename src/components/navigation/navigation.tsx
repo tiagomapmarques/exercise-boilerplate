@@ -13,12 +13,12 @@ const updateDocumentTitle = (i18n: I18n, pathname: string) => {
     return;
   }
 
-  let pageTitle = i18n.t({ id: 'boilerplate.header.logo' });
+  let pageTitle = i18n.t({ id: 'header.logo' });
 
   if (pathname === '/about') {
-    pageTitle += ` - ${i18n.t({ id: 'boilerplate.about.title' })}`;
+    pageTitle += ` - ${i18n.t({ id: 'about.title' })}`;
   } else if (pathname === '/') {
-    pageTitle += ` - ${i18n.t({ id: 'boilerplate.home.title' })}`;
+    pageTitle += ` - ${i18n.t({ id: 'home.title' })}`;
   }
 
   document.title = pageTitle;
@@ -62,7 +62,7 @@ export const Navigation = () => {
         <Home size="20" />
 
         <Text>
-          <Trans id="boilerplate.home.title" />
+          <Trans id="home.title" />
         </Text>
       </NavigationLink>
 
@@ -70,12 +70,12 @@ export const Navigation = () => {
         <Info size="20" />
 
         <Text>
-          <Trans id="boilerplate.about.title" />
+          <Trans id="about.title" />
         </Text>
       </NavigationLink>
 
       <Flex align="end" style={{ flexGrow: 1 }}>
-        <Stack gap="lg" style={{ width: '100%' }}>
+        <Stack gap="lg" style={{ flexGrow: 1 }}>
           <LocalePicker />
 
           <Divider />

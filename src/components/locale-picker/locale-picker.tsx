@@ -40,6 +40,7 @@ export const LocalePicker = () => {
       <Menu.Target>
         <Button
           variant="default"
+          justify="space-between"
           data-expanded={open || undefined}
           leftSection={<CountryFlag locale={locale} />}
           rightSection={<ChevronDown size="16" />}

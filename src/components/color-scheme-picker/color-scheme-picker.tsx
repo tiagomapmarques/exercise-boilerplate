@@ -9,12 +9,15 @@ import { Moon, Sun } from 'lucide-react';
 export const ColorSchemePicker = () => {
   const { i18n } = useLingui();
   const colorScheme = useComputedColorScheme();
-  const { toggleColorScheme } = useMantineColorScheme();
+  const { toggleColorScheme } = useMantineColorScheme({
+    keepTransitions: true,
+  });
 
   return (
     <Switch
       size="md"
-      aria-label={i18n.t({ id: 'boilerplate.navigation.dark-mode' })}
+      display="inline-flex"
+      aria-label={i18n.t({ id: 'navigation.dark-mode' })}
       checked={colorScheme === 'dark'}
       thumbIcon={
         colorScheme === 'dark' ? (

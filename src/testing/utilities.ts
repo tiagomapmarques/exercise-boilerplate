@@ -1,5 +1,15 @@
 import type { Mock } from 'vitest';
 
+import { messages as messagesDeDe } from '@/locales/de-DE.po';
+import { messages as messagesEnGb } from '@/locales/en-GB.po';
+import { messages as messagesFrFr } from '@/locales/fr-FR.po';
+
+export const messages = {
+  'en-GB': messagesEnGb,
+  'fr-FR': messagesFrFr,
+  'de-DE': messagesDeDe,
+};
+
 /**
  * Mocks the `console.log`, `console.warn` or `console.error` function before
  * a test and resets it after.
@@ -11,6 +21,7 @@ export const mockConsole = <Type extends 'log' | 'warn' | 'error'>(
   let original: (typeof console)[Type];
 
   beforeEach(() => {
+    // biome-ignore lint/suspicious/noConsole: Needed for mocking console calls
     original = console[type];
 
     Object.defineProperty(console, type, {
@@ -67,6 +78,7 @@ export class ControlledPromise {
   /** Method to resolve the currently awaited promise. */
   public continue() {
     if (this.resolved) {
+      // biome-ignore lint/suspicious/noConsole: Useful to detect potential test errors
       console.warn(
         'A ControlledPromise tried to `continue` with no previous `wait` call.',
       );
@@ -79,6 +91,7 @@ export class ControlledPromise {
   /** Method to reject the currently awaited promise. */
   public throw() {
     if (this.resolved) {
+      // biome-ignore lint/suspicious/noConsole: Useful to detect potential test errors
       console.warn(
         'A ControlledPromise tried to `throw` with no previous `wait` call.',
       );

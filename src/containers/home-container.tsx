@@ -7,7 +7,7 @@ export const HomeContainer = () => {
   return (
     <Stack gap="sm">
       <Title>
-        <Trans id="boilerplate.home.title" />
+        <Trans id="home.title" />
       </Title>
 
       <ExampleContent />

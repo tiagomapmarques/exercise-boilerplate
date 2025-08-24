@@ -23,7 +23,8 @@ export const fetchAndActivateLocale = async (locale: Locale, i18n?: I18n) => {
     i18n?.load(locale, messages);
     i18n?.activate(locale);
   } catch {
-    console.error(`Unable to load messages for "${locale}"`);
+    // biome-ignore lint/suspicious/noConsole: Useful error at runtime
+    console.error(`Unable to load messages for ${locale}`);
   }
 };
 
@@ -36,8 +37,8 @@ const isLanguage = (localeOrLanguage = ''): localeOrLanguage is Language => {
   return !!language && !!languages.includes(language as Language);
 };
 
-const getInitialLocale = () => {
-  const userPreference = detect(fromNavigator()) || undefined;
+const getInitialLocale = (locale?: string) => {
+  const userPreference = locale || detect(fromNavigator()) || undefined;
 
   if (isLocale(userPreference)) {
     return userPreference;
@@ -50,11 +51,13 @@ const getInitialLocale = () => {
 
 /**
  * Loads Messages for the Locale suggested by the browser (falls back to
- * the `fallbackLocale`).
+ * `fallbackLocale`).
  *
- * If an `i18n` instance is provided, it will load the Messages onto the `i18n`
- * instance and activate the Locale.
+ * If an `i18n` instance is provided, it will use its Locale, load the Messages
+ * onto the instance and (re-)activate the Locale. If no Locale was set in the
+ * `i18n` instance, it will use the Locale suggested by the browser instead
+ * (still with `fallbackLocale` as a fallback).
  */
 export const loadLocale = async (i18n?: I18n) => {
-  await fetchAndActivateLocale(getInitialLocale(), i18n);
+  await fetchAndActivateLocale(getInitialLocale(i18n?.locale), i18n);
 };

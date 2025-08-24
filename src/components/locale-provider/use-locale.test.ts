@@ -49,9 +49,8 @@ describe(useLocale, () => {
 
       await act(() => setLocale('de-AT' as Locale));
 
-      expect(console.error).toBeCalledWith(
-        'Unable to load messages for "de-AT"',
-      );
+      // biome-ignore lint/suspicious/noConsole: Test assertion
+      expect(console.error).toBeCalledWith('Unable to load messages for de-AT');
 
       const [updatedLocale] = result.current;
 

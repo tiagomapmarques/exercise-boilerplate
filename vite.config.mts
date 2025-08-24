@@ -9,10 +9,10 @@ import { countries } from './src/components/locale-provider/constants';
 
 export default defineConfig({
   plugins: [
-    tanstackRouter({ target: 'react', autoCodeSplitting: true }),
+    tsconfigPaths(),
     react({ plugins: [['@lingui/swc-plugin', {}]] }),
     lingui(),
-    tsconfigPaths(),
+    tanstackRouter({ target: 'react', autoCodeSplitting: true }),
     viteStaticCopy({
       targets: countries.map((country) => ({
         src: `./node_modules/country-flag-icons/1x1/${country}.svg`,

@@ -1,6 +1,6 @@
 {
   "name": "exercise-boilerplate",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "license": "MIT",
   "main": "src/main.tsx",
   "engines": {
@@ -9,7 +9,7 @@
   "packageManager": "pnpm@10.15.0",
   "engineStrict": true,
   "scripts": {
-    "postinstall": "playwright install --with-deps && tsr generate && pnpm run licenses",
+    "postinstall": "playwright install --with-deps && pnpm run licenses && tsr generate && ./bin/generate-env-file",
     "start": "vite",
     "build": "vite build",
     "serve": "node ./server.mjs",
@@ -38,7 +38,7 @@
     "@lingui/vite-plugin": "^5.4.1",
     "@mantine/core": "^8.2.7",
     "@mantine/nprogress": "^8.2.7",
-    "@tanstack/react-pacer": "^0.15.0",
+    "@tanstack/react-pacer": "^0.16.0",
     "@tanstack/react-router": "^1.131.27",
     "@tanstack/router-plugin": "^1.131.27",
     "@vitejs/plugin-react-swc": "^4.0.1",
@@ -52,7 +52,7 @@
     "vite-tsconfig-paths": "^5.1.4"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.2.0",
+    "@biomejs/biome": "^2.2.2",
     "@tanstack/react-router-devtools": "^1.131.27",
     "@tanstack/router-cli": "^1.131.27",
     "@testing-library/react": "^16.3.0",

@@ -1,5 +1,5 @@
 import type { Mock } from 'vitest';
-import { Trans } from '@lingui/react';
+import { Trans, useLingui } from '@lingui/react';
 
 import { act, ControlledPromise, render, screen } from '@/testing';
 
@@ -18,13 +18,24 @@ vi.mock('./utilities', async (importOriginal) => {
 describe(LocaleProvider, () => {
   let loader: ControlledPromise;
 
+  const TestingComponent = () => {
+    const { i18n } = useLingui();
+    return (
+      <div
+        data-slot="Content"
+        data-locale={i18n.locale}
+        data-messages={JSON.stringify(i18n.messages)}
+      />
+    );
+  };
+
   beforeEach(() => {
     loader = new ControlledPromise();
 
     (loadLocale as Mock<typeof loadLocale>).mockImplementation(async (i18n) => {
       await loader.wait();
       i18n?.loadAndActivate({
-        locale: 'custom-locale',
+        locale: i18n.locale || 'custom-locale',
         messages: { 'mock-key': 'Mock Value' },
       });
     });
@@ -33,7 +44,7 @@ describe(LocaleProvider, () => {
   it('loads messages before displaying children', async () => {
     render(
       <LocaleProvider>
-        <div data-slot="Content" />
+        <TestingComponent />
       </LocaleProvider>,
       { providers: { i18n: false } },
     );
@@ -55,7 +66,7 @@ describe(LocaleProvider, () => {
   it('does not load messages more than once', async () => {
     const { rerender } = render(
       <LocaleProvider>
-        <div data-slot="Content" />
+        <TestingComponent />
       </LocaleProvider>,
       { providers: { i18n: false } },
     );
@@ -66,15 +77,37 @@ describe(LocaleProvider, () => {
 
     rerender(
       <LocaleProvider>
-        <div data-slot="Content" />
+        <TestingComponent />
       </LocaleProvider>,
     );
 
     expect(loadLocale).toHaveBeenCalledTimes(1);
   });
 
+  it('accepts initial locale and messages', () => {
+    const messages = { 'mock-key': 'Mock Value 2' };
+
+    render(
+      <LocaleProvider locale="de-DE" messages={messages}>
+        <TestingComponent />
+      </LocaleProvider>,
+      { providers: { i18n: false } },
+    );
+
+    expect(loadLocale).not.toHaveBeenCalled();
+
+    expect(screen.getByTestId('Content')).toHaveAttribute(
+      'data-locale',
+      'de-DE',
+    );
+    expect(screen.getByTestId('Content')).toHaveAttribute(
+      'data-messages',
+      JSON.stringify(messages),
+    );
+  });
+
   it('works in tandem with `useLocale` and `Trans`', async () => {
-    const TestingComponent = () => {
+    const ConsumerComponent = () => {
       const [locale] = useLocale();
       return (
         <div data-slot="Content" data-locale={locale}>
@@ -85,7 +118,7 @@ describe(LocaleProvider, () => {
 
     render(
       <LocaleProvider>
-        <TestingComponent />
+        <ConsumerComponent />
       </LocaleProvider>,
       { providers: { i18n: false } },
     );

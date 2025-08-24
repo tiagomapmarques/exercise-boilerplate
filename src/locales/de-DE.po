@@ -13,44 +13,44 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
-msgid "boilerplate.about.license"
+msgid "about.license"
 msgstr "Licenz: {license}"
 
-msgid "boilerplate.about.title"
+msgid "about.title"
 msgstr "Über"
 
-msgid "boilerplate.actions.go-back"
+msgid "actions.go-back"
 msgstr "Zurückgehen"
 
-msgid "boilerplate.actions.go-to-start"
+msgid "actions.go-to-start"
 msgstr "Zum Start gehen"
 
-msgid "boilerplate.header.logo"
+msgid "header.logo"
 msgstr "Exercise boilerplate"
 
-msgid "boilerplate.header.menu"
+msgid "header.menu"
 msgstr "Menü"
 
-msgid "boilerplate.header.page-loading"
+msgid "header.page-loading"
 msgstr "Seite laden"
 
-msgid "boilerplate.home.instructions"
+msgid "home.instructions"
 msgstr "Platzieren Sie Ihre UI hier"
 
-msgid "boilerplate.home.title"
+msgid "home.title"
 msgstr "Startseite"
 
-msgid "boilerplate.navigation.dark-mode"
+msgid "navigation.dark-mode"
 msgstr "Dunkelmodus"
 
-msgid "boilerplate.not-found.content"
+msgid "not-found.content"
 msgstr "Diese Seite existiert nicht"
 
-msgid "boilerplate.not-found.title"
+msgid "not-found.title"
 msgstr "404 Not found"
 
-msgid "boilerplate.unexpected-error.content"
+msgid "unexpected-error.content"
 msgstr "Ups… da ist etwas auf unserer Seite schief gelaufen"
 
-msgid "boilerplate.unexpected-error.title"
+msgid "unexpected-error.title"
 msgstr "Unerwarteter Fehler"

@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.2.0/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.2.2/schema.json",
   "files": {
     "ignoreUnknown": false,
     "includes": [
@@ -23,6 +23,7 @@
     "enabled": true,
     "rules": {
       "recommended": true,
+      "suspicious": "warn",
       "correctness": {
         "useUniqueElementIds": {
           "level": "error",

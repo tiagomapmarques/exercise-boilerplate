@@ -8,15 +8,15 @@ export const NotFoundContainer = () => {
   return (
     <Stack align="start">
       <Title>
-        <Trans id="boilerplate.not-found.title" />
+        <Trans id="not-found.title" />
       </Title>
 
       <Text>
-        <Trans id="boilerplate.not-found.content" />
+        <Trans id="not-found.content" />
       </Text>
 
       <Button onClick={() => navigate({ to: '/' })}>
-        <Trans id="boilerplate.actions.go-to-start" />
+        <Trans id="actions.go-to-start" />
       </Button>
     </Stack>
   );

@@ -20,30 +20,46 @@ describe(loadLocale, () => {
   });
 
   it.each`
-    browser      | locale
-    ${undefined} | ${'en-GB'}
-    ${null}      | ${'en-GB'}
-    ${'en-GB'}   | ${'en-GB'}
-    ${'en-US'}   | ${'en-GB'}
-    ${'en'}      | ${'en-GB'}
-    ${'fr'}      | ${'fr-FR'}
-    ${'de-DE'}   | ${'de-DE'}
-    ${'de-AT'}   | ${'de-DE'}
-    ${'es-ES'}   | ${'en-GB'}
-    ${'es'}      | ${'en-GB'}
-  `('guesses $locale from $browser', async ({ browser, locale }) => {
-    (fromNavigator as Mock<typeof fromNavigator>).mockReturnValue(browser);
+    loaded       | browser      | expected
+    ${undefined} | ${undefined} | ${'en-GB'}
+    ${undefined} | ${null}      | ${'en-GB'}
+    ${undefined} | ${'en-GB'}   | ${'en-GB'}
+    ${undefined} | ${'en-US'}   | ${'en-GB'}
+    ${undefined} | ${'en'}      | ${'en-GB'}
+    ${undefined} | ${'fr'}      | ${'fr-FR'}
+    ${undefined} | ${'de-DE'}   | ${'de-DE'}
+    ${undefined} | ${'de-AT'}   | ${'de-DE'}
+    ${undefined} | ${'es-ES'}   | ${'en-GB'}
+    ${undefined} | ${'es'}      | ${'en-GB'}
+    ${'de-DE'}   | ${'en'}      | ${'de-DE'}
+    ${'de'}      | ${'en-GB'}   | ${'de-DE'}
+    ${'de-DE'}   | ${'es'}      | ${'de-DE'}
+    ${'de'}      | ${'es-ES'}   | ${'de-DE'}
+    ${'es-ES'}   | ${'de'}      | ${'en-GB'}
+    ${'es'}      | ${'de-DE'}   | ${'en-GB'}
+    ${'es-ES'}   | ${'es'}      | ${'en-GB'}
+    ${'es'}      | ${'es-ES'}   | ${'en-GB'}
+  `(
+    'guesses $expected from $browser and $loaded',
+    async ({ loaded, browser, expected }) => {
+      (fromNavigator as Mock<typeof fromNavigator>).mockReturnValue(browser);
 
-    const i18n = setupI18n();
+      const i18n = setupI18n(
+        loaded && {
+          locale: loaded,
+          messages: { [loaded]: {} },
+        },
+      );
 
-    expect(i18n.locale).toBe('');
-    expect(i18n.messages).toEqual({});
+      expect(i18n.locale).toBe(loaded || '');
+      expect(i18n.messages).toEqual({});
 
-    await loadLocale(i18n);
+      await loadLocale(i18n);
 
-    expect(i18n.locale).toBe(locale);
-    expect(i18n.messages).toMatchObject({
-      'boilerplate.home.title': [expect.stringMatching(/^((?!boilerplate).)/)],
-    });
-  });
+      expect(i18n.locale).toBe(expected);
+      expect(i18n.messages).toMatchObject({
+        'home.title': [expect.stringMatching(/^((?!home\.).)/)],
+      });
+    },
+  );
 });

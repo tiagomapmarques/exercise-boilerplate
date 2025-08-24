@@ -8,15 +8,15 @@ export const UnexpectedErrorContainer = () => {
   return (
     <Stack align="start">
       <Title>
-        <Trans id="boilerplate.unexpected-error.title" />
+        <Trans id="unexpected-error.title" />
       </Title>
 
       <Text>
-        <Trans id="boilerplate.unexpected-error.content" />
+        <Trans id="unexpected-error.content" />
       </Text>
 
       <Button onClick={() => router.history.back()}>
-        <Trans id="boilerplate.actions.go-back" />
+        <Trans id="actions.go-back" />
       </Button>
     </Stack>
   );

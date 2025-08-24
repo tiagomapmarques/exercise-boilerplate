@@ -32,11 +32,11 @@ const BurgerMenu = ({ opened, setOpened }: BurgerMenuProps) => {
         hiddenFrom="sm"
         opened={opened}
         onClick={() => setOpened((opened) => !opened)}
-        aria-label={i18n.t({ id: 'boilerplate.header.menu' })}
+        aria-label={i18n.t({ id: 'header.menu' })}
       />
 
       <Text>
-        <Trans id="boilerplate.header.logo" />
+        <Trans id="header.logo" />
       </Text>
     </Flex>
   );

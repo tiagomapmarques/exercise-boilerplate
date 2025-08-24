@@ -5,7 +5,7 @@ export const ExampleContent = () => {
   return (
     <Box>
       <Text>
-        <Trans id="boilerplate.home.instructions" />
+        <Trans id="home.instructions" />
       </Text>
     </Box>
   );

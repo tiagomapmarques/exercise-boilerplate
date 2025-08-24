@@ -1,4 +1,4 @@
-import { Fragment, lazy } from 'react';
+import { Fragment, lazy, useEffect } from 'react';
 
 export const DevTools =
   process.env.NODE_ENV !== 'development'
@@ -9,6 +9,15 @@ export const DevTools =
         );
 
         return {
-          default: () => <TanStackRouterDevtools position="bottom-right" />,
+          default: () => {
+            useEffect(() => {
+              // biome-ignore lint/suspicious/noConsole: Used only in dev environment
+              console.log(
+                'Environment:',
+                JSON.stringify({ ...import.meta.env }, null, 2),
+              );
+            });
+            return <TanStackRouterDevtools position="bottom-right" />;
+          },
         };
       });

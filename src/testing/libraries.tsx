@@ -4,7 +4,7 @@ import {
   type PropsWithChildren,
   type ReactNode,
 } from 'react';
-import { type Messages, setupI18n } from '@lingui/core';
+import { setupI18n } from '@lingui/core';
 import { I18nProvider, type I18nProviderProps } from '@lingui/react';
 import { MantineProvider, type MantineProviderProps } from '@mantine/core';
 import {
@@ -24,9 +24,8 @@ import {
 import { userEvent } from '@vitest/browser/context';
 
 import type { Locale } from '@/components/locale-provider';
-import { messages as messagesDeDe } from '@/locales/de-DE.po';
-import { messages as messagesEnGb } from '@/locales/en-GB.po';
-import { messages as messagesFrFr } from '@/locales/fr-FR.po';
+
+import { messages } from './utilities';
 
 export * from '@testing-library/react';
 export * from '@vitest/browser/context';
@@ -125,12 +124,6 @@ const createI18nRenderProvider = (props: I18nProps | boolean | undefined) => {
   if (!props) {
     return { Provider: Fragment, result: {} };
   }
-
-  const messages: Record<Locale, Messages> = {
-    'en-GB': messagesEnGb,
-    'fr-FR': messagesFrFr,
-    'de-DE': messagesDeDe,
-  };
 
   const {
     locale = 'en-GB',
