@@ -2,7 +2,8 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { RouterProvider } from '@tanstack/react-router';
 
-import { loadLocale } from './components/locale-provider/utilities';
+import { loadLocale } from '@/components/locale-provider/utilities';
+
 import { router } from './router';
 
 import './main.css';

@@ -5,7 +5,7 @@ import { ExampleContent } from '@/components/example-content';
 
 export const HomeContainer = () => {
   return (
-    <Stack gap="sm">
+    <Stack>
       <Title>
         <Trans id="home.title" />
       </Title>

@@ -5,7 +5,7 @@ import { About } from '@/components/about';
 
 export const AboutContainer = () => {
   return (
-    <Stack gap="sm">
+    <Stack>
       <Title>
         <Trans id="about.title" />
       </Title>
