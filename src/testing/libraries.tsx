@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/style/noRestrictedImports: Only for test environment setup */
 import {
   type ComponentProps,
   Fragment,
@@ -78,11 +79,6 @@ const createRouterRenderProvider = (
   /** Function to wait for the router to load and display the correct page */
   const waitForRouter = async () => {
     await act(() => router.latestLoadPromise);
-  };
-
-  const originalNavigate = router.navigate;
-  router.navigate = async (...args) => {
-    await act(() => originalNavigate.bind(router)(...args));
   };
 
   function RouterRenderProvider({ children }: PropsWithChildren) {

@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/style/noRestrictedImports: Only for test environment setup */
 import './src/main.css';
 
 import { configure } from '@testing-library/react';

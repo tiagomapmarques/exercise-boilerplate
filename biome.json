@@ -39,7 +39,9 @@
             "paths": {
               "@lingui/core": {
                 "allowImportNames": ["I18n", "Messages", "setupI18n"]
-              }
+              },
+              "@testing-library/react": {},
+              "@vitest/browser/context": {}
             }
           }
         }

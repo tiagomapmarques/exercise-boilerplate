@@ -10,6 +10,6 @@ VITE_API_KEY=PUBLIC_API_KEY_VALUE
 
 if (!existsSync(envFile)) {
   writeFileSync(envFile, defaultEnvFileContent.substring(1), 'utf8');
-  // biome-ignore lint/suspicious/noConsole: Useful as it runs in postinstall
+  // biome-ignore lint/suspicious/noConsole: Useful as this is a script
   console.log(`Generated .env file in ${Date.now() - startTime}ms`);
 }

@@ -1,32 +1,25 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useLingui } from '@lingui/react';
-import { NavigationProgress, nprogress } from '@mantine/nprogress';
-import { Throttler } from '@tanstack/react-pacer';
+import { createNprogress, NavigationProgress } from '@mantine/nprogress';
 import { useRouter } from '@tanstack/react-router';
 
 import './router-progress.css';
 
-const nprogressComplete = new Throttler(nprogress.complete, { wait: 50 });
-
 export const RouterProgress = () => {
-  const router = useRouter();
   const { i18n } = useLingui();
+  const router = useRouter();
+  const [store, { start, complete }] = useRef(createNprogress()).current;
 
   useEffect(() => {
-    router.subscribe('onBeforeNavigate', () => {
-      nprogress.start();
-    });
-    router.subscribe('onResolved', () => {
-      requestAnimationFrame(() => {
-        nprogressComplete.maybeExecute();
-      });
-    });
-  }, [router]);
+    router.subscribe('onBeforeNavigate', start);
+    router.subscribe('onResolved', complete);
+  }, [router, start, complete]);
 
   return (
     <NavigationProgress
       data-slot="RouterProgress"
       aria-label={i18n.t({ id: 'header.page-loading' })}
+      store={store}
     />
   );
 };

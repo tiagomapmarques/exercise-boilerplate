@@ -6,7 +6,7 @@ export default defineConfig({
   ...viteConfig,
   test: {
     globals: true,
-    setupFiles: './vitest.environment.mts',
+    setupFiles: './vitest.setup.mts',
     mockReset: true,
     browser: {
       enabled: true,
