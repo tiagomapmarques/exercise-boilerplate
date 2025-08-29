@@ -57,7 +57,7 @@ const createRouterRenderProvider = (
   props: RouterHistoryProps | RouterProviderProps | boolean | undefined,
 ) => {
   if (!props) {
-    return { Provider: Fragment, result: {} };
+    return { provider: Fragment, result: {} };
   }
 
   const {
@@ -91,7 +91,7 @@ const createRouterRenderProvider = (
     );
   }
 
-  return { Provider: RouterRenderProvider, result: { router, waitForRouter } };
+  return { provider: RouterRenderProvider, result: { router, waitForRouter } };
 };
 
 type MantineProps = Omit<MantineProviderProps, 'children'>;
@@ -100,7 +100,7 @@ const createMantineRenderProvider = (
   props: MantineProps | boolean | undefined,
 ) => {
   if (!props) {
-    return { Provider: Fragment, result: {} };
+    return { provider: Fragment, result: {} };
   }
 
   const parsedProps = typeof props === 'object' ? props : {};
@@ -109,7 +109,7 @@ const createMantineRenderProvider = (
     return <MantineProvider {...parsedProps}>{children}</MantineProvider>;
   }
 
-  return { Provider: MantineRenderProvider, result: {} };
+  return { provider: MantineRenderProvider, result: {} };
 };
 
 type I18nProps = Partial<Omit<I18nProviderProps, 'children'>> & {
@@ -118,7 +118,7 @@ type I18nProps = Partial<Omit<I18nProviderProps, 'children'>> & {
 
 const createI18nRenderProvider = (props: I18nProps | boolean | undefined) => {
   if (!props) {
-    return { Provider: Fragment, result: {} };
+    return { provider: Fragment, result: {} };
   }
 
   const {
@@ -137,7 +137,7 @@ const createI18nRenderProvider = (props: I18nProps | boolean | undefined) => {
     );
   }
 
-  return { Provider: I18nRenderProvider, result: { i18n } };
+  return { provider: I18nRenderProvider, result: { i18n } };
 };
 
 type Providers = {
@@ -164,13 +164,13 @@ const createWrapper = ({
   return {
     wrapper: ({ children }: PropsWithChildren) => (
       <OuterWrapper>
-        <RouterRender.Provider>
-          <MantineRender.Provider>
-            <I18nRender.Provider>
+        <RouterRender.provider>
+          <MantineRender.provider>
+            <I18nRender.provider>
               <Wrapper>{children}</Wrapper>
-            </I18nRender.Provider>
-          </MantineRender.Provider>
-        </RouterRender.Provider>
+            </I18nRender.provider>
+          </MantineRender.provider>
+        </RouterRender.provider>
       </OuterWrapper>
     ),
     result: {
@@ -203,14 +203,19 @@ export const render = (
   }: RenderOptions & CreateWrapperProps = {},
 ) => {
   const { wrapper, result } = createWrapper({
-    outerWrapper: outerWrapper,
+    outerWrapper,
     providers: { ...defaultRenderProviders, ...providers },
     wrapper: options.wrapper,
   });
 
-  const renderResult = screen.render(ui, { ...options, wrapper });
+  const { rerender: originalRerender, ...renderResult } = screen.render(ui, {
+    ...options,
+    wrapper,
+  });
 
-  return { ...renderResult, providers: result };
+  const rerender = (updatedUi = ui) => originalRerender(updatedUi);
+
+  return { ...renderResult, rerender, providers: result };
 };
 
 /**

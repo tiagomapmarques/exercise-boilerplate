@@ -63,7 +63,7 @@ describe(RouterProgress, () => {
 
     expect(createNprogress).toHaveBeenCalledTimes(1);
 
-    rerender(<RouterProgress />);
+    rerender();
 
     expect(createNprogress).toHaveBeenCalledTimes(1);
   });

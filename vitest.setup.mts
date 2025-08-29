@@ -27,13 +27,13 @@ const consoleWarnMock = mockConsole('warn', console.warn);
 const consoleErrorMock = mockConsole('error', console.error);
 afterEach(({ task, expect }) => {
   if (task.result && !task.result.errors) {
-    if (consoleLogMock.mock.calls.length) {
+    if (consoleLogMock.mock.calls.length > 0) {
       expect.fail('Unexpected `console.log` calls.');
     }
-    if (consoleWarnMock.mock.calls.length) {
+    if (consoleWarnMock.mock.calls.length > 0) {
       expect.fail('Unexpected `console.warn` calls.');
     }
-    if (consoleErrorMock.mock.calls.length) {
+    if (consoleErrorMock.mock.calls.length > 0) {
       expect.fail('Unexpected `console.error` calls.');
     }
   }

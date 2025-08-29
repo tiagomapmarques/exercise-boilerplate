@@ -9,7 +9,7 @@ import { ColorSchemePicker } from '@/components/color-scheme-picker';
 import { LocalePicker } from '@/components/locale-picker';
 
 const updateDocumentTitle = (i18n: I18n, pathname: string) => {
-  if (!Object.keys(i18n.messages).length) {
+  if (Object.keys(i18n.messages).length === 0) {
     return;
   }
 

@@ -1,3 +1,5 @@
+import process from 'node:process';
+
 import { defineConfig } from 'vite';
 
 import viteConfig from './vite.config.mjs';
@@ -8,7 +10,7 @@ const browserArgs = process.argv.find((arg) => arg === '--all-browsers')
       .filter((arg) => /--(firefox|chromium|webkit)/.test(arg))
       .map((browserArg) => browserArg.slice(2));
 
-const browsers = browserArgs.length ? browserArgs : ['firefox'];
+const browsers = browserArgs.length > 0 ? browserArgs : ['firefox'];
 
 // biome-ignore lint/style/noDefaultExport: Necessary for it to work
 export default defineConfig({

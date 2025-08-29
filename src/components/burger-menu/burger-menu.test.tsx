@@ -18,7 +18,7 @@ describe(BurgerMenu, () => {
   it('displays custom content', () => {
     render(
       <BurgerMenu opened={false} setOpened={undefined}>
-        <div data-slot="Content"></div>
+        <div data-slot="Content" />
       </BurgerMenu>,
     );
 

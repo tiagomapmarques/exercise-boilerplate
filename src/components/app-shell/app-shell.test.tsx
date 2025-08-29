@@ -24,7 +24,7 @@ describe(AppShell, () => {
     rootRoute.addChildren({
       indexRoute: createRoute({
         path: '/',
-        component: () => <div data-slot="TanstackReactRouter-Outlet" />,
+        component: () => <div data-slot="Router-Outlet" />,
         getParentRoute: () => rootRoute,
       }),
     });
@@ -38,9 +38,7 @@ describe(AppShell, () => {
       outerWrapper,
     });
 
-    expect(
-      await screen.findByTestId('TanstackReactRouter-Outlet'),
-    ).not.toBeVisible();
+    expect(await screen.findByTestId('Router-Outlet')).not.toBeVisible();
   });
 
   it('displays header', async () => {

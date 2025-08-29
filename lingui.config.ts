@@ -9,7 +9,7 @@ import {
 // biome-ignore lint/style/noDefaultExport: Necessary for it to work
 export default defineConfig({
   sourceLocale: fallbackLocale,
-  locales: locales,
+  locales,
   catalogs: [
     {
       path: '<rootDir>/src/locales/{locale}',

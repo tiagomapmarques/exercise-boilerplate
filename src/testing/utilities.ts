@@ -48,11 +48,13 @@ export const mockConsole = <Type extends 'log' | 'warn' | 'error'>(
  */
 export class ControlledPromise {
   private promise: Promise<void>;
+  // biome-ignore lint/style/useReadonlyClassProperties: False positive
   private resolve: (() => void) | undefined;
+  // biome-ignore lint/style/useReadonlyClassProperties: False positive
   private reject: (() => void) | undefined;
 
   private get resolved() {
-    return !this.resolve && !this.reject;
+    return !(this.resolve || this.reject);
   }
 
   public constructor() {

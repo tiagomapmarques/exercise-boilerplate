@@ -29,12 +29,12 @@ export const fetchAndActivateLocale = async (locale: Locale, i18n?: I18n) => {
 };
 
 const isLocale = (locale = ''): locale is Locale => {
-  return !!locale && !!locales.includes(locale as Locale);
+  return Boolean(locale) && locales.includes(locale as Locale);
 };
 
 const isLanguage = (localeOrLanguage = ''): localeOrLanguage is Language => {
   const language = localeOrLanguage.split('-')[0];
-  return !!language && !!languages.includes(language as Language);
+  return Boolean(language) && languages.includes(language as Language);
 };
 
 const getInitialLocale = (locale?: string) => {

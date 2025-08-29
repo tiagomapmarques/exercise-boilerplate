@@ -1,7 +1,14 @@
 import type { Mock } from 'vitest';
 import { Trans, useLingui } from '@lingui/react';
 
-import { act, ControlledPromise, render, screen } from '@/testing';
+import {
+  act,
+  ControlledPromise,
+  mockConsole,
+  render,
+  screen,
+  waitFor,
+} from '@/testing';
 
 import { LocaleProvider } from './locale-provider';
 import { useLocale } from './use-locale';
@@ -75,11 +82,7 @@ describe(LocaleProvider, () => {
 
     expect(loadLocale).toHaveBeenCalledTimes(1);
 
-    rerender(
-      <LocaleProvider>
-        <TestingComponent />
-      </LocaleProvider>,
-    );
+    rerender();
 
     expect(loadLocale).toHaveBeenCalledTimes(1);
   });
@@ -130,5 +133,70 @@ describe(LocaleProvider, () => {
       'custom-locale',
     );
     expect(screen.getByTestId('Content')).toHaveTextContent('Mock Value');
+  });
+
+  it('can be used multiple times on a single page', () => {
+    const messagesEn = { 'mock-key': 'English' };
+    const messagesDe = { 'mock-key': 'Deutch' };
+    const messagesFr = { 'mock-key': 'Français' };
+
+    const ConsumerComponent = () => {
+      const { i18n } = useLingui();
+      return (
+        <div>
+          <Trans id="mock-key" />
+          &nbsp;
+          {i18n.t({ id: 'mock-key' })}
+        </div>
+      );
+    };
+
+    render(
+      <>
+        <LocaleProvider locale="en-GB" messages={messagesEn}>
+          <ConsumerComponent />
+
+          <LocaleProvider locale="fr-FR" messages={messagesFr}>
+            <ConsumerComponent />
+          </LocaleProvider>
+        </LocaleProvider>
+
+        <LocaleProvider locale="de-DE" messages={messagesDe}>
+          <ConsumerComponent />
+        </LocaleProvider>
+      </>,
+      { providers: { i18n: false } },
+    );
+
+    expect(screen.getByText('English English')).toBeVisible();
+    expect(screen.getByText('Deutch Deutch')).toBeVisible();
+    expect(screen.getByText('Français Français')).toBeVisible();
+
+    expect(screen.queryByText('mock-key')).not.toBeInTheDocument();
+  });
+
+  describe('error while loading', () => {
+    const consoleError = mockConsole('error');
+
+    beforeEach(() => {
+      (loadLocale as Mock<typeof loadLocale>).mockImplementation(async () => {
+        throw new Error('Custom error');
+      });
+    });
+
+    it('handles errors loading locale/messages', async () => {
+      render(
+        <LocaleProvider>
+          <TestingComponent />
+        </LocaleProvider>,
+        { providers: { i18n: false } },
+      );
+
+      await waitFor(() => {
+        expect(consoleError).toHaveBeenCalledWith('Custom error');
+      });
+
+      expect(screen.queryByTestId('Content')).not.toBeInTheDocument();
+    });
   });
 });

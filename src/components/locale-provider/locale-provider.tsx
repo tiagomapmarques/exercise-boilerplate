@@ -30,7 +30,12 @@ export const LocaleProvider = ({
     const isNotLoaded = Object.keys(i18nRef.current.messages).length === 0;
 
     if (isNotLoaded) {
-      loadLocale(i18nRef.current).then(() => setReady(true));
+      loadLocale(i18nRef.current)
+        .then(() => setReady(true))
+        .catch((error: Error) => {
+          // biome-ignore lint/suspicious/noConsole: Useful error at runtime
+          console.error(error.message);
+        });
     } else {
       setReady(true);
     }
