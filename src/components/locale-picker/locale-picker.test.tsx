@@ -25,7 +25,7 @@ describe(LocalePicker, () => {
     ).not.toBeInTheDocument();
   });
 
-  it('shows all locales in dropdown', async () => {
+  it('displays all locales in dropdown', async () => {
     render(<LocalePicker />);
 
     expect(screen.queryByRole('menu')).not.toBeInTheDocument();
@@ -61,5 +61,23 @@ describe(LocalePicker, () => {
     expect(
       screen.getByRole('button', { name: 'Great Britain English (GB)' }),
     ).toBeVisible();
+  });
+
+  it('toggles chevrons on open and close', async () => {
+    render(<LocalePicker />);
+
+    expect(screen.getByTestId('LocalePicker-ChevronDown')).toBeVisible();
+
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Great Britain English (GB)' }),
+    );
+
+    expect(screen.getByTestId('LocalePicker-ChevronUp')).toBeVisible();
+
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Great Britain English (GB)' }),
+    );
+
+    expect(screen.getByTestId('LocalePicker-ChevronDown')).toBeVisible();
   });
 });

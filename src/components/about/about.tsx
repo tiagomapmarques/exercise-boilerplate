@@ -9,7 +9,7 @@ export const About = () => {
       <Text>{name}</Text>
       <Text>v{version}</Text>
       <Text>
-        <Trans id="about.license" values={{ license }} />
+        <Trans id="pages.about.license" values={{ license }} />
       </Text>
     </>
   );

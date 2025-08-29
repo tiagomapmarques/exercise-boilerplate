@@ -5,7 +5,7 @@ export const ExampleContent = () => {
   return (
     <Box>
       <Text>
-        <Trans id="home.instructions" />
+        <Trans id="pages.home.instructions" />
       </Text>
     </Box>
   );

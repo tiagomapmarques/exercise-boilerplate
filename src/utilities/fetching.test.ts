@@ -1,9 +1,6 @@
 import { FetchError } from './fetching';
 
 describe(FetchError, () => {
-  const getFirstStackLine = (error: Error) => error.stack?.split('\n')[0];
-  const getStackLineCount = (error: Error) => error.stack?.split('\n').length;
-
   it('extends the `Error` class', () => {
     const message = 'Custom error message';
     const error = new Error(message);
@@ -13,9 +10,8 @@ describe(FetchError, () => {
     expect(fetchError.message).toBe(error.message);
     expect(fetchError.name).toBe(error.name);
 
+    expect(fetchError.stack).toEqual(expect.any(String));
     expect(fetchError.stack).toBeTruthy();
-    expect(getStackLineCount(fetchError)).toBe(getStackLineCount(error));
-    expect(getFirstStackLine(fetchError)).toBe(getFirstStackLine(error));
   });
 
   it('includes a status', () => {

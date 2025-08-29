@@ -8,11 +8,11 @@ export const UnexpectedErrorContainer = () => {
   return (
     <Stack align="start">
       <Title>
-        <Trans id="unexpected-error.title" />
+        <Trans id="pages.unexpected-error.title" />
       </Title>
 
       <Text>
-        <Trans id="unexpected-error.content" />
+        <Trans id="pages.unexpected-error.content" />
       </Text>
 
       <Button onClick={() => router.history.back()}>

@@ -36,7 +36,7 @@ describe(useLocale, () => {
   });
 
   describe('setting an unknown locale', () => {
-    mockConsole('error');
+    const consoleError = mockConsole('error');
 
     it('logs error if locale is unknown', async () => {
       const { result } = renderHook(useLocale, {
@@ -49,8 +49,7 @@ describe(useLocale, () => {
 
       await act(() => setLocale('de-AT' as Locale));
 
-      // biome-ignore lint/suspicious/noConsole: Test assertion
-      expect(console.error).toBeCalledWith('Unable to load messages for de-AT');
+      expect(consoleError).toBeCalledWith('Unable to load messages for de-AT');
 
       const [updatedLocale] = result.current;
 

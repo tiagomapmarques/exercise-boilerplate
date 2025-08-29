@@ -8,11 +8,11 @@ export const NotFoundContainer = () => {
   return (
     <Stack align="start">
       <Title>
-        <Trans id="not-found.title" />
+        <Trans id="pages.not-found.title" />
       </Title>
 
       <Text>
-        <Trans id="not-found.content" />
+        <Trans id="pages.not-found.content" />
       </Text>
 
       <Button onClick={() => navigate({ to: '/' })}>

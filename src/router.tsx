@@ -4,7 +4,7 @@ import { NotFoundContainer, UnexpectedErrorContainer } from '@/containers';
 
 import { routeTree } from './routeTree.gen';
 
-/** Router instance for the app */
+/** Router instance for the app. */
 export const router = createRouter({
   routeTree,
   defaultPreload: 'intent',
@@ -14,6 +14,7 @@ export const router = createRouter({
 
 // Register the router instance for type safety
 declare module '@tanstack/react-router' {
+  // biome-ignore lint/nursery/useConsistentTypeDefinitions: Necessary for it to work
   interface Register {
     router: typeof router;
   }

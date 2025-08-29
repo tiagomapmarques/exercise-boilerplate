@@ -7,8 +7,15 @@ import tsconfigPaths from 'vite-tsconfig-paths';
 
 import { countries } from './src/components/locale-provider/constants';
 
+const devtools =
+  process.env.NODE_ENV !== 'development'
+    ? undefined
+    : (await import('@tanstack/devtools-vite')).devtools;
+
+// biome-ignore lint/style/noDefaultExport: Necessary for it to work
 export default defineConfig({
   plugins: [
+    devtools?.(),
     tsconfigPaths(),
     react({ plugins: [['@lingui/swc-plugin', {}]] }),
     lingui(),

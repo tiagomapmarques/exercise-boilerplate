@@ -1,13 +1,12 @@
 #!/usr/bin/env node
+/** biome-ignore-all lint/suspicious/noConsole: Useful as this is a script */
 import { execSync } from 'node:child_process';
 
 const output = execSync('git status --porcelain').toString();
 
 if (output) {
-  // biome-ignore lint/suspicious/noConsole: Useful as this is a script
   console.error(`Uncommitted changes found\n${output}`);
   process.exit(1);
 }
 
-// biome-ignore lint/suspicious/noConsole: Useful as this is a script
-console.log(`No uncommitted changes found`);
+console.log('No uncommitted changes found');

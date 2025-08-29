@@ -1,3 +1,4 @@
+import type { PropsWithChildren } from 'react';
 import {
   createRootRoute,
   createRoute,
@@ -10,6 +11,14 @@ import { render, screen, userEvent } from '@/testing';
 import { AppShell } from './app-shell';
 
 describe(AppShell, () => {
+  const outerWrapper = ({ children }: PropsWithChildren) => (
+    <>
+      {/** biome-ignore lint/correctness/useUniqueElementIds: ID must match index.html */}
+      <div id="global-throbber" />
+      {children}
+    </>
+  );
+
   it('adds router outlet', async () => {
     const rootRoute = createRootRoute({ component: AppShell });
     rootRoute.addChildren({
@@ -26,6 +35,7 @@ describe(AppShell, () => {
         mantine: false,
         i18n: false,
       },
+      outerWrapper,
     });
 
     expect(
@@ -40,6 +50,7 @@ describe(AppShell, () => {
         mantine: false,
         i18n: false,
       },
+      outerWrapper,
     });
 
     expect(await screen.findByRole('banner')).toHaveTextContent(
@@ -54,10 +65,11 @@ describe(AppShell, () => {
         mantine: false,
         i18n: false,
       },
+      outerWrapper,
     });
 
     expect(
-      await screen.findByRole('progressbar', { name: 'Page loading' }),
+      await screen.findByRole('progressbar', { name: 'Loading' }),
     ).not.toBeVisible();
   });
 
@@ -69,6 +81,7 @@ describe(AppShell, () => {
           mantine: false,
           i18n: false,
         },
+        outerWrapper,
       });
 
       await providers.waitForRouter?.();
@@ -83,6 +96,7 @@ describe(AppShell, () => {
           mantine: false,
           i18n: false,
         },
+        outerWrapper,
       });
 
       await providers.waitForRouter?.();
@@ -107,6 +121,7 @@ describe(AppShell, () => {
           mantine: false,
           i18n: false,
         },
+        outerWrapper,
       });
 
       await providers.waitForRouter?.();

@@ -10,6 +10,8 @@
       "!**/coverage",
       "!**/dist",
       "!**/node_modules",
+      "!**/__screenshots__",
+      "!**/TODO",
       "!**/.env",
       "!**/licenses.json",
       "!**/routeTree.gen.ts"
@@ -22,17 +24,36 @@
   "linter": {
     "enabled": true,
     "rules": {
-      "recommended": true,
-      "suspicious": "warn",
+      "a11y": {
+        "recommended": true
+      },
+      "complexity": {
+        "recommended": true
+      },
       "correctness": {
+        "recommended": true,
         "useUniqueElementIds": {
           "level": "error",
           "options": {
             "excludedComponents": ["Trans"]
           }
-        }
+        },
+        "noUndeclaredDependencies": "error",
+        "noUndeclaredVariables": "error",
+        "useSingleJsDocAsterisk": "error"
+      },
+      "performance": {
+        "recommended": true,
+        "noNamespaceImport": "error"
+      },
+      "security": {
+        "recommended": true
       },
       "style": {
+        "recommended": true,
+        "noDefaultExport": "error",
+        "noNestedTernary": "error",
+        "noUnusedTemplateLiteral": "error",
         "noRestrictedImports": {
           "level": "error",
           "options": {
@@ -45,10 +66,37 @@
             }
           }
         }
+      },
+      "suspicious": {
+        "recommended": true,
+        "noConsole": "warn",
+        "noAlert": "warn",
+        "noDuplicateTestHooks": "warn",
+        "noEmptyBlockStatements": "warn",
+        "noExportsInTest": "warn",
+        "noFocusedTests": "warn",
+        "noMisplacedAssertion": "warn",
+        "noSkippedTests": "warn",
+        "noVar": "warn",
+        "useErrorMessage": "warn"
+      },
+      "nursery": {
+        "recommended": true,
+        "noShadow": "warn",
+        "noUnnecessaryConditions": "warn",
+        "noUselessUndefined": "warn",
+        "useConsistentTypeDefinitions": {
+          "level": "warn",
+          "options": {
+            "style": "type"
+          }
+        },
+        "useReactFunctionComponents": "warn"
       }
     }
   },
   "javascript": {
+    "globals": ["vi"],
     "formatter": {
       "quoteStyle": "single"
     }

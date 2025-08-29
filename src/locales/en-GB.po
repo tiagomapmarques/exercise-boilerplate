@@ -13,44 +13,44 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
-msgid "about.license"
-msgstr "License: {license}"
-
-msgid "about.title"
-msgstr "About"
-
 msgid "actions.go-back"
 msgstr "Go back"
 
 msgid "actions.go-to-start"
 msgstr "Go to start"
 
-msgid "header.logo"
-msgstr "Exercise boilerplate"
+msgid "messages.loading"
+msgstr "Loading"
 
-msgid "header.menu"
-msgstr "Menu"
+msgid "pages.about.license"
+msgstr "License: {license}"
 
-msgid "header.page-loading"
-msgstr "Page loading"
+msgid "pages.about.title"
+msgstr "About"
 
-msgid "home.instructions"
+msgid "pages.home.instructions"
 msgstr "Place your UI here"
 
-msgid "home.title"
+msgid "pages.home.title"
 msgstr "Home"
 
-msgid "navigation.dark-mode"
-msgstr "Dark mode"
-
-msgid "not-found.content"
+msgid "pages.not-found.content"
 msgstr "This page does not exist"
 
-msgid "not-found.title"
+msgid "pages.not-found.title"
 msgstr "404 Not found"
 
-msgid "unexpected-error.content"
+msgid "pages.unexpected-error.content"
 msgstr "Oops… something went wrong on our end"
 
-msgid "unexpected-error.title"
+msgid "pages.unexpected-error.title"
 msgstr "Unexpected error"
+
+msgid "titles.app"
+msgstr "Exercise boilerplate"
+
+msgid "titles.dark-mode"
+msgstr "Dark mode"
+
+msgid "titles.menu"
+msgstr "Menu"

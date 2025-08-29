@@ -58,7 +58,7 @@ describe(loadLocale, () => {
 
       expect(i18n.locale).toBe(expected);
       expect(i18n.messages).toMatchObject({
-        'home.title': [expect.stringMatching(/^((?!home\.).)/)],
+        'pages.home.title': [expect.stringMatching(/^((?!pages\.).)/)],
       });
     },
   );

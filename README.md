@@ -8,7 +8,8 @@
 
 ### Production
 - pnpm i
-- pnpm build:watch
+- pnpm build
+- pnpm serve
 
 ### Production (docker)
 - pnpm docker:build

@@ -1,6 +1,6 @@
 {
   "name": "exercise-boilerplate",
-  "version": "0.7.3",
+  "version": "0.8.0",
   "license": "MIT",
   "main": "src/main.tsx",
   "engines": {
@@ -15,7 +15,7 @@
     "serve": "node ./server.mjs",
     "build:watch": "(pnpm build --watch &) && pnpm serve",
     "i18n": "lingui extract --clean && lingui compile --typescript --strict",
-    "test": "vitest --run --bail=1",
+    "test": "vitest --run --bail=1 -- --all-browsers",
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit",
     "lint": "biome check --write --error-on-warnings",
@@ -53,12 +53,14 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^2.2.2",
+    "@tanstack/devtools-vite": "^0.2.10",
+    "@tanstack/react-devtools": "^0.5.4",
     "@tanstack/react-router-devtools": "^1.131.28",
     "@tanstack/router-cli": "^1.131.28",
     "@testing-library/react": "^16.3.0",
     "@types/node": "^22.18.0",
     "@types/react": "^19.1.12",
-    "@types/react-dom": "^19.1.8",
+    "@types/react-dom": "^19.1.9",
     "@vitest/browser": "^3.2.4",
     "@vitest/coverage-istanbul": "^3.2.4",
     "dpdm": "^3.14.0",

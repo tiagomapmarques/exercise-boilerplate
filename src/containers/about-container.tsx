@@ -7,7 +7,7 @@ export const AboutContainer = () => {
   return (
     <Stack>
       <Title>
-        <Trans id="about.title" />
+        <Trans id="pages.about.title" />
       </Title>
 
       <About />

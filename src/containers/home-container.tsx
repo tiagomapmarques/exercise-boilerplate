@@ -7,7 +7,7 @@ export const HomeContainer = () => {
   return (
     <Stack>
       <Title>
-        <Trans id="home.title" />
+        <Trans id="pages.home.title" />
       </Title>
 
       <ExampleContent />

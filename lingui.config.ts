@@ -6,6 +6,7 @@ import {
   locales,
 } from './src/components/locale-provider/constants';
 
+// biome-ignore lint/style/noDefaultExport: Necessary for it to work
 export default defineConfig({
   sourceLocale: fallbackLocale,
   locales: locales,

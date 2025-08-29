@@ -23,7 +23,7 @@ describe(RouterProgress, () => {
     });
 
     expect(
-      await screen.findByRole('progressbar', { name: 'Page loading' }),
+      await screen.findByRole('progressbar', { name: 'Loading' }),
     ).not.toBeVisible();
 
     expect(screen.getByTestId('RouterProgress')).toBeVisible();

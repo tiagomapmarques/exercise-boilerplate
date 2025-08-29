@@ -1,4 +1,5 @@
 // Add `.env` types to `import.meta.env` for type-safety
+// biome-ignore lint/nursery/useConsistentTypeDefinitions: Necessary for it to work
 declare interface ImportMetaEnv {
   VITE_API_KEY?: string;
 }

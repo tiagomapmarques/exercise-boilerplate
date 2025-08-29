@@ -1,4 +1,4 @@
-/** biome-ignore-all lint/style/noRestrictedImports: Only for test environment setup */
+/** biome-ignore-all lint/style/noRestrictedImports: Needed for test setup and as single export point */
 import {
   type ComponentProps,
   Fragment,
@@ -76,7 +76,7 @@ const createRouterRenderProvider = (
       history: createMemoryHistory({ initialEntries, initialIndex }),
     });
 
-  /** Function to wait for the router to load and display the correct page */
+  /** Function to wait for the router to load and display the correct page. */
   const waitForRouter = async () => {
     await act(() => router.latestLoadPromise);
   };
@@ -146,11 +146,17 @@ type Providers = {
   i18n?: Parameters<typeof createI18nRenderProvider>[0];
 };
 
-const createWrapper = (
-  OuterWrapper: RenderOptions['wrapper'] = Fragment,
-  providers: Providers = {},
-  Wrapper: RenderOptions['wrapper'] = Fragment,
-) => {
+type CreateWrapperProps = {
+  outerWrapper?: RenderOptions['wrapper'];
+  providers?: Providers;
+  wrapper?: RenderOptions['wrapper'];
+};
+
+const createWrapper = ({
+  outerWrapper: OuterWrapper = Fragment,
+  providers = {},
+  wrapper: Wrapper = Fragment,
+}: CreateWrapperProps) => {
   const RouterRender = createRouterRenderProvider(providers.router);
   const MantineRender = createMantineRenderProvider(providers.mantine);
   const I18nRender = createI18nRenderProvider(providers.i18n);
@@ -191,18 +197,16 @@ const defaultRenderProviders: Providers = {
 export const render = (
   ui: ReactNode,
   {
+    outerWrapper,
     providers,
     ...options
-  }: RenderOptions & {
-    providers?: Providers;
-    outerWrapper?: RenderOptions['wrapper'];
-  } = {},
+  }: RenderOptions & CreateWrapperProps = {},
 ) => {
-  const { wrapper, result } = createWrapper(
-    options.outerWrapper,
-    { ...defaultRenderProviders, ...providers },
-    options.wrapper,
-  );
+  const { wrapper, result } = createWrapper({
+    outerWrapper: outerWrapper,
+    providers: { ...defaultRenderProviders, ...providers },
+    wrapper: options.wrapper,
+  });
 
   const renderResult = screen.render(ui, { ...options, wrapper });
 
@@ -219,20 +223,42 @@ export const render = (
 export const renderHook = <HookReturn, HookProps>(
   hook: (initialProps: HookProps) => HookReturn,
   {
+    outerWrapper,
     providers,
     ...options
-  }: RenderHookOptions<HookProps> & {
-    providers?: Providers;
-    outerWrapper?: RenderOptions['wrapper'];
-  } = {},
+  }: RenderHookOptions<HookProps> & CreateWrapperProps = {},
 ) => {
-  const { wrapper, result } = createWrapper(
-    options.outerWrapper,
+  const { wrapper, result } = createWrapper({
+    outerWrapper,
     providers,
-    options.wrapper,
-  );
+    wrapper: options.wrapper,
+  });
 
   const renderResult = screen.renderHook(hook, { ...options, wrapper });
 
   return { ...renderResult, providers: result };
+};
+
+/**
+ * Renders a component similarly to the `render` function from
+ * `@testing-library/react`, but accepts the component and its props
+ * separately.
+ *
+ * It also takes in a `providers` object to auto-wrap the component in the
+ * selected app providers. By default, it adds the `i18n` and `mantine`
+ * providers.
+ */
+export const renderComponent = <T extends {}>(
+  Component: (_: T) => ReactNode,
+  props: T,
+  options?: Parameters<typeof render>[1],
+) => {
+  const { rerender: originalRerender, ...result } = render(
+    <Component {...props} />,
+    options,
+  );
+  const rerender = (updatedProps: T) =>
+    originalRerender(<Component {...updatedProps} />);
+
+  return { ...result, rerender };
 };

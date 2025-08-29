@@ -1,5 +1,3 @@
-import type { Mock } from 'vitest';
-
 import { messages as messagesDeDe } from '@/locales/de-DE.po';
 import { messages as messagesEnGb } from '@/locales/en-GB.po';
 import { messages as messagesFrFr } from '@/locales/fr-FR.po';
@@ -16,8 +14,9 @@ export const messages = {
  */
 export const mockConsole = <Type extends 'log' | 'warn' | 'error'>(
   type: Type,
-  consoleMock?: Mock<(typeof console)[Type]>,
+  callback?: (typeof console)[Type],
 ) => {
+  const callbackMock = vi.fn(callback);
   let original: (typeof console)[Type];
 
   beforeEach(() => {
@@ -25,7 +24,7 @@ export const mockConsole = <Type extends 'log' | 'warn' | 'error'>(
     original = console[type];
 
     Object.defineProperty(console, type, {
-      value: consoleMock || vi.fn(),
+      value: callbackMock,
       configurable: true,
     });
   });
@@ -36,6 +35,8 @@ export const mockConsole = <Type extends 'log' | 'warn' | 'error'>(
       configurable: true,
     });
   });
+
+  return callbackMock;
 };
 
 /**

@@ -13,44 +13,44 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
-msgid "about.license"
-msgstr "Licenz: {license}"
-
-msgid "about.title"
-msgstr "Über"
-
 msgid "actions.go-back"
 msgstr "Zurückgehen"
 
 msgid "actions.go-to-start"
 msgstr "Zum Start gehen"
 
-msgid "header.logo"
-msgstr "Exercise boilerplate"
+msgid "messages.loading"
+msgstr "Wird geladen"
 
-msgid "header.menu"
-msgstr "Menü"
+msgid "pages.about.license"
+msgstr "Licenz: {license}"
 
-msgid "header.page-loading"
-msgstr "Seite laden"
+msgid "pages.about.title"
+msgstr "Über"
 
-msgid "home.instructions"
+msgid "pages.home.instructions"
 msgstr "Platzieren Sie Ihre UI hier"
 
-msgid "home.title"
+msgid "pages.home.title"
 msgstr "Startseite"
 
-msgid "navigation.dark-mode"
-msgstr "Dunkelmodus"
-
-msgid "not-found.content"
+msgid "pages.not-found.content"
 msgstr "Diese Seite existiert nicht"
 
-msgid "not-found.title"
+msgid "pages.not-found.title"
 msgstr "404 Not found"
 
-msgid "unexpected-error.content"
+msgid "pages.unexpected-error.content"
 msgstr "Ups… da ist etwas auf unserer Seite schief gelaufen"
 
-msgid "unexpected-error.title"
+msgid "pages.unexpected-error.title"
 msgstr "Unerwarteter Fehler"
+
+msgid "titles.app"
+msgstr "Exercise boilerplate"
+
+msgid "titles.dark-mode"
+msgstr "Dunkelmodus"
+
+msgid "titles.menu"
+msgstr "Menü"
