@@ -1,6 +1,6 @@
 import type { PropsWithChildren } from 'react';
 import { Trans, useLingui } from '@lingui/react';
-import { Burger, Flex, Text } from '@mantine/core';
+import { Burger, Group, Text } from '@mantine/core';
 
 export type BurgerMenuProps = PropsWithChildren<{
   opened: boolean;
@@ -19,7 +19,7 @@ export const BurgerMenu = ({
   };
 
   return (
-    <Flex h="3em" gap="sm" align="center" pl={{ base: 'sm', sm: 'md' }}>
+    <Group h="3em" gap="sm" align="center" pl={{ base: 'sm', sm: 'md' }}>
       <Burger
         size="sm"
         hiddenFrom="sm"
@@ -33,6 +33,6 @@ export const BurgerMenu = ({
           <Trans id="titles.app" />
         </Text>
       )}
-    </Flex>
+    </Group>
   );
 };

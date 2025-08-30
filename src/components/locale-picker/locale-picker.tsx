@@ -1,28 +1,9 @@
 import { useState } from 'react';
-import { Button, Image, Menu, Text } from '@mantine/core';
-import { ChevronDown, ChevronUp } from 'lucide-react';
+import { Button, Menu, Text } from '@mantine/core';
 
-import {
-  type Locale,
-  localeLabels,
-  locales,
-  useLocale,
-} from '@/components/locale-provider';
-
-type CountryFlagProps = {
-  locale: Locale;
-};
-
-const CountryFlag = ({ locale }: CountryFlagProps) => {
-  return (
-    <Image
-      height="16"
-      radius="sm"
-      src={`/flags/${localeLabels[locale].code}.svg`}
-      alt={localeLabels[locale].country}
-    />
-  );
-};
+import { ChevronIcon } from '@/components/chevron-icon';
+import { CountryFlag } from '@/components/country-flag';
+import { localeLabels, locales, useLocale } from '@/components/locale-provider';
 
 export const LocalePicker = () => {
   const [locale, setLocale] = useLocale();
@@ -41,15 +22,8 @@ export const LocalePicker = () => {
         <Button
           variant="default"
           justify="space-between"
-          data-expanded={open || undefined}
           leftSection={<CountryFlag locale={locale} />}
-          rightSection={
-            open ? (
-              <ChevronUp data-slot="LocalePicker-ChevronUp" size="16" />
-            ) : (
-              <ChevronDown data-slot="LocalePicker-ChevronDown" size="16" />
-            )
-          }
+          rightSection={<ChevronIcon icon={open ? 'up' : 'down'} />}
         >
           <Text size="sm">{localeLabels[locale].label}</Text>
         </Button>
@@ -58,9 +32,9 @@ export const LocalePicker = () => {
       <Menu.Dropdown>
         {locales.map((supportedLocale) => (
           <Menu.Item
+            key={`LocalePicker-Dropdown-Item-${supportedLocale}`}
             leftSection={<CountryFlag locale={supportedLocale} />}
             onClick={() => setLocale(supportedLocale)}
-            key={`LanguagePicker-Dropdown-Item-${supportedLocale}`}
           >
             {localeLabels[supportedLocale].label}
           </Menu.Item>

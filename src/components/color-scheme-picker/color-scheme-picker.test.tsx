@@ -10,10 +10,10 @@ describe(ColorSchemePicker, () => {
 
     expect(screen.getByRole('switch', { name: 'Dark mode' })).not.toBeChecked();
 
-    expect(screen.getByTestId('ColorSchemePicker-Sun')).toBeVisible();
-    expect(
-      screen.queryByTestId('ColorSchemePicker-Moon'),
-    ).not.toBeInTheDocument();
+    expect(screen.getByTestId('ColorSchemeIcon')).toHaveAttribute(
+      'data-icon',
+      'light',
+    );
   });
 
   it('displays dark scheme', () => {
@@ -23,21 +23,27 @@ describe(ColorSchemePicker, () => {
 
     expect(screen.getByRole('switch', { name: 'Dark mode' })).toBeChecked();
 
-    expect(screen.getByTestId('ColorSchemePicker-Moon')).toBeVisible();
-    expect(
-      screen.queryByTestId('ColorSchemePicker-Sun'),
-    ).not.toBeInTheDocument();
+    expect(screen.getByTestId('ColorSchemeIcon')).toHaveAttribute(
+      'data-icon',
+      'dark',
+    );
   });
 
   it('toggles to color scheme', async () => {
     render(<ColorSchemePicker />, {
-      providers: { mantine: { defaultColorScheme: 'dark' } },
+      providers: { mantine: { defaultColorScheme: 'light' } },
     });
 
-    expect(screen.getByTestId('ColorSchemePicker-Moon')).toBeVisible();
+    expect(screen.getByTestId('ColorSchemeIcon')).toHaveAttribute(
+      'data-icon',
+      'light',
+    );
 
-    await userEvent.click(screen.getByTestId('ColorSchemePicker-Moon'));
+    await userEvent.click(screen.getByTestId('ColorSchemeIcon'));
 
-    expect(screen.getByTestId('ColorSchemePicker-Sun')).toBeVisible();
+    expect(screen.getByTestId('ColorSchemeIcon')).toHaveAttribute(
+      'data-icon',
+      'dark',
+    );
   });
 });

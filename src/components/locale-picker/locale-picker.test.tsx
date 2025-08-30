@@ -34,7 +34,7 @@ describe(LocalePicker, () => {
       screen.getByRole('button', { name: 'Great Britain English (GB)' }),
     );
 
-    expect(screen.getByRole('menu')).toBeVisible();
+    expect(await screen.findByRole('menu')).toBeVisible();
 
     for (const { label, country } of Object.values(localeLabels)) {
       expect(
@@ -52,7 +52,7 @@ describe(LocalePicker, () => {
       screen.getByRole('button', { name: 'Deutschland Deutsch (DE)' }),
     );
 
-    expect(screen.getByRole('menu')).toBeVisible();
+    expect(await screen.findByRole('menu')).toBeVisible();
 
     await userEvent.click(
       screen.getByRole('menuitem', { name: 'Great Britain English (GB)' }),
@@ -66,18 +66,27 @@ describe(LocalePicker, () => {
   it('toggles chevrons on open and close', async () => {
     render(<LocalePicker />);
 
-    expect(screen.getByTestId('LocalePicker-ChevronDown')).toBeVisible();
+    expect(screen.getByTestId('ChevronIcon')).toHaveAttribute(
+      'data-icon',
+      'down',
+    );
 
     await userEvent.click(
       screen.getByRole('button', { name: 'Great Britain English (GB)' }),
     );
 
-    expect(screen.getByTestId('LocalePicker-ChevronUp')).toBeVisible();
+    expect(screen.getByTestId('ChevronIcon')).toHaveAttribute(
+      'data-icon',
+      'up',
+    );
 
     await userEvent.click(
       screen.getByRole('button', { name: 'Great Britain English (GB)' }),
     );
 
-    expect(screen.getByTestId('LocalePicker-ChevronDown')).toBeVisible();
+    expect(screen.getByTestId('ChevronIcon')).toHaveAttribute(
+      'data-icon',
+      'down',
+    );
   });
 });

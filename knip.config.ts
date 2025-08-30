@@ -9,9 +9,11 @@ const config: KnipConfig = {
     'types',
   ],
   ignoreDependencies: [
-    // Ignored as these are used in the vite config
+    // Used in the Vite config
     '@lingui/swc-plugin',
     'country-flag-icons',
+    // Used in the Mantine PostCSS config
+    'postcss-preset-mantine',
   ],
 };
 

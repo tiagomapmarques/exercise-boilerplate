@@ -1,0 +1,9 @@
+.ColorSchemeIcon {
+  @mixin light {
+    color: var(--mantine-primary-color-filled);
+  }
+
+  @mixin dark {
+    color: var(--mantine-color-body);
+  }
+}

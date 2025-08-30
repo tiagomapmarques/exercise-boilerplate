@@ -4,7 +4,8 @@ import {
   useComputedColorScheme,
   useMantineColorScheme,
 } from '@mantine/core';
-import { Moon, Sun } from 'lucide-react';
+
+import { ColorSchemeIcon } from './color-scheme-icon';
 
 export const ColorSchemePicker = () => {
   const { i18n } = useLingui();
@@ -19,21 +20,7 @@ export const ColorSchemePicker = () => {
       display="inline-flex"
       aria-label={i18n.t({ id: 'titles.dark-mode' })}
       checked={colorScheme === 'dark'}
-      thumbIcon={
-        colorScheme === 'dark' ? (
-          <Moon
-            data-slot="ColorSchemePicker-Moon"
-            size="14"
-            style={{ color: 'var(--mantine-color-body)' }}
-          />
-        ) : (
-          <Sun
-            data-slot="ColorSchemePicker-Sun"
-            size="14"
-            style={{ color: 'var(--mantine-primary-color-filled)' }}
-          />
-        )
-      }
+      thumbIcon={<ColorSchemeIcon colorScheme={colorScheme} />}
       onChange={toggleColorScheme}
     />
   );

@@ -25,8 +25,6 @@ describe(RouterProgress, () => {
     expect(
       await screen.findByRole('progressbar', { name: 'Loading' }),
     ).not.toBeVisible();
-
-    expect(screen.getByTestId('RouterProgress')).toBeVisible();
   });
 
   it('starts and completes progress when user navigates', async () => {

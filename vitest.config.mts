@@ -7,7 +7,7 @@ import viteConfig from './vite.config.mjs';
 const browserArgs = process.argv.find((arg) => arg === '--all-browsers')
   ? ['firefox', 'chromium', 'webkit']
   : process.argv
-      .filter((arg) => /--(firefox|chromium|webkit)/.test(arg))
+      .filter((arg) => /^--(firefox|chromium|webkit)$/.test(arg))
       .map((browserArg) => browserArg.slice(2));
 
 const browsers = browserArgs.length > 0 ? browserArgs : ['firefox'];
@@ -37,6 +37,12 @@ export default defineConfig({
         'src/*.gen.ts',
         'src/main.tsx',
       ],
+      thresholds: {
+        lines: 100,
+        functions: 100,
+        branches: 100,
+        statements: 100,
+      },
     },
   },
 });

@@ -86,7 +86,10 @@
         "noUnassignedVariables": "warn",
         "noVar": "warn",
 
-        "useErrorMessage": "warn"
+        "useErrorMessage": "warn",
+
+        "noDuplicateProperties": "off",
+        "noUnknownAtRules": "off"
       },
       "style": {
         "recommended": true,

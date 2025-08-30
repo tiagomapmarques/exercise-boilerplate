@@ -1,7 +1,7 @@
 import { type PropsWithChildren, useEffect } from 'react';
 import type { I18n } from '@lingui/core';
 import { Trans, useLingui } from '@lingui/react';
-import { Divider, Flex, Stack, Text } from '@mantine/core';
+import { Divider, Group, Stack, Text } from '@mantine/core';
 import { Link, type LinkProps, useLocation } from '@tanstack/react-router';
 import { Home, Info } from 'lucide-react';
 
@@ -41,9 +41,9 @@ const NavigationLink = ({
       }}
       {...props}
     >
-      <Flex gap="sm" align="center">
+      <Group gap="sm" align="center">
         {children}
-      </Flex>
+      </Group>
     </Link>
   );
 };
@@ -59,7 +59,7 @@ export const Navigation = () => {
   return (
     <Stack style={{ flexGrow: 1 }}>
       <NavigationLink to="/">
-        <Home size="20" />
+        <Home size="16" />
 
         <Text>
           <Trans id="pages.home.title" />
@@ -67,22 +67,20 @@ export const Navigation = () => {
       </NavigationLink>
 
       <NavigationLink to="/about">
-        <Info size="20" />
+        <Info size="16" />
 
         <Text>
           <Trans id="pages.about.title" />
         </Text>
       </NavigationLink>
 
-      <Flex align="end" style={{ flexGrow: 1 }}>
-        <Stack gap="lg" style={{ flexGrow: 1 }}>
-          <LocalePicker />
+      <Stack gap="lg" justify="end" style={{ flexGrow: 1 }}>
+        <LocalePicker />
 
-          <Divider />
+        <Divider />
 
-          <ColorSchemePicker />
-        </Stack>
-      </Flex>
+        <ColorSchemePicker />
+      </Stack>
     </Stack>
   );
 };

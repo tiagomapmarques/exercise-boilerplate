@@ -22,7 +22,7 @@ describe(Navigation, () => {
       },
     });
 
-    expect(await screen.findByTestId('ColorSchemePicker-Sun')).toBeVisible();
+    expect(await screen.findByTestId('ColorSchemeIcon')).toBeVisible();
   });
 
   it('does not change document title without initial messages', async () => {
