@@ -1,0 +1,29 @@
+#!/usr/bin/env node
+/** biome-ignore-all lint/suspicious/noConsole: Useful as this is a script */
+import { exec } from 'node:child_process';
+
+const getDependenciesVersions = async () => {
+  let output = '';
+  let packages = {};
+  try {
+    output = await new Promise((resolve) => {
+      exec('pnpm outdated --format json', (_error, stdout) => resolve(stdout));
+    });
+  } finally {
+    packages = Object.fromEntries(Object.entries(JSON.parse(output)));
+  }
+  return packages;
+};
+
+const dependencyVersions = await getDependenciesVersions();
+const dependencies = Object.keys(dependencyVersions);
+
+if (dependencies.length > 0) {
+  console.log(
+    '\x1b[33m%s\x1b[0m',
+    '_INFO_',
+    `The following packages are outdated:\n  ${dependencies.map((dependency) => `- ${dependency}: ${dependencyVersions[dependency].latest} (current: ${dependencyVersions[dependency].current})`).join('\n  ')}`,
+  );
+} else {
+  console.log('No outdated packages found');
+}

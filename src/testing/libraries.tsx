@@ -57,7 +57,7 @@ const createRouterRenderProvider = (
   props: RouterHistoryProps | RouterProviderProps | boolean | undefined,
 ) => {
   if (!props) {
-    return { provider: Fragment, result: {} };
+    return { provider: Fragment, result: undefined };
   }
 
   const {
@@ -100,7 +100,7 @@ const createMantineRenderProvider = (
   props: MantineProps | boolean | undefined,
 ) => {
   if (!props) {
-    return { provider: Fragment, result: {} };
+    return { provider: Fragment, result: undefined };
   }
 
   const parsedProps = typeof props === 'object' ? props : {};
@@ -109,7 +109,7 @@ const createMantineRenderProvider = (
     return <MantineProvider {...parsedProps}>{children}</MantineProvider>;
   }
 
-  return { provider: MantineRenderProvider, result: {} };
+  return { provider: MantineRenderProvider, result: undefined };
 };
 
 type I18nProps = Partial<Omit<I18nProviderProps, 'children'>> & {
@@ -118,7 +118,7 @@ type I18nProps = Partial<Omit<I18nProviderProps, 'children'>> & {
 
 const createI18nRenderProvider = (props: I18nProps | boolean | undefined) => {
   if (!props) {
-    return { provider: Fragment, result: {} };
+    return { provider: Fragment, result: undefined };
   }
 
   const {
@@ -174,9 +174,9 @@ const createWrapper = ({
       </OuterWrapper>
     ),
     result: {
-      ...RouterRender.result,
-      ...MantineRender.result,
-      ...I18nRender.result,
+      ...(RouterRender.result || {}),
+      ...(MantineRender.result || {}),
+      ...(I18nRender.result || {}),
     },
   };
 };

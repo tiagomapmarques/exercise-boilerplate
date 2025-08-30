@@ -2,7 +2,7 @@ import type { KnipConfig } from 'knip';
 
 const config: KnipConfig = {
   project: ['./src/**/*.{ts,tsx}'],
-  entry: ['./*.{js,mjs,ts,mts}'],
+  entry: ['./src/main.tsx', './*.{js,mjs,ts,mts}'],
   exclude: [
     // Excluding to favour import suggestions and API completeness of files
     'exports',

@@ -7,7 +7,7 @@ COPY ./package.json /tmp
 
 RUN jq 'del(.version)' < /tmp/package.json > /cache/package.json
 
-FROM node:22.18.0-alpine AS app
+FROM node:22.19.0-alpine AS app
 
 WORKDIR /app
 RUN npm i -g pnpm@10.15.0
