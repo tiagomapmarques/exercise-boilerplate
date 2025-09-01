@@ -32,10 +32,8 @@ export const LocaleProvider = ({
     if (isNotLoaded) {
       loadLocale(i18nRef.current)
         .then(() => setReady(true))
-        .catch((error: Error) => {
-          // biome-ignore lint/suspicious/noConsole: Useful error at runtime
-          console.error(error.message);
-        });
+        // biome-ignore lint/suspicious/noConsole: Useful error at runtime
+        .catch(console.error);
     } else {
       setReady(true);
     }

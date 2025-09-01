@@ -3,6 +3,8 @@ import { useLingui } from '@lingui/react';
 import { createNprogress, NavigationProgress } from '@mantine/nprogress';
 import { useRouter } from '@tanstack/react-router';
 
+import classes from './router-progress.module.css';
+
 export const RouterProgress = () => {
   const { i18n } = useLingui();
   const router = useRouter();
@@ -15,8 +17,9 @@ export const RouterProgress = () => {
 
   return (
     <NavigationProgress
-      aria-label={i18n.t({ id: 'messages.loading' })}
       store={store}
+      className={classes.RouterProgress}
+      aria-label={i18n.t({ id: 'messages.loading' })}
     />
   );
 };

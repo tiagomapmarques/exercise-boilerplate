@@ -4,50 +4,65 @@ import { exec } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 
 const packageJsonFile = `${import.meta.dirname}/../package.json`;
+const dockerFile = `${import.meta.dirname}/../Dockerfile`;
+const nvmrcFile = `${import.meta.dirname}/../.nvmrc`;
 
-const getPnpmVersions = async () => {
-  let output = '';
-  try {
-    output = await new Promise((resolve) => {
-      exec('pnpm self-update 100', (_error, stdout) => resolve(stdout));
+let warningsOrInfo = false;
+const warn = (...args) => {
+  warningsOrInfo = true;
+  args
+    .join(' ')
+    .split('\n')
+    .forEach((line) => {
+      console.log('\x1b[43m%s\x1b[0m', ' WARN ', line);
     });
-  } finally {
-    output =
+};
+const info = (...args) => {
+  warningsOrInfo = true;
+  args
+    .join(' ')
+    .split('\n')
+    .forEach((line) => {
+      console.log('\x1b[34m%s\x1b[0m', '_INFO_', line);
+    });
+};
+const execAsync = (command) =>
+  new Promise((resolve) => {
+    exec(command, (_error, stdout) => resolve(stdout));
+  });
+
+const getInternetVersions = async () => {
+  const fetchPnpm = async () => {
+    const output = await execAsync('pnpm self-update 9001');
+
+    const latestLine =
       output
         .split('\n')
         .filter((line) => line.includes('latest-'))
         .pop() || '';
-  }
-  return {
-    latest: output.split(': ').pop() || '',
-    lts: undefined,
+
+    const latest = latestLine.split(': ').pop() || '';
+
+    return { latest, lts: latest };
   };
+
+  const fetchNode = async () => {
+    const response = await fetch(
+      'https://nodejs.org/download/release/index.json',
+    );
+    const data = await response.json();
+    return {
+      latest: data.find((item) => !item.lts)?.version.slice(1),
+      lts: data.find((item) => item.lts)?.version.slice(1),
+    };
+  };
+
+  const [node, pnpm] = await Promise.all([fetchNode(), fetchPnpm()]);
+
+  return { node, pnpm };
 };
 
-const getNodeVersions = async () => {
-  const response = await fetch(
-    'https://nodejs.org/download/release/index.json',
-  );
-  const data = await response.json();
-  return {
-    latest: data.find((item) => !item.lts)?.version.slice(1),
-    lts: data.find((item) => item.lts)?.version.slice(1),
-  };
-};
-
-const getLatestVersions = async () => {
-  const [pnpmVersions, nodeVersions] = await Promise.all([
-    getPnpmVersions(),
-    getNodeVersions(),
-  ]);
-
-  return {
-    node: nodeVersions,
-    pnpm: pnpmVersions,
-  };
-};
-
-const getCurrentVersions = () => {
+const getLocalVersions = () => {
   const { engines } = JSON.parse(readFileSync(packageJsonFile).toString());
 
   const [latestNode, ltsNode] = engines.node
@@ -66,52 +81,84 @@ const getCurrentVersions = () => {
   };
 };
 
-const latestVersions = await getLatestVersions();
-const currentVersions = getCurrentVersions();
-let warnings = false;
+const getDockerVersions = () => {
+  const dockerContent = readFileSync(dockerFile).toString();
 
-if (
-  currentVersions.node.lts &&
-  currentVersions.node.lts !== latestVersions.node.lts
-) {
-  warnings = true;
-  console.log(
-    '\x1b[43m%s\x1b[0m',
-    ' WARN ',
-    `Newer \`node\` LTS version available: ${latestVersions.node.lts} (current: ${currentVersions.node.lts})`,
+  const [nodeMatch] = /FROM node:\d+.\d+.\d+/.exec(dockerContent);
+  const nodeVersion = nodeMatch.slice('FROM node:'.length);
+
+  const [pnpmMatch] = / pnpm@\d+.\d+.\d+/.exec(dockerContent);
+  const pnpmVersion = pnpmMatch.slice(' pnpm@'.length);
+
+  return {
+    node: { latest: nodeVersion },
+    pnpm: { latest: pnpmVersion },
+  };
+};
+
+const internet = await getInternetVersions();
+const local = getLocalVersions();
+const docker = getDockerVersions();
+const nvmrc = {
+  node: {
+    latest: readFileSync(nvmrcFile).toString().trim().slice(1),
+  },
+};
+
+const semverToNumber = (semver, maxDigits = 4, semverSize = 3) => {
+  const semverSplit = semver.split('.').map((value) => value.split('-')[0]);
+  const semverParsed = [...new Array(semverSize)]
+    .fill()
+    .map((_, index) => `${semverSplit[index] || 0}`);
+  const prefix = [...new Array(maxDigits)]
+    .fill()
+    .reduce((index) => `${index}0`, '');
+
+  return Number(
+    semverParsed
+      .map((value = '0') => `${prefix}${value}`.slice(-maxDigits))
+      .join(''),
   );
-}
+};
 
-if (
-  currentVersions.pnpm.lts &&
-  currentVersions.pnpm.lts !== latestVersions.pnpm.lts
-) {
-  warnings = true;
-  console.log(
-    '\x1b[43m%s\x1b[0m',
-    ' WARN ',
-    `Newer \`pnpm\` LTS version available: ${latestVersions.pnpm.lts} (current: ${currentVersions.pnpm.lts})`,
-  );
-}
+const compareVersions = (name, current, latest) => {
+  if (!current) {
+    return;
+  }
 
-if (currentVersions.node.latest !== latestVersions.node.latest) {
-  warnings = true;
-  console.log(
-    '\x1b[33m%s\x1b[0m',
-    '_INFO_',
-    `Newer \`node\` version available: ${latestVersions.node.latest} (current: ${currentVersions.node.latest})`,
-  );
-}
+  const isImportant = name.includes(' ');
+  const currentNumber = semverToNumber(current);
+  const latestNumber = semverToNumber(latest);
+  const logger = isImportant ? warn : info;
 
-if (currentVersions.pnpm.latest !== latestVersions.pnpm.latest) {
-  warnings = true;
-  console.log(
-    '\x1b[33m%s\x1b[0m',
-    '_INFO_',
-    `Newer \`pnpm\` version available: ${latestVersions.pnpm.latest} (current: ${currentVersions.pnpm.latest})`,
-  );
-}
+  if (latestNumber > currentNumber) {
+    logger(`New ${name} version available: ${latest} (current: ${current})`);
+  } else if (latestNumber < currentNumber) {
+    warn(`Current version of ${name} (${current}) is not valid.`);
+  }
+};
 
-if (!warnings) {
-  console.log('No engine updates found');
+const lowestLocalNode = local.node.lts || local.node.latest;
+const lowestLocalPnpm = local.pnpm.lts || local.pnpm.latest;
+
+// Compare non-LTS versions
+compareVersions('node', local.node.latest, internet.node.latest);
+compareVersions('pnpm', local.pnpm.latest, internet.pnpm.latest);
+
+// Compare LTS versions
+compareVersions('node LTS', local.node.lts, internet.node.lts);
+compareVersions('pnpm LTS', local.pnpm.lts, internet.pnpm.lts);
+
+// Check if project versions are in sync
+if (!warningsOrInfo) {
+  // Dockerfile
+  compareVersions('node (Dockerfile)', docker.node.latest, lowestLocalNode);
+  compareVersions('pnpm (Dockerfile)', docker.pnpm.latest, lowestLocalPnpm);
+
+  // Nvm
+  compareVersions('node (.nvmrc)', nvmrc.node.latest, lowestLocalNode);
+
+  if (!warningsOrInfo) {
+    console.log('No engine updates found');
+  }
 }

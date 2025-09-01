@@ -177,10 +177,11 @@ describe(LocaleProvider, () => {
 
   describe('error while loading', () => {
     const consoleError = mockConsole('error');
+    const errorObject = new Error('Custom error');
 
     beforeEach(() => {
       (loadLocale as Mock<typeof loadLocale>).mockImplementation(async () => {
-        throw new Error('Custom error');
+        throw errorObject;
       });
     });
 
@@ -193,7 +194,7 @@ describe(LocaleProvider, () => {
       );
 
       await waitFor(() => {
-        expect(consoleError).toHaveBeenCalledWith('Custom error');
+        expect(consoleError).toHaveBeenCalledWith(errorObject);
       });
 
       expect(screen.queryByTestId('Content')).not.toBeInTheDocument();
