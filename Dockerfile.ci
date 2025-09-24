@@ -1,0 +1,52 @@
+ARG NODE_VERSION=22.20.0
+ARG PNPM_VERSION=10.17.1
+ARG PLAYWRIGHT_VERSION=1.55.1
+
+FROM alpine AS cache
+
+RUN apk add --no-cache jq
+
+# Remove "version" from package.json file
+WORKDIR /cache
+COPY ./package.json /tmp
+RUN jq 'del(.version)' < /tmp/package.json > /cache/package.json
+
+FROM mcr.microsoft.com/playwright:v${PLAYWRIGHT_VERSION}-noble AS base-image
+
+# Uninstall pre-installed node
+RUN apt-get -y remove nodejs
+# Install tar dependencies for unzipping xz files
+RUN apt-get update && apt-get -y install xz-utils
+
+# Install node
+ARG NODE_VERSION
+WORKDIR /tmp
+RUN wget "https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-arm64.tar.xz"
+RUN tar -xvf "node-v${NODE_VERSION}-linux-arm64.tar.xz"
+RUN mv "node-v${NODE_VERSION}-linux-arm64" node
+ENV PATH="/tmp/node/bin/:$PATH"
+
+# Install pnpm
+ARG PNPM_VERSION
+RUN /tmp/node/bin/npm i -g "pnpm@${PNPM_VERSION}"
+
+FROM base-image AS runner
+
+WORKDIR /app
+
+# Install dependencies
+COPY --from=cache /cache/package.json /app
+COPY ./.npm* /app
+COPY ./pnpm-* /app
+RUN pnpm install --ignore-scripts
+
+# Run CI checks
+COPY . /app
+RUN pnpm check:ci
+
+FROM base-image AS reporter
+
+WORKDIR /reports
+
+# Export coverage
+COPY --from=runner /app/coverage /reports/coverage

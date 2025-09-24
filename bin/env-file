@@ -1,6 +1,7 @@
 #!/usr/bin/env node
-/** biome-ignore-all lint/suspicious/noConsole: Useful as this is a script */
 import { existsSync, writeFileSync } from 'node:fs';
+
+import { log } from './common/logs.mjs';
 
 const startTime = Date.now();
 
@@ -11,5 +12,5 @@ VITE_API_KEY=PUBLIC_API_KEY_VALUE
 
 if (!existsSync(envFile)) {
   writeFileSync(envFile, defaultEnvFileContent.substring(1), 'utf8');
-  console.log(`Generated .env file in ${Date.now() - startTime}ms`);
+  log(`Generated .env file in ${Date.now() - startTime}ms`);
 }

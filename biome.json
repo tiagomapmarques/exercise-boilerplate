@@ -1,20 +1,24 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.2.2/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.2.4/schema.json",
   "files": {
     "ignoreUnknown": false,
     "includes": [
       "**/*",
+      "!**/Thumbs.db",
+      "!**/.DS_Store",
       "!**/.swc",
       "!**/.tanstack",
       "!**/.tmp",
       "!**/coverage",
+      "!**/reports",
       "!**/dist",
       "!**/node_modules",
+      "!**/node-compile-cache",
       "!**/__screenshots__",
       "!**/TODO",
       "!**/.env",
       "!**/licenses.json",
-      "!**/routeTree.gen.ts"
+      "!**/*.gen.ts"
     ]
   },
   "formatter": {

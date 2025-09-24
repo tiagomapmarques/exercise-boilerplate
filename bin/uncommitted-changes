@@ -1,6 +1,14 @@
 #!/usr/bin/env node
-/** biome-ignore-all lint/suspicious/noConsole: Useful as this is a script */
 import { execSync } from 'node:child_process';
+import process from 'node:process';
+
+import {
+  error,
+  hasLoggedError,
+  hasLoggedWarnOrError,
+  log,
+  warn,
+} from './common/logs.mjs';
 
 try {
   execSync('git -v');
@@ -8,11 +16,20 @@ try {
   process.exit(1);
 }
 
-const output = execSync('git status --porcelain').toString();
+const errorOnWarnings = process.argv[2] === '--error-on-warnings';
+
+const output = execSync('git status --porcelain').toString().trim();
 
 if (output) {
-  console.error(`Uncommitted changes found\n${output}`);
-  process.exit(1);
+  (errorOnWarnings ? error : warn)(
+    `\nUncommitted changes found:\n  ${output.replaceAll('\n', '\n  ')}\n`,
+  );
 }
 
-console.log('No uncommitted changes found');
+if (!hasLoggedWarnOrError()) {
+  log('No uncommitted changes found');
+}
+
+if (hasLoggedError()) {
+  process.exit(1);
+}

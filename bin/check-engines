@@ -1,35 +1,25 @@
 #!/usr/bin/env node
-/** biome-ignore-all lint/suspicious/noConsole: Useful as this is a script */
-import { exec } from 'node:child_process';
 import { readFileSync } from 'node:fs';
+
+import { execAsync } from './common/exec.mjs';
+import {
+  error,
+  hasLoggedError,
+  hasLoggedInfoWarnOrError,
+  hasLoggedWarnOrError,
+  info,
+  log,
+  redBg,
+  warn,
+} from './common/logs.mjs';
+import { highlightSemver, parseSemver } from './common/semver.mjs';
 
 const packageJsonFile = `${import.meta.dirname}/../package.json`;
 const dockerFile = `${import.meta.dirname}/../Dockerfile`;
+const dockerFileCi = `${import.meta.dirname}/../Dockerfile.ci`;
 const nvmrcFile = `${import.meta.dirname}/../.nvmrc`;
 
-let warningsOrInfo = false;
-const warn = (...args) => {
-  warningsOrInfo = true;
-  args
-    .join(' ')
-    .split('\n')
-    .forEach((line) => {
-      console.log('\x1b[43m%s\x1b[0m', ' WARN ', line);
-    });
-};
-const info = (...args) => {
-  warningsOrInfo = true;
-  args
-    .join(' ')
-    .split('\n')
-    .forEach((line) => {
-      console.log('\x1b[34m%s\x1b[0m', '_INFO_', line);
-    });
-};
-const execAsync = (command) =>
-  new Promise((resolve) => {
-    exec(command, (_error, stdout) => resolve(stdout));
-  });
+const errorOnWarnings = process.argv[2] === '--error-on-warnings';
 
 const getInternetVersions = async () => {
   const fetchPnpm = async () => {
@@ -63,7 +53,9 @@ const getInternetVersions = async () => {
 };
 
 const getLocalVersions = () => {
-  const { engines } = JSON.parse(readFileSync(packageJsonFile).toString());
+  const { engines, devDependencies } = JSON.parse(
+    readFileSync(packageJsonFile).toString(),
+  );
 
   const [latestNode, ltsNode] = engines.node
     .replaceAll('^', '')
@@ -75,90 +67,107 @@ const getLocalVersions = () => {
     .split('||')
     .map((version) => version.trim());
 
+  const latestPlaywright = devDependencies.playwright.replaceAll(/(~|\^)/g, '');
+
   return {
     node: { latest: latestNode, lts: ltsNode },
     pnpm: { latest: latestPnpm, lts: ltsPnpm },
+    playwright: { latest: latestPlaywright },
   };
 };
 
-const getDockerVersions = () => {
-  const dockerContent = readFileSync(dockerFile).toString();
+const getDockerVersions = (file) => {
+  const dockerContent = readFileSync(file).toString();
 
-  const [nodeMatch] = /FROM node:\d+.\d+.\d+/.exec(dockerContent);
-  const nodeVersion = nodeMatch.slice('FROM node:'.length);
+  const [nodeMatch = ''] =
+    /ARG NODE_VERSION=\d+.\d+.\d+/.exec(dockerContent) || [];
+  const nodeVersion = nodeMatch.slice('ARG NODE_VERSION='.length);
 
-  const [pnpmMatch] = / pnpm@\d+.\d+.\d+/.exec(dockerContent);
-  const pnpmVersion = pnpmMatch.slice(' pnpm@'.length);
+  const [pnpmMatch = ''] =
+    /ARG PNPM_VERSION=\d+.\d+.\d+/.exec(dockerContent) || [];
+  const pnpmVersion = pnpmMatch.slice('ARG PNPM_VERSION='.length);
+
+  const [playwrightMatch = ''] =
+    /ARG PLAYWRIGHT_VERSION=\d+.\d+.\d+/.exec(dockerContent) || [];
+  const playwrightVersion = playwrightMatch.slice(
+    'ARG PLAYWRIGHT_VERSION='.length,
+  );
 
   return {
     node: { latest: nodeVersion },
     pnpm: { latest: pnpmVersion },
+    ...(playwrightVersion && {
+      playwright: { latest: playwrightVersion },
+    }),
   };
 };
 
 const internet = await getInternetVersions();
 const local = getLocalVersions();
-const docker = getDockerVersions();
+const docker = getDockerVersions(dockerFile);
+const dockerCi = getDockerVersions(dockerFileCi);
 const nvmrc = {
   node: {
     latest: readFileSync(nvmrcFile).toString().trim().slice(1),
   },
 };
 
-const semverToNumber = (semver, maxDigits = 4, semverSize = 3) => {
-  const semverSplit = semver.split('.').map((value) => value.split('-')[0]);
-  const semverParsed = [...new Array(semverSize)]
-    .fill()
-    .map((_, index) => `${semverSplit[index] || 0}`);
-  const prefix = [...new Array(maxDigits)]
-    .fill()
-    .reduce((index) => `${index}0`, '');
-
-  return Number(
-    semverParsed
-      .map((value = '0') => `${prefix}${value}`.slice(-maxDigits))
-      .join(''),
-  );
-};
-
-const compareVersions = (name, current, latest) => {
+const compare = (name, current, latest, forceError) => {
   if (!current) {
     return;
   }
 
   const isImportant = name.includes(' ');
-  const currentNumber = semverToNumber(current);
-  const latestNumber = semverToNumber(latest);
-  const logger = isImportant ? warn : info;
+  const warnOrError = forceError || errorOnWarnings ? error : warn;
+  const logger = isImportant ? warnOrError : info;
 
-  if (latestNumber > currentNumber) {
-    logger(`New ${name} version available: ${latest} (current: ${current})`);
-  } else if (latestNumber < currentNumber) {
-    warn(`Current version of ${name} (${current}) is not valid.`);
+  const currentNumber = parseSemver(current);
+  const latestNumber = parseSemver(latest);
+
+  if (latestNumber.number > currentNumber.number) {
+    const highlight = highlightSemver(latestNumber, currentNumber);
+    logger(`New ${name} version available: ${highlight} (current: ${current})`);
+  } else if (latestNumber.number < currentNumber.number) {
+    error(`\nCurrent version of ${name} (${redBg(current)}) is not valid.\n`);
   }
 };
 
-const lowestLocalNode = local.node.lts || local.node.latest;
-const lowestLocalPnpm = local.pnpm.lts || local.pnpm.latest;
+const localNode = local.node.lts || local.node.latest;
+const localPnpm = local.pnpm.lts || local.pnpm.latest;
+const localPlaywright = local.playwright.lts || local.playwright.latest;
 
 // Compare non-LTS versions
-compareVersions('node', local.node.latest, internet.node.latest);
-compareVersions('pnpm', local.pnpm.latest, internet.pnpm.latest);
+compare('node', local.node.latest, internet.node.latest);
+compare('pnpm', local.pnpm.latest, internet.pnpm.latest);
 
 // Compare LTS versions
-compareVersions('node LTS', local.node.lts, internet.node.lts);
-compareVersions('pnpm LTS', local.pnpm.lts, internet.pnpm.lts);
+compare('node LTS', local.node.lts, internet.node.lts);
+compare('pnpm LTS', local.pnpm.lts, internet.pnpm.lts);
 
 // Check if project versions are in sync
-if (!warningsOrInfo) {
+if (!hasLoggedWarnOrError()) {
   // Dockerfile
-  compareVersions('node (Dockerfile)', docker.node.latest, lowestLocalNode);
-  compareVersions('pnpm (Dockerfile)', docker.pnpm.latest, lowestLocalPnpm);
+  compare('node (Dockerfile)', docker.node.latest, localNode, true);
+  compare('pnpm (Dockerfile)', docker.pnpm.latest, localPnpm, true);
+
+  // Dockerfile.ci
+  compare('node (Dockerfile.ci)', dockerCi.node.latest, localNode, true);
+  compare('pnpm (Dockerfile.ci)', dockerCi.pnpm.latest, localPnpm, true);
+  compare(
+    'playwright (Dockerfile.ci)',
+    dockerCi.playwright.latest,
+    localPlaywright,
+    true,
+  );
 
   // Nvm
-  compareVersions('node (.nvmrc)', nvmrc.node.latest, lowestLocalNode);
+  compare('node (.nvmrc)', nvmrc.node.latest, localNode, true);
 
-  if (!warningsOrInfo) {
-    console.log('No engine updates found');
+  if (!hasLoggedInfoWarnOrError()) {
+    log('No engine updates found');
   }
+}
+
+if (hasLoggedError()) {
+  process.exit(1);
 }

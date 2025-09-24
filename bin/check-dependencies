@@ -1,19 +1,17 @@
 #!/usr/bin/env node
-/** biome-ignore-all lint/suspicious/noConsole: Useful as this is a script */
-import { exec } from 'node:child_process';
 
-const info = (...args) => {
-  args
-    .join(' ')
-    .split('\n')
-    .forEach((line) => {
-      console.log('\x1b[34m%s\x1b[0m', '_INFO_', line);
-    });
-};
-const execAsync = (command) =>
-  new Promise((resolve) => {
-    exec(command, (_error, stdout) => resolve(stdout));
-  });
+import { execAsync } from './common/exec.mjs';
+import {
+  error,
+  hasLoggedError,
+  hasLoggedInfoWarnOrError,
+  info,
+  log,
+  warn,
+} from './common/logs.mjs';
+import { highlightSemver, parseSemver } from './common/semver.mjs';
+
+const errorOnWarnings = process.argv[2] === '--error-on-warnings';
 
 const getDependenciesVersions = async () => {
   const output = await execAsync('pnpm outdated --format json');
@@ -23,13 +21,66 @@ const getDependenciesVersions = async () => {
   );
 };
 
-const dependencyVersions = await getDependenciesVersions();
-const dependencies = Object.keys(dependencyVersions).map((dependency) => {
-  return `- ${dependency}: ${dependencyVersions[dependency].latest} (current: ${dependencyVersions[dependency].current})`;
-});
+const sortByProdAndName = (left, right) => {
+  const leftIsDev =
+    outdatedDependencies[left].dependencyType === 'devDependencies';
+  const rightIsDev =
+    outdatedDependencies[right].dependencyType === 'devDependencies';
 
-if (dependencies.length > 0) {
-  info(`The following packages are outdated:\n  ${dependencies.join('\n  ')}`);
-} else {
-  console.log('No outdated packages found');
+  if (leftIsDev && !rightIsDev) {
+    return 1;
+  }
+  if (!leftIsDev && rightIsDev) {
+    return -1;
+  }
+  if (left === right) {
+    return 0;
+  }
+  return left > right ? 1 : -1;
+};
+
+const outdatedDependencies = await getDependenciesVersions();
+const major = Object.keys(outdatedDependencies)
+  .filter((dependency) => {
+    const { current, latest } = outdatedDependencies[dependency];
+    return parseSemver(latest).major > parseSemver(current).major;
+  })
+  .sort(sortByProdAndName);
+const minorOrPatch = Object.keys(outdatedDependencies)
+  .filter((dependency) => !major.includes(dependency))
+  .sort(sortByProdAndName);
+
+const printVersions = (dependencies, isImportant) => {
+  const warnOrError = errorOnWarnings ? error : warn;
+  const logger = isImportant ? warnOrError : info;
+
+  if (dependencies.length > 0) {
+    logger(
+      `\nThe following packages have ${isImportant ? 'major' : 'minor/patch'} version updates:`,
+    );
+  }
+
+  dependencies.forEach((dependency) => {
+    const parsedLatest = parseSemver(outdatedDependencies[dependency].latest);
+    const parsedCurrent = parseSemver(outdatedDependencies[dependency].current);
+    const highlight = highlightSemver(parsedLatest, parsedCurrent);
+    logger(
+      `  ${dependency}: ${highlight} (current: ${outdatedDependencies[dependency].current})`,
+    );
+  });
+
+  if (dependencies.length > 0) {
+    logger('');
+  }
+};
+
+printVersions(major, true);
+printVersions(minorOrPatch, false);
+
+if (!hasLoggedInfoWarnOrError()) {
+  log('No outdated packages found');
+}
+
+if (hasLoggedError()) {
+  process.exit(1);
 }

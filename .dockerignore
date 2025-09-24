@@ -7,12 +7,14 @@ Thumbs.db
 .tanstack
 .tmp
 coverage
+reports
 dist
 node_modules
+node-compile-cache
 __screenshots__
 
 # Local
 TODO
 .env
 licenses.json
-routeTree.gen.ts
+*.gen.ts
