@@ -147,15 +147,13 @@ type Providers = {
 };
 
 type CreateWrapperProps = {
-  outerWrapper?: RenderOptions['wrapper'];
-  providers?: Providers;
   wrapper?: RenderOptions['wrapper'];
+  providers?: Providers;
 };
 
 const createWrapper = ({
-  outerWrapper: OuterWrapper = Fragment,
-  providers = {},
   wrapper: Wrapper = Fragment,
+  providers = {},
 }: CreateWrapperProps) => {
   const RouterRender = createRouterRenderProvider(providers.router);
   const MantineRender = createMantineRenderProvider(providers.mantine);
@@ -163,15 +161,13 @@ const createWrapper = ({
 
   return {
     wrapper: ({ children }: PropsWithChildren) => (
-      <OuterWrapper>
+      <Wrapper>
         <RouterRender.provider>
           <MantineRender.provider>
-            <I18nRender.provider>
-              <Wrapper>{children}</Wrapper>
-            </I18nRender.provider>
+            <I18nRender.provider>{children}</I18nRender.provider>
           </MantineRender.provider>
         </RouterRender.provider>
-      </OuterWrapper>
+      </Wrapper>
     ),
     result: {
       ...(RouterRender.result || {}),
@@ -187,25 +183,17 @@ const defaultRenderProviders: Providers = {
 };
 
 /**
- * Renders a component similarly to the `render` function from
- * `@testing-library/react`.
- *
- * It also takes in a `providers` object to auto-wrap the component in the
- * selected app providers. By default, it adds the `i18n` and `mantine`
- * providers.
+ * Wrapper on the `render` function of `@testing-library/react`. It takes in a
+ * `providers` object to auto-wrap the component in the selected app providers.
+ * By default, it adds the `i18n` and `mantine` providers.
  */
 export const render = (
   ui: ReactNode,
-  {
-    outerWrapper,
-    providers,
-    ...options
-  }: RenderOptions & CreateWrapperProps = {},
+  { providers, ...options }: RenderOptions & CreateWrapperProps = {},
 ) => {
   const { wrapper, result } = createWrapper({
-    outerWrapper,
-    providers: { ...defaultRenderProviders, ...providers },
     wrapper: options.wrapper,
+    providers: { ...defaultRenderProviders, ...providers },
   });
 
   const { rerender: originalRerender, ...renderResult } = screen.render(ui, {
@@ -219,51 +207,23 @@ export const render = (
 };
 
 /**
- * Renders a hook similarly to the `renderHook` function from
- * `@testing-library/react`.
- *
- * It also takes in a `providers` object to auto-wrap the component in the
- * selected app providers. By default, it does not add any app providers.
+ * Wrapper on the `renderHook` function of `@testing-library/react`. It takes
+ * in a `providers` object to auto-wrap the component in the selected app
+ * providers. By default, it does not add any app providers.
  */
 export const renderHook = <HookReturn, HookProps>(
   hook: (initialProps: HookProps) => HookReturn,
   {
-    outerWrapper,
     providers,
     ...options
   }: RenderHookOptions<HookProps> & CreateWrapperProps = {},
 ) => {
   const { wrapper, result } = createWrapper({
-    outerWrapper,
-    providers,
     wrapper: options.wrapper,
+    providers,
   });
 
   const renderResult = screen.renderHook(hook, { ...options, wrapper });
 
   return { ...renderResult, providers: result };
-};
-
-/**
- * Renders a component similarly to the `render` function from
- * `@testing-library/react`, but accepts the component and its props
- * separately.
- *
- * It also takes in a `providers` object to auto-wrap the component in the
- * selected app providers. By default, it adds the `i18n` and `mantine`
- * providers.
- */
-export const renderComponent = <T extends {}>(
-  Component: (_: T) => ReactNode,
-  props: T,
-  options?: Parameters<typeof render>[1],
-) => {
-  const { rerender: originalRerender, ...result } = render(
-    <Component {...props} />,
-    options,
-  );
-  const rerender = (updatedProps: T) =>
-    originalRerender(<Component {...updatedProps} />);
-
-  return { ...result, rerender };
 };

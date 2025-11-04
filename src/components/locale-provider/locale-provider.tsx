@@ -1,45 +1,41 @@
-import { type PropsWithChildren, useEffect, useRef, useState } from 'react';
-import { type Messages, setupI18n } from '@lingui/core';
+import { type PropsWithChildren, useEffect, useState } from 'react';
+import { type I18n, type Messages, setupI18n } from '@lingui/core';
 import { I18nProvider } from '@lingui/react';
 
 import type { Locale } from './constants';
 import { loadLocale } from './utilities';
 
 export type LocaleProviderProps = PropsWithChildren<
-  | {
-      locale?: never;
-      messages?: never;
-    }
-  | {
-      locale: Locale;
-      messages: Messages;
-    }
+  | { initialLocale?: never; initialMessages?: never }
+  | { initialLocale: Locale; initialMessages: Messages }
 >;
 
 export const LocaleProvider = ({
-  locale,
-  messages,
+  initialLocale,
+  initialMessages,
   children,
 }: LocaleProviderProps) => {
-  const i18nRef = useRef(
-    setupI18n(locale && { locale, messages: { [locale]: messages } }),
-  );
-  const [ready, setReady] = useState(false);
+  const [i18n, setI18n] = useState<I18n | null>(null);
 
   useEffect(() => {
-    const isNotLoaded = Object.keys(i18nRef.current.messages).length === 0;
+    if (!i18n) {
+      const initialI18n = setupI18n(
+        initialLocale && {
+          locale: initialLocale,
+          messages: { [initialLocale]: initialMessages },
+        },
+      );
 
-    if (isNotLoaded) {
-      loadLocale(i18nRef.current)
-        .then(() => setReady(true))
-        // biome-ignore lint/suspicious/noConsole: Useful error at runtime
-        .catch(console.error);
-    } else {
-      setReady(true);
+      if (Object.keys(initialMessages || {}).length === 0) {
+        loadLocale(initialI18n)
+          .then(() => setI18n(initialI18n))
+          // biome-ignore lint/suspicious/noConsole: Useful error at runtime
+          .catch(console.error);
+      } else {
+        setI18n(initialI18n);
+      }
     }
-  }, []);
+  }, [i18n, initialLocale, initialMessages]);
 
-  return ready ? (
-    <I18nProvider i18n={i18nRef.current}>{children}</I18nProvider>
-  ) : null;
+  return i18n ? <I18nProvider i18n={i18n}>{children}</I18nProvider> : null;
 };

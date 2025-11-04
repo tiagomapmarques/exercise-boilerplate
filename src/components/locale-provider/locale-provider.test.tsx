@@ -91,7 +91,7 @@ describe(LocaleProvider, () => {
     const messages = { 'mock-key': 'Mock Value 2' };
 
     render(
-      <LocaleProvider locale="de-DE" messages={messages}>
+      <LocaleProvider initialLocale="de-DE" initialMessages={messages}>
         <TestingComponent />
       </LocaleProvider>,
       { providers: { i18n: false } },
@@ -153,15 +153,15 @@ describe(LocaleProvider, () => {
 
     render(
       <>
-        <LocaleProvider locale="en-GB" messages={messagesEn}>
+        <LocaleProvider initialLocale="en-GB" initialMessages={messagesEn}>
           <ConsumerComponent />
 
-          <LocaleProvider locale="fr-FR" messages={messagesFr}>
+          <LocaleProvider initialLocale="fr-FR" initialMessages={messagesFr}>
             <ConsumerComponent />
           </LocaleProvider>
         </LocaleProvider>
 
-        <LocaleProvider locale="de-DE" messages={messagesDe}>
+        <LocaleProvider initialLocale="de-DE" initialMessages={messagesDe}>
           <ConsumerComponent />
         </LocaleProvider>
       </>,
@@ -180,9 +180,9 @@ describe(LocaleProvider, () => {
     const errorObject = new Error('Custom error');
 
     beforeEach(() => {
-      (loadLocale as Mock<typeof loadLocale>).mockImplementation(async () => {
-        throw errorObject;
-      });
+      (loadLocale as Mock<typeof loadLocale>).mockImplementation(
+        () => new Promise((_, reject) => reject(errorObject)),
+      );
     });
 
     it('handles errors loading locale/messages', async () => {

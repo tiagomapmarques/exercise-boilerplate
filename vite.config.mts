@@ -2,6 +2,7 @@ import process from 'node:process';
 
 import { lingui } from '@lingui/vite-plugin';
 import { tanstackRouter } from '@tanstack/router-plugin/vite';
+import legacy from '@vitejs/plugin-legacy';
 import react from '@vitejs/plugin-react-swc';
 import { defineConfig } from 'vite';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
@@ -27,6 +28,11 @@ export default defineConfig({
         src: `./node_modules/country-flag-icons/1x1/${country}.svg`,
         dest: 'flags',
       })),
+    }),
+    legacy({
+      modernTargets: 'defaults',
+      modernPolyfills: true,
+      renderLegacyChunks: false,
     }),
   ],
   build: {

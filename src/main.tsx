@@ -9,7 +9,8 @@ import { router } from './router';
 import './main.css';
 
 // Start loading the initial translations as soon as possible
-loadLocale();
+// biome-ignore lint/suspicious/noConsole: Useful error at runtime
+loadLocale().catch(console.error);
 
 const rootElement = document.getElementById('root');
 

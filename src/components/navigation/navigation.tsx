@@ -8,7 +8,7 @@ import { Home, Info } from 'lucide-react';
 import { ColorSchemePicker } from '@/components/color-scheme-picker';
 import { LocalePicker } from '@/components/locale-picker';
 
-const updateDocumentTitle = (i18n: I18n, pathname: string) => {
+const updateDocumentTitle = (i18n: I18n, pathname: string | undefined) => {
   if (Object.keys(i18n.messages).length === 0) {
     return;
   }
@@ -17,7 +17,8 @@ const updateDocumentTitle = (i18n: I18n, pathname: string) => {
 
   if (pathname === '/about') {
     pageTitle += ` - ${i18n.t({ id: 'pages.about.title' })}`;
-  } else if (pathname === '/') {
+  }
+  if (pathname === '/') {
     pageTitle += ` - ${i18n.t({ id: 'pages.home.title' })}`;
   }
 

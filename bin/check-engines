@@ -17,7 +17,7 @@ import { highlightSemver, parseSemver } from './common/semver.mjs';
 const packageJsonFile = `${import.meta.dirname}/../package.json`;
 const dockerFile = `${import.meta.dirname}/../Dockerfile`;
 const dockerFileCi = `${import.meta.dirname}/../Dockerfile.ci`;
-const nvmrcFile = `${import.meta.dirname}/../.nvmrc`;
+const nodeVersionFile = `${import.meta.dirname}/../.node-version`;
 
 const errorOnWarnings = process.argv[2] === '--error-on-warnings';
 
@@ -106,9 +106,9 @@ const internet = await getInternetVersions();
 const local = getLocalVersions();
 const docker = getDockerVersions(dockerFile);
 const dockerCi = getDockerVersions(dockerFileCi);
-const nvmrc = {
+const nodeVersion = {
   node: {
-    latest: readFileSync(nvmrcFile).toString().trim().slice(1),
+    latest: readFileSync(nodeVersionFile).toString().trim().slice(1),
   },
 };
 
@@ -160,8 +160,8 @@ if (!hasLoggedWarnOrError()) {
     true,
   );
 
-  // Nvm
-  compare('node (.nvmrc)', nvmrc.node.latest, localNode, true);
+  // .node-version
+  compare('node (.node-version)', nodeVersion.node.latest, localNode, true);
 
   if (!hasLoggedInfoWarnOrError()) {
     log('No engine updates found');

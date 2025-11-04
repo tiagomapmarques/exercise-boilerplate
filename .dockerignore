@@ -2,19 +2,20 @@
 Thumbs.db
 .DS_Store
 
-# Node + Build
-.swc
-.tanstack
-.tmp
-coverage
-reports
-dist
+# Node + Install
 node_modules
 node-compile-cache
+licenses.json
+.tanstack
+*.gen.ts
+
+# Build + Reports
+.tmp
+dist
+coverage
+reports
 __screenshots__
 
 # Local
-TODO
 .env
-licenses.json
-*.gen.ts
+TODO

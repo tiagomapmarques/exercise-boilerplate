@@ -24,51 +24,51 @@
     >
     <link rel="manifest" href="/favicons/site.webmanifest">
     <style>
-      @keyframes spin {
-        100% {
-          transform: rotate(360deg);
-        }
+    @keyframes spin {
+      100% {
+        transform: rotate(360deg);
       }
+    }
 
-      body {
-        margin: 0px;
-      }
+    body {
+      margin: 0px;
+    }
 
-      #global-throbber {
-        width: 100%;
-        height: 100%;
-        position: absolute;
-        display: grid;
-        align-content: center;
-        justify-content: center;
-        opacity: 0;
-        z-index: -1;
-      }
+    #global-throbber {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      display: grid;
+      align-content: center;
+      justify-content: center;
+      opacity: 0;
+      z-index: -1;
+    }
 
-      #global-throbber::after {
-        content: '';
-        box-sizing: border-box;
-        width: 3rem;
-        height: 3rem;
-        border-radius: 100%;
-        border: 0.4rem solid #FE8800;
-        border-top-color: transparent;
-        animation: spin 0.7s infinite linear;
-      }
+    #global-throbber::after {
+      content: "";
+      box-sizing: border-box;
+      width: 3rem;
+      height: 3rem;
+      border-radius: 100%;
+      border: 0.4rem solid #fe8800;
+      border-top-color: transparent;
+      animation: spin 0.7s infinite linear;
+    }
 
-      #global-throbber+#root {
-        opacity: 1;
-        transition: opacity 0.25s;
-      }
+    #global-throbber + #root {
+      opacity: 1;
+      transition: opacity 0.25s;
+    }
 
-      #global-throbber.active {
-        opacity: 1;
-        transition: opacity 0.25s;
-      }
+    #global-throbber.active {
+      opacity: 1;
+      transition: opacity 0.25s;
+    }
 
-      #global-throbber.active+#root {
-        opacity: 0.001; /* Prevents NO_FCP in Lighthouse */
-      }
+    #global-throbber.active + #root {
+      opacity: 0.001; /* Prevents NO_FCP in Lighthouse */
+    }
     </style>
   </head>
 

@@ -9,6 +9,7 @@ vi.mock('@mantine/nprogress', async (importOriginal) => {
   const nProgress = original.createNprogress();
   nProgress[1].start = vi.fn(nProgress[1].start);
   nProgress[1].complete = vi.fn(nProgress[1].complete);
+  nProgress[1].cleanup = vi.fn(nProgress[1].cleanup);
 
   return {
     ...original,
@@ -27,10 +28,10 @@ describe(RouterProgress, () => {
     ).not.toBeVisible();
   });
 
-  it('starts and completes progress when user navigates', async () => {
-    const [, { start, complete }] = createNprogress();
+  it('starts, completes and cleans up progress bar', async () => {
+    const [, { start, complete, cleanup }] = createNprogress();
 
-    const { providers } = render(<RouterProgress />, {
+    const { providers, unmount } = render(<RouterProgress />, {
       providers: { router: { initialEntries: ['/about'] } },
     });
 
@@ -38,6 +39,7 @@ describe(RouterProgress, () => {
 
     expect(start).not.toHaveBeenCalled();
     expect(complete).not.toHaveBeenCalled();
+    expect(cleanup).not.toHaveBeenCalled();
 
     let navigation: Promise<void> | undefined;
     act(() => {
@@ -46,10 +48,19 @@ describe(RouterProgress, () => {
 
     expect(start).toHaveBeenCalledTimes(1);
     expect(complete).not.toHaveBeenCalled();
+    expect(cleanup).not.toHaveBeenCalled();
 
     await waitFor(() => navigation);
 
+    expect(start).toHaveBeenCalledTimes(1);
     expect(complete).toHaveBeenCalledTimes(1);
+    expect(cleanup).not.toHaveBeenCalled();
+
+    unmount();
+
+    expect(start).toHaveBeenCalledTimes(1);
+    expect(complete).toHaveBeenCalledTimes(1);
+    expect(cleanup).toHaveBeenCalledTimes(1);
   });
 
   it('does not re-create navigation progress on rerender', async () => {

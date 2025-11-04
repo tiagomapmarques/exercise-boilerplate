@@ -14,7 +14,7 @@ export const router = createRouter({
 
 // Register the router instance for type safety
 declare module '@tanstack/react-router' {
-  // biome-ignore lint/nursery/useConsistentTypeDefinitions: Necessary for it to work
+  // biome-ignore lint/style/useConsistentTypeDefinitions: Necessary for it to work
   interface Register {
     router: typeof router;
   }

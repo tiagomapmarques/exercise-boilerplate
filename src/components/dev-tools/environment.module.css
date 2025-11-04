@@ -1,0 +1,31 @@
+.container {
+  container-type: inline-size;
+
+  .title {
+    padding-block: var(--mantine-spacing-md);
+  }
+
+  .grid {
+    padding-top: var(--mantine-spacing-md);
+
+    /* --mantine-breakpoint-xs */
+    @container (min-width: 36rem) {
+      --sg-cols: 2;
+    }
+
+    /* --mantine-breakpoint-md */
+    @container (min-width: 62rem) {
+      --sg-cols: 3;
+    }
+
+    /* --mantine-breakpoint-xl */
+    @container (min-width: 88rem) {
+      --sg-cols: 4;
+    }
+  }
+
+  code {
+    font-family: system-ui;
+    font-stretch: condensed;
+  }
+}

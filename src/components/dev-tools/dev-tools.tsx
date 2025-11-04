@@ -1,6 +1,7 @@
 import { Fragment, lazy } from 'react';
 
 export const DevTools =
+  // biome-ignore lint/style/noProcessEnv: Removes dev tools from build
   process.env.NODE_ENV !== 'development'
     ? Fragment
     : lazy(async () => {

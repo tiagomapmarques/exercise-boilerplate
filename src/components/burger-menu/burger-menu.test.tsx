@@ -1,4 +1,4 @@
-import { render, renderComponent, screen, userEvent } from '@/testing';
+import { render, screen, userEvent } from '@/testing';
 
 import { BurgerMenu } from './burger-menu';
 
@@ -28,22 +28,21 @@ describe(BurgerMenu, () => {
 
   describe('parent control', () => {
     it('reacts to opened prop change', () => {
-      const { rerender } = renderComponent(BurgerMenu, {
-        opened: false,
-        setOpened: undefined,
-      });
+      const { rerender } = render(
+        <BurgerMenu opened={false} setOpened={undefined} />,
+      );
 
       expect(
         screen.getByRole('button', { name: 'Menu' }).firstChild,
       ).not.toHaveAttribute('data-opened');
 
-      rerender({ opened: true, setOpened: undefined });
+      rerender(<BurgerMenu opened={true} setOpened={undefined} />);
 
       expect(
         screen.getByRole('button', { name: 'Menu' }).firstChild,
       ).toHaveAttribute('data-opened', 'true');
 
-      rerender({ opened: false, setOpened: undefined });
+      rerender(<BurgerMenu opened={false} setOpened={undefined} />);
 
       expect(
         screen.getByRole('button', { name: 'Menu' }).firstChild,
@@ -53,10 +52,9 @@ describe(BurgerMenu, () => {
     it('toggles opened prop', async () => {
       const setOpened = vi.fn((fn) => fn(false));
 
-      const { rerender } = renderComponent(BurgerMenu, {
-        opened: false,
-        setOpened,
-      });
+      const { rerender } = render(
+        <BurgerMenu opened={false} setOpened={setOpened} />,
+      );
 
       await userEvent.click(screen.getByRole('button', { name: 'Menu' }));
 
@@ -64,7 +62,7 @@ describe(BurgerMenu, () => {
       expect(setOpened.mock.results[0].value).toBeTruthy();
 
       setOpened.mockImplementation((fn) => fn(true));
-      rerender({ opened: true, setOpened });
+      rerender(<BurgerMenu opened={true} setOpened={setOpened} />);
 
       await userEvent.click(screen.getByRole('button', { name: 'Menu' }));
 

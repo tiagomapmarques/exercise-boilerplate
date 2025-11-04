@@ -11,7 +11,7 @@ import { render, screen, userEvent } from '@/testing';
 import { AppShell } from './app-shell';
 
 describe(AppShell, () => {
-  const outerWrapper = ({ children }: PropsWithChildren) => (
+  const wrapper = ({ children }: PropsWithChildren) => (
     <>
       {/** biome-ignore lint/correctness/useUniqueElementIds: ID must match index.html */}
       <div id="global-throbber" />
@@ -35,7 +35,7 @@ describe(AppShell, () => {
         mantine: false,
         i18n: false,
       },
-      outerWrapper,
+      wrapper,
     });
 
     expect(await screen.findByTestId('Router-Outlet')).not.toBeVisible();
@@ -48,7 +48,7 @@ describe(AppShell, () => {
         mantine: false,
         i18n: false,
       },
-      outerWrapper,
+      wrapper,
     });
 
     expect(await screen.findByRole('banner')).toHaveTextContent(
@@ -63,7 +63,7 @@ describe(AppShell, () => {
         mantine: false,
         i18n: false,
       },
-      outerWrapper,
+      wrapper,
     });
 
     expect(
@@ -79,7 +79,7 @@ describe(AppShell, () => {
           mantine: false,
           i18n: false,
         },
-        outerWrapper,
+        wrapper,
       });
 
       await providers.waitForRouter?.();
@@ -94,7 +94,7 @@ describe(AppShell, () => {
           mantine: false,
           i18n: false,
         },
-        outerWrapper,
+        wrapper,
       });
 
       await providers.waitForRouter?.();
@@ -119,7 +119,7 @@ describe(AppShell, () => {
           mantine: false,
           i18n: false,
         },
-        outerWrapper,
+        wrapper,
       });
 
       await providers.waitForRouter?.();
