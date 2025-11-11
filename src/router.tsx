@@ -1,6 +1,7 @@
 import { createRouter } from '@tanstack/react-router';
 
-import { NotFoundContainer, UnexpectedErrorContainer } from '@/containers';
+import { NotFoundContainer } from '@/containers/not-found-container';
+import { UnexpectedErrorContainer } from '@/containers/unexpected-error-container';
 
 import { routeTree } from './routeTree.gen';
 

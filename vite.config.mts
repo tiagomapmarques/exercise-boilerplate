@@ -1,5 +1,4 @@
 import process from 'node:process';
-
 import { lingui } from '@lingui/vite-plugin';
 import { tanstackRouter } from '@tanstack/router-plugin/vite';
 import legacy from '@vitejs/plugin-legacy';
@@ -8,7 +7,7 @@ import { defineConfig } from 'vite';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
 import tsconfigPaths from 'vite-tsconfig-paths';
 
-import { countries } from './src/components/locale-provider/constants';
+import { countries } from './src/providers/locale/constants';
 
 const devtools =
   process.env.NODE_ENV !== 'development'

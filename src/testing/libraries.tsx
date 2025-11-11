@@ -4,10 +4,12 @@ import {
   Fragment,
   type PropsWithChildren,
   type ReactNode,
+  useEffect,
 } from 'react';
 import { setupI18n } from '@lingui/core';
 import { I18nProvider, type I18nProviderProps } from '@lingui/react';
 import { MantineProvider, type MantineProviderProps } from '@mantine/core';
+import { createNprogress } from '@mantine/nprogress';
 import {
   createMemoryHistory,
   createRootRoute,
@@ -22,19 +24,31 @@ import {
   type RenderHookOptions,
   type RenderOptions,
 } from '@testing-library/react';
-import { userEvent } from '@vitest/browser/context';
+import { userEvent } from 'vitest/browser';
 
-import type { Locale } from '@/components/locale-provider';
+import type { Locale } from '@/providers/locale';
+import {
+  type ProgressBarActions,
+  ProgressBarActionsContext,
+  type ProgressBarStore,
+  ProgressBarStoreContext,
+} from '@/providers/progress-bar/contexts';
 
 import { messages } from './utilities';
 
 export * from '@testing-library/react';
-export * from '@vitest/browser/context';
+export * from 'vitest';
+export type { PrettyDOMOptions } from 'vitest/browser';
+export * from 'vitest/browser';
 
-// Wrap `userEvent.click` in an `act` due to inner state changes in the router
+// Wrap `userEvent.*` in an `act` due to inner state changes in the router
 const userEventClick = userEvent.click;
 userEvent.click = async (...args) => {
   await act(() => userEventClick(...args));
+};
+const userEventHover = userEvent.hover;
+userEvent.hover = async (...args) => {
+  await act(() => userEventHover(...args));
 };
 
 // Attach `render` and `renderHook` to screen
@@ -140,10 +154,47 @@ const createI18nRenderProvider = (props: I18nProps | boolean | undefined) => {
   return { provider: I18nRenderProvider, result: { i18n } };
 };
 
+type ProgressBarProps = {
+  store?: ProgressBarStore;
+  actions?: Partial<ProgressBarActions>;
+};
+
+const createProgressBarRenderProvider = (
+  props: ProgressBarProps | boolean | undefined,
+) => {
+  if (!props) {
+    return { provider: Fragment, result: undefined };
+  }
+
+  const defaultProgress = createNprogress();
+
+  const { store = defaultProgress[0], actions: customActions } =
+    typeof props === 'object' ? props : {};
+
+  const actions = { ...defaultProgress[1], ...customActions };
+
+  function ProgressBarRenderProvider({ children }: PropsWithChildren) {
+    useEffect(() => {
+      return () => defaultProgress[1].cleanup();
+    }, []);
+
+    return (
+      <ProgressBarStoreContext.Provider value={store}>
+        <ProgressBarActionsContext.Provider value={actions}>
+          {children}
+        </ProgressBarActionsContext.Provider>
+      </ProgressBarStoreContext.Provider>
+    );
+  }
+
+  return { provider: ProgressBarRenderProvider, result: { store, actions } };
+};
+
 type Providers = {
   router?: Parameters<typeof createRouterRenderProvider>[0];
   mantine?: Parameters<typeof createMantineRenderProvider>[0];
   i18n?: Parameters<typeof createI18nRenderProvider>[0];
+  progressBar?: Parameters<typeof createProgressBarRenderProvider>[0];
 };
 
 type CreateWrapperProps = {
@@ -158,13 +209,20 @@ const createWrapper = ({
   const RouterRender = createRouterRenderProvider(providers.router);
   const MantineRender = createMantineRenderProvider(providers.mantine);
   const I18nRender = createI18nRenderProvider(providers.i18n);
+  const ProgressBarRender = createProgressBarRenderProvider(
+    providers.progressBar,
+  );
 
   return {
     wrapper: ({ children }: PropsWithChildren) => (
       <Wrapper>
         <RouterRender.provider>
           <MantineRender.provider>
-            <I18nRender.provider>{children}</I18nRender.provider>
+            <I18nRender.provider>
+              <ProgressBarRender.provider>
+                {children}
+              </ProgressBarRender.provider>
+            </I18nRender.provider>
           </MantineRender.provider>
         </RouterRender.provider>
       </Wrapper>
@@ -173,6 +231,7 @@ const createWrapper = ({
       ...(RouterRender.result || {}),
       ...(MantineRender.result || {}),
       ...(I18nRender.result || {}),
+      ...(ProgressBarRender.result || {}),
     },
   };
 };

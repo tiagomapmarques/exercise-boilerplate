@@ -1,6 +1,7 @@
-import type { Mock } from 'vitest';
 import { setupI18n } from '@lingui/core';
 import { detect, fromNavigator } from '@lingui/detect-locale';
+
+import type { Mock } from '@/testing';
 
 import { loadLocale } from './utilities';
 

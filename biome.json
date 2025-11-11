@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.3.2/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.3.4/schema.json",
   "files": {
     "ignoreUnknown": false,
     "includes": [
@@ -8,7 +8,7 @@
       "!**/.DS_Store",
       "!**/node_modules",
       "!**/node-compile-cache",
-      "!**/licenses.json",
+      "!**/licenses.*json",
       "!**/.tanstack",
       "!**/*.gen.ts",
       "!**/.tmp",
@@ -118,7 +118,8 @@
                 "allowImportNames": ["I18n", "Messages", "setupI18n"]
               },
               "@testing-library/react": {},
-              "@vitest/browser/context": {}
+              "vitest": {},
+              "vitest/browser": {}
             }
           }
         },
@@ -210,6 +211,7 @@
       },
       "nursery": {
         "recommended": true,
+        "noContinue": "warn",
         "noDeprecatedImports": "warn",
         "noEmptySource": "warn",
         "noFloatingPromises": "warn",
@@ -218,8 +220,10 @@
         "noJsxLiterals": "off",
         "noMisusedPromises": "warn",
         "noNextAsyncClientComponent": "warn",
+        "noParametersOnlyUsedInRecursion": "warn",
         "noReactForwardRef": "warn",
         "noShadow": "warn",
+        "noUnknownAttribute": "warn",
         "noUnnecessaryConditions": "warn",
         "noUnresolvedImports": "off",
         "noUnusedExpressions": "warn",
@@ -270,17 +274,21 @@
           "options": {
             "groups": [
               ":NODE:",
-              ":BLANK_LINE:",
-              "vitest",
               "react",
               "react-dom",
               "react-dom/client",
               ":PACKAGE:",
               ":BLANK_LINE:",
               "@/testing",
+              "@/testing/*",
+              "@/containers",
+              "@/containers/*",
+              "@/providers",
+              "@/providers/*",
               ":ALIAS:",
               ":BLANK_LINE:",
-              ":PATH:"
+              ":PATH:",
+              "*.css"
             ]
           }
         }

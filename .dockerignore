@@ -5,7 +5,7 @@ Thumbs.db
 # Node + Install
 node_modules
 node-compile-cache
-licenses.json
+licenses.*json
 .tanstack
 *.gen.ts
 

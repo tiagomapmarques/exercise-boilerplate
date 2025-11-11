@@ -15,5 +15,9 @@ export const useLocale = () => {
     [i18n],
   );
 
-  return [i18n.locale as Locale, setLocale] as const;
+  const preloadLocale = useCallback(async (locale: Locale) => {
+    await fetchAndActivateLocale(locale);
+  }, []);
+
+  return [i18n.locale as Locale, setLocale, preloadLocale] as const;
 };

@@ -1,14 +1,17 @@
 import { setupI18n } from '@lingui/core';
 
 import { render, screen, userEvent } from '@/testing';
-import { fallbackLocale } from '@/components/locale-provider';
+import { fallbackLocale } from '@/providers/locale';
 
 import { Navigation } from './navigation';
 
 describe(Navigation, () => {
   it('displays locale picker', async () => {
     render(<Navigation />, {
-      providers: { router: true },
+      providers: {
+        router: true,
+        progressBar: true,
+      },
     });
 
     expect(await screen.findByTestId('LocalePicker')).toBeVisible();
@@ -19,6 +22,7 @@ describe(Navigation, () => {
       providers: {
         router: true,
         mantine: { defaultColorScheme: 'light' },
+        progressBar: true,
       },
     });
 
@@ -35,6 +39,7 @@ describe(Navigation, () => {
       providers: {
         router: true,
         i18n: { i18n },
+        progressBar: true,
       },
     });
 
@@ -46,7 +51,10 @@ describe(Navigation, () => {
   describe('navigation links', () => {
     it('displays links', async () => {
       const { providers } = render(<Navigation />, {
-        providers: { router: { initialEntries: ['/unknown'] } },
+        providers: {
+          router: { initialEntries: ['/unknown'] },
+          progressBar: true,
+        },
       });
 
       expect(await screen.findByRole('link', { name: 'Home' })).toBeVisible();
@@ -58,7 +66,10 @@ describe(Navigation, () => {
 
     it('displays active route', async () => {
       render(<Navigation />, {
-        providers: { router: { initialEntries: ['/about'] } },
+        providers: {
+          router: { initialEntries: ['/about'] },
+          progressBar: true,
+        },
       });
 
       expect(
@@ -72,7 +83,10 @@ describe(Navigation, () => {
 
     it('navigates to home page', async () => {
       const { providers } = render(<Navigation />, {
-        providers: { router: { initialEntries: ['/unknown'] } },
+        providers: {
+          router: { initialEntries: ['/unknown'] },
+          progressBar: true,
+        },
       });
 
       await userEvent.click(await screen.findByRole('link', { name: 'Home' }));
@@ -83,7 +97,10 @@ describe(Navigation, () => {
 
     it('navigates to about page', async () => {
       const { providers } = render(<Navigation />, {
-        providers: { router: { initialEntries: ['/unknown'] } },
+        providers: {
+          router: { initialEntries: ['/unknown'] },
+          progressBar: true,
+        },
       });
 
       await userEvent.click(await screen.findByRole('link', { name: 'About' }));

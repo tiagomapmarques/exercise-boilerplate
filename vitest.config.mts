@@ -1,29 +1,24 @@
 import process from 'node:process';
-
-import { defineConfig } from 'vite';
+import { playwright } from '@vitest/browser-playwright';
+import { defineConfig } from 'vitest/config';
 
 import viteConfig from './vite.config.mjs';
 
+const browserList = ['chromium', 'firefox', 'webkit'] as const;
+
 const getBrowsers = () => {
-  const browserList = ['chromium', 'firefox', 'webkit'];
+  const isWatch = !process.argv.includes('--run');
+
+  const defaultBrowsers = isWatch
+    ? [browserList[Math.floor(Math.random() * 10) % browserList.length]]
+    : browserList;
+
   const browserRegex = /^--(chromium|firefox|webkit)$/;
-  const argvBrowsers = process.argv.filter(
-    (arg) => arg === '--all-browsers' || browserRegex.test(arg),
-  );
-  const allBrowsersIndex = argvBrowsers.lastIndexOf('--all-browsers');
+  const argvBrowsers = process.argv
+    .filter((arg) => browserRegex.test(arg))
+    .map((browser) => browser.slice(2) as (typeof defaultBrowsers)[number]);
 
-  const browsers =
-    allBrowsersIndex < 0
-      ? [browserList[Math.floor(Math.random() * 10) % browserList.length]]
-      : browserList;
-
-  const browserOverrides = argvBrowsers.slice(
-    allBrowsersIndex >= 0 ? allBrowsersIndex + 1 : 0,
-  );
-
-  return browserOverrides.length > 0
-    ? browserOverrides.map((browser) => browser.slice(2))
-    : browsers;
+  return argvBrowsers.length > 0 ? argvBrowsers : defaultBrowsers;
 };
 
 // biome-ignore lint/style/noDefaultExport: Necessary for it to work
@@ -36,7 +31,7 @@ export default defineConfig({
     browser: {
       enabled: true,
       headless: true,
-      provider: 'playwright',
+      provider: playwright({}),
       instances: getBrowsers().map((browser) => ({ browser })),
     },
     coverage: {

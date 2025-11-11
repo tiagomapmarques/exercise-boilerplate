@@ -1,5 +1,5 @@
 import { render, screen } from '@/testing';
-import { locales } from '@/components/locale-provider';
+import { locales } from '@/providers/locale';
 
 import { CountryFlag } from './country-flag';
 

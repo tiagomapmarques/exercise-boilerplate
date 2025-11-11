@@ -2,7 +2,7 @@ engineStrict: true
 
 ignoredBuiltDependencies: null
 
-minimumReleaseAge: 2880
+minimumReleaseAge: 4320 # 3 days
 
 onlyBuiltDependencies:
   - '@biomejs/biome'

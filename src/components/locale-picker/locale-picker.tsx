@@ -1,13 +1,26 @@
 import { useState } from 'react';
 import { Button, Menu, Text } from '@mantine/core';
 
+import {
+  type Locale,
+  localeLabels,
+  locales,
+  useLocale,
+} from '@/providers/locale';
+import { useProgressBar } from '@/providers/progress-bar';
 import { ChevronIcon } from '@/components/chevron-icon';
 import { CountryFlag } from '@/components/country-flag';
-import { localeLabels, locales, useLocale } from '@/components/locale-provider';
 
 export const LocalePicker = () => {
-  const [locale, setLocale] = useLocale();
+  const { start, complete } = useProgressBar();
+  const [locale, setLocale, preloadLocale] = useLocale();
   const [open, setOpen] = useState(false);
+
+  const handleClick = async (newLocale: Locale) => {
+    start();
+    await setLocale(newLocale);
+    complete();
+  };
 
   return (
     <Menu
@@ -34,7 +47,9 @@ export const LocalePicker = () => {
           <Menu.Item
             key={`LocalePicker-Dropdown-Item-${supportedLocale}`}
             leftSection={<CountryFlag locale={supportedLocale} />}
-            onClick={() => setLocale(supportedLocale)}
+            onMouseOver={() => preloadLocale(supportedLocale)}
+            onFocus={() => preloadLocale(supportedLocale)}
+            onClick={() => handleClick(supportedLocale)}
           >
             {localeLabels[supportedLocale].label}
           </Menu.Item>

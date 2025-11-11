@@ -1,9 +1,9 @@
-import type { Mock } from 'vitest';
 import { Trans, useLingui } from '@lingui/react';
 
 import {
   act,
   ControlledPromise,
+  type Mock,
   mockConsole,
   render,
   screen,
@@ -110,7 +110,7 @@ describe(LocaleProvider, () => {
   });
 
   it('works in tandem with `useLocale` and `Trans`', async () => {
-    const ConsumerComponent = () => {
+    const Consumer = () => {
       const [locale] = useLocale();
       return (
         <div data-slot="Content" data-locale={locale}>
@@ -121,7 +121,7 @@ describe(LocaleProvider, () => {
 
     render(
       <LocaleProvider>
-        <ConsumerComponent />
+        <Consumer />
       </LocaleProvider>,
       { providers: { i18n: false } },
     );
@@ -140,7 +140,7 @@ describe(LocaleProvider, () => {
     const messagesDe = { 'mock-key': 'Deutch' };
     const messagesFr = { 'mock-key': 'Français' };
 
-    const ConsumerComponent = () => {
+    const Consumer = () => {
       const { i18n } = useLingui();
       return (
         <div>
@@ -154,15 +154,15 @@ describe(LocaleProvider, () => {
     render(
       <>
         <LocaleProvider initialLocale="en-GB" initialMessages={messagesEn}>
-          <ConsumerComponent />
+          <Consumer />
 
           <LocaleProvider initialLocale="fr-FR" initialMessages={messagesFr}>
-            <ConsumerComponent />
+            <Consumer />
           </LocaleProvider>
         </LocaleProvider>
 
         <LocaleProvider initialLocale="de-DE" initialMessages={messagesDe}>
-          <ConsumerComponent />
+          <Consumer />
         </LocaleProvider>
       </>,
       { providers: { i18n: false } },

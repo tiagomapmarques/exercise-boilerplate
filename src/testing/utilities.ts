@@ -67,10 +67,16 @@ export class ControlledPromise {
       this.promise = new Promise<void>((resolve, reject) => {
         this.resolve = resolve;
         this.reject = reject;
-      }).then(() => {
-        this.resolve = undefined;
-        this.reject = undefined;
-      });
+      })
+        .then(() => {
+          this.resolve = undefined;
+          this.reject = undefined;
+        })
+        .catch((error) => {
+          this.resolve = undefined;
+          this.reject = undefined;
+          throw error;
+        });
     }
 
     return this.promise;
@@ -100,5 +106,18 @@ export class ControlledPromise {
 
     this.reject?.();
     return this.promise;
+  }
+
+  public reset() {
+    if (!this.resolved) {
+      // biome-ignore lint/suspicious/noConsole: Useful to detect potential test errors
+      console.warn(
+        'A ControlledPromise tried to `reset` before being resolved.',
+      );
+    }
+
+    this.promise = Promise.resolve();
+    this.resolve = undefined;
+    this.reject = undefined;
   }
 }

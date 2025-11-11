@@ -6,6 +6,12 @@ import { fallbackLocale, type Locale } from './constants';
 import { useLocale } from './use-locale';
 
 describe(useLocale, () => {
+  it('throws an error without an I18nProvider', () => {
+    expect(() => renderHook(useLocale)).toThrowError(
+      'useLingui hook was used without I18nProvider.',
+    );
+  });
+
   it('gets the current locale', () => {
     const { result } = renderHook(useLocale, {
       providers: { i18n: true },
@@ -33,6 +39,21 @@ describe(useLocale, () => {
     expect(updatedLocale).toBe('de-DE');
     expect(providers.i18n?.messages).toBe(messagesDeDe);
     expect(updatedSetLocale).toBe(setLocale);
+  });
+
+  it('preloads a new locale', async () => {
+    const { result, providers } = renderHook(useLocale, {
+      providers: { i18n: true },
+    });
+
+    const [, , preloadLocale] = result.current;
+
+    expect(providers.i18n?.messages).toBe(messagesEnGb);
+
+    await act(() => preloadLocale('de-DE'));
+
+    expect(result.current[0]).toBe('en-GB');
+    expect(providers.i18n?.messages).toBe(messagesEnGb);
   });
 
   describe('setting an unknown locale', () => {

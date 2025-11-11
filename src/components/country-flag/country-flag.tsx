@@ -1,6 +1,6 @@
 import { Image } from '@mantine/core';
 
-import { type Locale, localeLabels } from '@/components/locale-provider';
+import { type Locale, localeLabels } from '@/providers/locale';
 
 export type CountryFlagProps = {
   locale: Locale;

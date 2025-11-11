@@ -1,5 +1,5 @@
 ARG NODE_VERSION=24.11.0
-ARG PNPM_VERSION=10.20.0
+ARG PNPM_VERSION=10.21.0
 ARG PLAYWRIGHT_VERSION=1.56.1
 
 FROM alpine AS cache
@@ -51,3 +51,4 @@ WORKDIR /reports
 # Export coverage
 COPY --from=runner /app/coverage /reports/coverage
 COPY --from=runner /app/licenses.json /reports/licenses.json
+COPY --from=runner /app/licenses.dev.json /reports/licenses.dev.json
