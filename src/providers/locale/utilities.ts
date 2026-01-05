@@ -33,7 +33,7 @@ const isLocale = (locale = ''): locale is Locale => {
 };
 
 const isLanguage = (localeOrLanguage = ''): localeOrLanguage is Language => {
-  const language = localeOrLanguage.split('-')[0];
+  const [language] = localeOrLanguage.split('-');
   return Boolean(language) && languages.includes(language as Language);
 };
 

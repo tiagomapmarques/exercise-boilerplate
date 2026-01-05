@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { readFileSync, writeFileSync } from 'node:fs';
+import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 
 import { parse } from 'node-html-parser';
 
@@ -10,7 +10,9 @@ const gitIgnoreFile = `${import.meta.dirname}/../.gitignore`;
 const biomeConfigFile = `${import.meta.dirname}/../biome.json`;
 const biomeConfigContent = readFileSync(biomeConfigFile).toString();
 
-const backupConfigFile = `${import.meta.dirname}/../.tmp/biome.json`;
+const backupFolder = `${import.meta.dirname}/../.tmp`;
+const backupConfigFile = `${backupFolder}/biome.json`;
+mkdirSync(backupFolder, { recursive: true });
 writeFileSync(backupConfigFile, biomeConfigContent);
 
 const getExpectedSetting = (section) => {

@@ -57,7 +57,7 @@ describe(LocaleProvider, () => {
     );
 
     expect(loadLocale).toHaveBeenCalledTimes(1);
-    const i18n = (loadLocale as Mock<typeof loadLocale>).mock.calls[0][0];
+    const [i18n] = (loadLocale as Mock<typeof loadLocale>).mock.calls[0];
 
     expect(i18n?.locale).toBe('');
     expect(i18n?.messages).toEqual({});
