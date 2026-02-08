@@ -18,7 +18,7 @@ beforeEach(() => {
   document.title = originalDocumentTitle;
 
   // Local storage
-  window.localStorage.clear();
+  globalThis.localStorage.clear();
 });
 
 // Console functions check

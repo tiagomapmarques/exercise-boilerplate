@@ -19,9 +19,9 @@ export default defineConfig({
   plugins: [
     devtools?.(),
     tsconfigPaths(),
-    react({ plugins: [['@lingui/swc-plugin', {}]] }),
-    lingui(),
     tanstackRouter({ target: 'react', autoCodeSplitting: true }),
+    lingui(),
+    react({ plugins: [['@lingui/swc-plugin', {}]] }),
     viteStaticCopy({
       targets: countries.map((country) => ({
         src: `./node_modules/country-flag-icons/1x1/${country}.svg`,

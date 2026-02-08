@@ -9,11 +9,11 @@ import {
 } from './contexts';
 
 export type ProgressBarProviderProps = PropsWithChildren<
-  | { initialStore?: never; initialActions?: never }
   | {
       initialStore: ProgressBarStore;
       initialActions: ProgressBarActions & { cleanup?: () => void };
     }
+  | { initialStore?: never; initialActions?: never }
 >;
 
 export const ProgressBarProvider = ({

@@ -6,8 +6,8 @@ import type { Locale } from './constants';
 import { loadLocale } from './utilities';
 
 export type LocaleProviderProps = PropsWithChildren<
-  | { initialLocale?: never; initialMessages?: never }
   | { initialLocale: Locale; initialMessages: Messages }
+  | { initialLocale?: never; initialMessages?: never }
 >;
 
 export const LocaleProvider = ({
