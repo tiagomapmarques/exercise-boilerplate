@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/nursery/noConditionalExpect: Needed to detect unexpected logging in successful tests */
 /** biome-ignore-all lint/style/noRestrictedImports: Needed to avoid import loops and mock leaks */
 /** biome-ignore-all lint/suspicious/noConsole: Needed for mocking console calls */
 

@@ -15,7 +15,11 @@ dist
 coverage
 reports
 __screenshots__
+.vitest-attachments
 
 # Local
+.idea
+.vscode
+.zed
 .env
 TODO

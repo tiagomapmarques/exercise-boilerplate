@@ -8,9 +8,9 @@ import {
 describe('locale and language maps', () => {
   it('defines labels for all locales', () => {
     const configMatch = {
-      label: expect.stringMatching(/./),
-      country: expect.stringMatching(/./),
-      code: expect.stringMatching(/^[A-Z][A-Z]$/),
+      label: expect.stringMatching(/./u),
+      country: expect.stringMatching(/./u),
+      code: expect.stringMatching(/^[A-Z][A-Z]$/u),
     };
 
     expect(localeLabels).toStrictEqual({
@@ -21,12 +21,10 @@ describe('locale and language maps', () => {
   });
 
   it('defines default locales for all languages', () => {
-    const anyLocale = /(en-GB)|(fr-FR)|(de-DE)/;
-
     expect(languageMap).toStrictEqual({
-      en: expect.stringMatching(anyLocale),
-      fr: expect.stringMatching(anyLocale),
-      de: expect.stringMatching(anyLocale),
+      en: expect.stringMatching(/^en-[A-Z][A-Z]$/u),
+      fr: expect.stringMatching(/^fr-[A-Z][A-Z]$/u),
+      de: expect.stringMatching(/^de-[A-Z][A-Z]$/u),
     });
   });
 

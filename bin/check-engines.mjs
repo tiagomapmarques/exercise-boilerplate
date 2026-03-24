@@ -53,21 +53,26 @@ const getInternetVersions = async () => {
 };
 
 const getLocalVersions = () => {
+  const semverPrefix = /(?<prefix>~|\^)/gu;
+
   const { engines, devDependencies } = JSON.parse(
     readFileSync(packageJsonFile).toString(),
   );
 
   const [latestNode, ltsNode] = engines.node
-    .replaceAll('^', '')
+    .replaceAll(semverPrefix, '')
     .split('||')
     .map((version) => version.trim());
 
   const [latestPnpm, ltsPnpm] = engines.pnpm
-    .replaceAll('^', '')
+    .replaceAll(semverPrefix, '')
     .split('||')
     .map((version) => version.trim());
 
-  const latestPlaywright = devDependencies.playwright.replaceAll(/(~|\^)/g, '');
+  const latestPlaywright = devDependencies.playwright.replaceAll(
+    semverPrefix,
+    '',
+  );
 
   return {
     node: { latest: latestNode, lts: ltsNode },
@@ -80,15 +85,15 @@ const getDockerVersions = (file) => {
   const dockerContent = readFileSync(file).toString();
 
   const [nodeMatch = ''] =
-    /ARG NODE_VERSION=\d+.\d+.\d+/.exec(dockerContent) || [];
+    /ARG NODE_VERSION=\d+.\d+.\d+/u.exec(dockerContent) || [];
   const nodeVersion = nodeMatch.slice('ARG NODE_VERSION='.length);
 
   const [pnpmMatch = ''] =
-    /ARG PNPM_VERSION=\d+.\d+.\d+/.exec(dockerContent) || [];
+    /ARG PNPM_VERSION=\d+.\d+.\d+/u.exec(dockerContent) || [];
   const pnpmVersion = pnpmMatch.slice('ARG PNPM_VERSION='.length);
 
   const [playwrightMatch = ''] =
-    /ARG PLAYWRIGHT_VERSION=\d+.\d+.\d+/.exec(dockerContent) || [];
+    /ARG PLAYWRIGHT_VERSION=\d+.\d+.\d+/u.exec(dockerContent) || [];
   const playwrightVersion = playwrightMatch.slice(
     'ARG PLAYWRIGHT_VERSION='.length,
   );

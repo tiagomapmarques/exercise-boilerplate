@@ -38,6 +38,7 @@ const isLanguage = (localeOrLanguage = ''): localeOrLanguage is Language => {
 };
 
 const getInitialLocale = (locale?: string) => {
+  // biome-ignore lint/nursery/useNullishCoalescing: Purposefully considering empty strings as nullish as they aren't valid
   const userPreference = locale || detect(fromNavigator()) || undefined;
 
   if (isLocale(userPreference)) {

@@ -10,7 +10,7 @@ describe(CountryFlag, () => {
     expect(screen.getByRole('img')).toBeVisible();
 
     expect(screen.getByRole('img').getAttribute('src')).toMatch(
-      new RegExp(`/${locale.split('-')[1]}\\.svg$`),
+      new RegExp(`/${locale.split('-')[1]}\\.svg$`, 'u'),
     );
   });
 });

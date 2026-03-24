@@ -1,13 +1,11 @@
 engineStrict: true
 
-ignoredBuiltDependencies: null
-
 minimumReleaseAge: 4320 # 3 days
 
-onlyBuiltDependencies:
-  - '@biomejs/biome'
-  - '@swc/core'
-  - core-js
-  - esbuild
-  - msw
-  - oxc-resolver
+allowBuilds:
+  '@biomejs/biome': true
+  '@swc/core': true
+  core-js: true
+  esbuild: true
+  msw: true
+  oxc-resolver: true

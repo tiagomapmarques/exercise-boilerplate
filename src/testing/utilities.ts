@@ -52,7 +52,7 @@ export class ControlledPromise {
   private reject: (() => void) | undefined;
 
   private get resolved() {
-    return !(this.resolve || this.reject);
+    return !(this.resolve ?? this.reject);
   }
 
   public constructor() {

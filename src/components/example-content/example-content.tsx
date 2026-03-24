@@ -1,12 +1,12 @@
 import { Trans } from '@lingui/react';
-import { Box, Text } from '@mantine/core';
+import { Stack, Text } from '@mantine/core';
 
 export const ExampleContent = () => {
   return (
-    <Box>
+    <Stack>
       <Text>
         <Trans id="pages.home.instructions" />
       </Text>
-    </Box>
+    </Stack>
   );
 };

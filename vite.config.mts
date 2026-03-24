@@ -5,20 +5,18 @@ import legacy from '@vitejs/plugin-legacy';
 import react from '@vitejs/plugin-react-swc';
 import { defineConfig } from 'vite';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
-import tsconfigPaths from 'vite-tsconfig-paths';
 
 import { countries } from './src/providers/locale/constants';
 
 const devtools =
-  process.env.NODE_ENV !== 'development'
-    ? undefined
-    : (await import('@tanstack/devtools-vite')).devtools;
+  process.env.NODE_ENV === 'development'
+    ? (await import('@tanstack/devtools-vite')).devtools
+    : undefined;
 
 // biome-ignore lint/style/noDefaultExport: Necessary for it to work
 export default defineConfig({
   plugins: [
     devtools?.(),
-    tsconfigPaths(),
     tanstackRouter({ target: 'react', autoCodeSplitting: true }),
     lingui(),
     react({ plugins: [['@lingui/swc-plugin', {}]] }),
@@ -34,11 +32,14 @@ export default defineConfig({
       renderLegacyChunks: false,
     }),
   ],
+  resolve: {
+    tsconfigPaths: true,
+  },
   build: {
     rollupOptions: {
       output: {
         manualChunks(id) {
-          if (/\/node_modules\/react(?:-dom)?\//.test(id)) {
+          if (/\/node_modules\/react(?:-dom)?\//u.test(id)) {
             return 'vendor';
           }
         },

@@ -11,6 +11,6 @@ VITE_API_KEY=PUBLIC_API_KEY_VALUE
 `;
 
 if (!existsSync(envFile)) {
-  writeFileSync(envFile, defaultEnvFileContent.substring(1), 'utf8');
+  writeFileSync(envFile, defaultEnvFileContent.slice(1), 'utf8');
   log(`Generated .env file in ${Date.now() - startTime}ms`);
 }

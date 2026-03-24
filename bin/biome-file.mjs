@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
-
+import { readFileSync, writeFileSync } from 'node:fs';
+import Ajv from 'ajv';
 import { parse } from 'node-html-parser';
 
 import { execAsync } from './common/exec.mjs';
@@ -9,11 +9,6 @@ const gitIgnoreFile = `${import.meta.dirname}/../.gitignore`;
 
 const biomeConfigFile = `${import.meta.dirname}/../biome.json`;
 const biomeConfigContent = readFileSync(biomeConfigFile).toString();
-
-const backupFolder = `${import.meta.dirname}/../.tmp`;
-const backupConfigFile = `${backupFolder}/biome.json`;
-mkdirSync(backupFolder, { recursive: true });
-writeFileSync(backupConfigFile, biomeConfigContent);
 
 const getExpectedSetting = (section) => {
   return ['nursery', 'suspicious'].includes(section) ? 'warn' : 'error';
@@ -78,7 +73,7 @@ const getGitIgnores = () => {
 
   return gitIgnoreContent
     .split('\n')
-    .map((line) => (/^.*?#/.exec(line)?.[0].slice(0, -1) ?? line).trim())
+    .map((line) => (/^.*?#/u.exec(line)?.[0].slice(0, -1) ?? line).trim())
     .filter((line) => Boolean(line));
 };
 
@@ -86,18 +81,48 @@ const getIncludes = () => {
   return ['**/*', ...getGitIgnores().map((ignore) => `!**/${ignore}`)];
 };
 
+const getValidRules = async (config) => {
+  const schema = await (await fetch(config.$schema)).json();
+  schema.$schema = undefined;
+
+  const ajv = new Ajv({
+    allErrors: true,
+    formats: {
+      uint8: true,
+      uint16: true,
+      uint64: true,
+    },
+  });
+
+  ajv.validate(schema, config);
+
+  const badProperties = (ajv.errors ?? [])
+    .filter(({ keyword }) => keyword === 'additionalProperties')
+    .map(({ params: { additionalProperty } }) => additionalProperty);
+
+  let jsonString = JSON.stringify(config, undefined, 2);
+
+  for (const property of badProperties) {
+    jsonString = jsonString.replace(
+      new RegExp(`\\s*"${property}"\\s*:\\s*.*\\s*,\\n`, 'u'),
+      '\n',
+    );
+  }
+
+  return JSON.parse(jsonString).linter.rules;
+};
+
 const writeBiomeConfig = async (config) => {
   const content = `${JSON.stringify(config, undefined, 2)}\n`;
 
   writeFileSync(biomeConfigFile, content);
-  await execAsync(
-    `pnpm biome check --config-path=${backupConfigFile} --write ${biomeConfigFile}`,
-  );
+  await execAsync(`pnpm biome check --write ${biomeConfigFile}`);
 };
 
 const biomeConfig = JSON.parse(biomeConfigContent);
 
 biomeConfig.files.includes = getIncludes();
 biomeConfig.linter.rules = await buildNewRules(biomeConfig.linter.rules);
+biomeConfig.linter.rules = await getValidRules(biomeConfig);
 
-writeBiomeConfig(biomeConfig);
+await writeBiomeConfig(biomeConfig);

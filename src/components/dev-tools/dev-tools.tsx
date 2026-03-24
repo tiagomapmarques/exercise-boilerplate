@@ -2,9 +2,8 @@ import { Fragment, lazy } from 'react';
 
 export const DevTools =
   // biome-ignore lint/style/noProcessEnv: Removes dev tools from build
-  process.env.NODE_ENV !== 'development'
-    ? Fragment
-    : lazy(async () => {
+  process.env.NODE_ENV === 'development'
+    ? lazy(async () => {
         const { TanStackDevtools } = await import('@tanstack/react-devtools');
         const { Environment } = await import('./environment');
         const { TanStackRouterDevtoolsPanel } = await import(
@@ -24,4 +23,5 @@ export const DevTools =
             />
           ),
         };
-      });
+      })
+    : Fragment;

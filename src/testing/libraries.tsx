@@ -37,6 +37,7 @@ import {
 import { messages } from './utilities';
 
 export * from '@testing-library/react';
+// @ts-expect-error Ignoring as the overriding of the exports is intended
 export * from 'vitest';
 export type { PrettyDOMOptions } from 'vitest/browser';
 export * from 'vitest/browser';
@@ -228,10 +229,10 @@ const createWrapper = ({
       </Wrapper>
     ),
     result: {
-      ...(RouterRender.result || {}),
-      ...(MantineRender.result || {}),
-      ...(I18nRender.result || {}),
-      ...(ProgressBarRender.result || {}),
+      ...(RouterRender.result ?? {}),
+      ...(MantineRender.result ?? {}),
+      ...(I18nRender.result ?? {}),
+      ...(ProgressBarRender.result ?? {}),
     },
   };
 };

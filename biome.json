@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.3.14/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.4.8/schema.json",
   "files": {
     "ignoreUnknown": false,
     "includes": [
@@ -16,6 +16,10 @@
       "!**/coverage",
       "!**/reports",
       "!**/__screenshots__",
+      "!**/.vitest-attachments",
+      "!**/.idea",
+      "!**/.vscode",
+      "!**/.zed",
       "!**/.env",
       "!**/TODO"
     ]
@@ -38,8 +42,11 @@
         "noExcessiveNestedTestSuites": "error",
         "noForEach": "error",
         "noImplicitCoercions": "error",
+        "noUselessCatchBinding": "error",
         "noUselessStringConcat": "error",
+        "noUselessUndefined": "error",
         "noVoid": "error",
+        "useMaxParams": "error",
         "useSimplifiedLogicExpression": "error",
         "useWhile": "error"
       },
@@ -47,6 +54,7 @@
         "recommended": true,
         "noGlobalDirnameFilename": "error",
         "noNestedComponentDefinitions": "error",
+        "noNextAsyncClientComponent": "error",
         "noNodejsModules": "off",
         "noProcessGlobal": "off",
         "noReactPropAssignments": "error",
@@ -54,6 +62,8 @@
         "noSolidDestructuredProps": "off",
         "noUndeclaredDependencies": "error",
         "noUndeclaredVariables": "error",
+        "noUnresolvedImports": "off",
+        "noVueSetupPropsReactivityLoss": "off",
         "useImportExtensions": "off",
         "useJsonImportAttributes": "error",
         "useSingleJsDocAsterisk": "error",
@@ -64,7 +74,13 @@
           }
         },
         "noQwikUseVisibleTask": "off",
-        "useQwikClasslist": "off"
+        "useQwikClasslist": "off",
+        "noVueDataObjectDeclaration": "off",
+        "noVueDuplicateKeys": "off",
+        "noVueReservedKeys": "off",
+        "noVueReservedProps": "off",
+        "useQwikMethodUsage": "off",
+        "useQwikValidLexicalScope": "off"
       },
       "performance": {
         "recommended": true,
@@ -89,6 +105,7 @@
         "noExportedImports": "error",
         "noImplicitBoolean": "off",
         "noInferrableTypes": "error",
+        "noJsxLiterals": "off",
         "noMagicNumbers": "error",
         "noNamespace": "error",
         "noNegationElse": "error",
@@ -101,13 +118,23 @@
           "level": "error",
           "options": {
             "paths": {
+              "node:console": {},
+              "console": {},
               "@lingui/core": {
                 "allowImportNames": ["I18n", "Messages", "setupI18n"]
               },
               "@testing-library/react": {},
               "vitest": {},
               "vitest/browser": {}
-            }
+            },
+            "patterns": [
+              {
+                "group": ["@/*/*/*/*"]
+              },
+              {
+                "group": ["../*"]
+              }
+            ]
           }
         },
         "noRestrictedTypes": "error",
@@ -123,6 +150,7 @@
         "useCollapsedIf": "error",
         "useComponentExportOnlyModules": "error",
         "useConsistentArrayType": "error",
+        "useConsistentArrowReturn": "off",
         "useConsistentBuiltinInstantiation": "error",
         "useConsistentCurlyBraces": "error",
         "useConsistentMemberAccessibility": {
@@ -157,7 +185,7 @@
         "useNumberNamespace": "error",
         "useNumericSeparators": "error",
         "useObjectSpread": "error",
-        "useReactFunctionComponents": "warn",
+        "useReactFunctionComponents": "error",
         "useReadonlyClassProperties": "error",
         "useSelfClosingElements": "error",
         "useShorthandAssign": "error",
@@ -174,11 +202,16 @@
         "noBitwiseOperators": "warn",
         "noConsole": "warn",
         "noConstantBinaryExpressions": "warn",
+        "noDeprecatedImports": "warn",
         "noEmptyBlockStatements": "warn",
+        "noEmptySource": "warn",
         "noEvolvingTypes": "warn",
+        "noImportCycles": "warn",
         "noMisplacedAssertion": "warn",
+        "noReactForwardRef": "warn",
         "noSkippedTests": "warn",
         "noUnassignedVariables": "warn",
+        "noUnusedExpressions": "warn",
         "noVar": "warn",
         "useAwait": "warn",
         "useErrorMessage": "warn",
@@ -194,30 +227,38 @@
         "recommended": true,
         "noAmbiguousAnchorText": "warn",
         "noBeforeInteractiveScriptOutsideDocument": "warn",
+        "noConditionalExpect": "warn",
         "noContinue": "warn",
-        "noDeprecatedImports": "warn",
         "noDivRegex": "warn",
+        "noDrizzleDeleteWithoutWhere": "warn",
+        "noDrizzleUpdateWithoutWhere": "warn",
         "noDuplicateEnumValues": "warn",
         "noDuplicatedSpreadProps": "warn",
-        "noEmptySource": "warn",
         "noEqualsToNull": "warn",
         "noExcessiveClassesPerFile": "warn",
         "noExcessiveLinesPerFile": "warn",
         "noFloatingClasses": "warn",
         "noFloatingPromises": "warn",
         "noForIn": "warn",
-        "noImportCycles": "warn",
         "noIncrementDecrement": "warn",
-        "noJsxLiterals": "off",
         "noJsxPropsBind": "off",
         "noLeakedRender": "warn",
         "noMisusedPromises": "warn",
         "noMultiAssign": "warn",
         "noMultiStr": "warn",
-        "noNextAsyncClientComponent": "warn",
+        "noNestedPromises": "warn",
         "noParametersOnlyUsedInRecursion": "warn",
+        "noPlaywrightElementHandle": "warn",
+        "noPlaywrightEval": "warn",
+        "noPlaywrightForceOption": "warn",
+        "noPlaywrightMissingAwait": "off",
+        "noPlaywrightNetworkidle": "warn",
+        "noPlaywrightPagePause": "warn",
+        "noPlaywrightUselessAwait": "warn",
+        "noPlaywrightWaitForNavigation": "warn",
+        "noPlaywrightWaitForSelector": "warn",
+        "noPlaywrightWaitForTimeout": "warn",
         "noProto": "warn",
-        "noReactForwardRef": "warn",
         "noRedundantDefaultExport": "warn",
         "noReturnAssign": "warn",
         "noScriptUrl": "warn",
@@ -227,36 +268,32 @@
         "noUndeclaredEnvVars": "warn",
         "noUnknownAttribute": "warn",
         "noUnnecessaryConditions": "warn",
-        "noUnresolvedImports": "off",
-        "noUnusedExpressions": "warn",
-        "noUselessCatchBinding": "warn",
-        "noUselessUndefined": "warn",
-        "noVueArrowFuncInWatch": "warn",
-        "noVueDataObjectDeclaration": "off",
-        "noVueDuplicateKeys": "off",
-        "noVueOptionsApi": "warn",
-        "noVueReservedKeys": "off",
-        "noVueReservedProps": "off",
-        "noVueSetupPropsReactivityLoss": "warn",
+        "noUselessReturn": "warn",
+        "noVueArrowFuncInWatch": "off",
+        "noVueOptionsApi": "off",
+        "noVueRefAsOperand": "off",
+        "useArraySome": "warn",
         "useArraySortCompare": "warn",
         "useAwaitThenable": "off",
-        "useConsistentArrowReturn": "off",
         "useConsistentEnumValueType": "warn",
         "useConsistentMethodSignatures": "warn",
         "useDestructuring": "warn",
         "useErrorCause": "warn",
         "useExhaustiveSwitchCases": "warn",
+        "useExpect": "warn",
         "useExplicitType": "off",
         "useFind": "warn",
         "useGlobalThis": "warn",
+        "useImportsFirst": "warn",
         "useInlineScriptId": "warn",
-        "useMaxParams": "warn",
-        "useQwikMethodUsage": "off",
-        "useQwikValidLexicalScope": "off",
+        "useNamedCaptureGroup": "warn",
+        "useNullishCoalescing": "warn",
+        "usePlaywrightValidDescribeCallback": "warn",
         "useRegexpExec": "warn",
         "useSortedClasses": "warn",
         "useSpread": "warn",
-        "useVueConsistentDefinePropsDeclaration": "warn",
+        "useUnicodeRegex": "warn",
+        "useVueConsistentDefinePropsDeclaration": "off",
         "useVueDefineMacrosOrder": "off",
         "useVueMultiWordComponentNames": "off"
       }
@@ -319,6 +356,9 @@
         "rules": {
           "style": {
             "noMagicNumbers": "off"
+          },
+          "nursery": {
+            "useNamedCaptureGroup": "off"
           }
         }
       }

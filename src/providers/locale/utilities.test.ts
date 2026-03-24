@@ -32,6 +32,9 @@ describe(loadLocale, () => {
     ${undefined} | ${'de-AT'}   | ${'de-DE'}
     ${undefined} | ${'es-ES'}   | ${'en-GB'}
     ${undefined} | ${'es'}      | ${'en-GB'}
+    ${''}        | ${'de-DE'}   | ${'de-DE'}
+    ${''}        | ${'de'}      | ${'de-DE'}
+    ${''}        | ${'es'}      | ${'en-GB'}
     ${'de-DE'}   | ${'en'}      | ${'de-DE'}
     ${'de'}      | ${'en-GB'}   | ${'de-DE'}
     ${'de-DE'}   | ${'es'}      | ${'de-DE'}
@@ -41,7 +44,7 @@ describe(loadLocale, () => {
     ${'es-ES'}   | ${'es'}      | ${'en-GB'}
     ${'es'}      | ${'es-ES'}   | ${'en-GB'}
   `(
-    'guesses $expected from $browser and $loaded',
+    'guesses $expected locale from $browser and $loaded',
     async ({ loaded, browser, expected }) => {
       (fromNavigator as Mock<typeof fromNavigator>).mockReturnValue(browser);
 
@@ -59,7 +62,7 @@ describe(loadLocale, () => {
 
       expect(i18n.locale).toBe(expected);
       expect(i18n.messages).toMatchObject({
-        'pages.home.title': [expect.stringMatching(/^((?!pages\.).)/)],
+        'pages.home.title': [expect.stringMatching(/^((?!pages\.).)/u)],
       });
     },
   );

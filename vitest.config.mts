@@ -13,7 +13,7 @@ const getBrowsers = () => {
     ? [browserList[Math.floor(Math.random() * 10) % browserList.length]]
     : browserList;
 
-  const browserRegex = /^--(chromium|firefox|webkit)$/;
+  const browserRegex = /^--(?<browser>chromium|firefox|webkit)$/u;
   const argvBrowsers = process.argv
     .filter((arg) => browserRegex.test(arg))
     .map((browser) => browser.slice(2) as (typeof defaultBrowsers)[number]);
