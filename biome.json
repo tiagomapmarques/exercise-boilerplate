@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.4.8/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.4.10/schema.json",
   "files": {
     "ignoreUnknown": false,
     "includes": [
@@ -240,7 +240,9 @@
         "noFloatingClasses": "warn",
         "noFloatingPromises": "warn",
         "noForIn": "warn",
+        "noImpliedEval": "warn",
         "noIncrementDecrement": "warn",
+        "noInlineStyles": "warn",
         "noJsxPropsBind": "off",
         "noLeakedRender": "warn",
         "noMisusedPromises": "warn",
@@ -268,6 +270,7 @@
         "noUndeclaredEnvVars": "warn",
         "noUnknownAttribute": "warn",
         "noUnnecessaryConditions": "warn",
+        "noUnsafePlusOperands": "warn",
         "noUselessReturn": "warn",
         "noVueArrowFuncInWatch": "off",
         "noVueOptionsApi": "off",

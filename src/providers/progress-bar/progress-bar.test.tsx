@@ -8,9 +8,7 @@ describe(ProgressBar, () => {
       render(<ProgressBar label="Mock label" />, {
         providers: { i18n: false },
       }),
-    ).toThrowError(
-      'ProgressBar component was used without ProgressBarProvider.',
-    );
+    ).toThrow('ProgressBar component was used without ProgressBarProvider.');
   });
 
   it('gets actions for the progress bar', () => {

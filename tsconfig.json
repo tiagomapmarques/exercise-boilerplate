@@ -13,9 +13,8 @@
     "strictNullChecks": true,
 
     /* Imports */
-    "baseUrl": "./src",
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["./src/*"]
     },
 
     /* Bundler mode */

@@ -27,25 +27,31 @@ describe(BurgerMenu, () => {
   });
 
   describe('parent control', () => {
+    const getBurgerIconWithin = ({ children }: HTMLElement) => {
+      return Array.from(children).find((child) =>
+        child.className.includes('mantine-Burger-burger'),
+      );
+    };
+
     it('reacts to opened prop change', () => {
       const { rerender } = render(
         <BurgerMenu opened={false} setOpened={undefined} />,
       );
 
       expect(
-        screen.getByRole('button', { name: 'Menu' }).firstChild,
+        getBurgerIconWithin(screen.getByRole('button', { name: 'Menu' })),
       ).not.toHaveAttribute('data-opened');
 
       rerender(<BurgerMenu opened={true} setOpened={undefined} />);
 
       expect(
-        screen.getByRole('button', { name: 'Menu' }).firstChild,
+        getBurgerIconWithin(screen.getByRole('button', { name: 'Menu' })),
       ).toHaveAttribute('data-opened', 'true');
 
       rerender(<BurgerMenu opened={false} setOpened={undefined} />);
 
       expect(
-        screen.getByRole('button', { name: 'Menu' }).firstChild,
+        getBurgerIconWithin(screen.getByRole('button', { name: 'Menu' })),
       ).not.toHaveAttribute('data-opened');
     });
 

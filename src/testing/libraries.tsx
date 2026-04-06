@@ -89,6 +89,7 @@ const createRouterRenderProvider = (
     createRouter({
       routeTree: createRootRoute({}),
       history: createMemoryHistory({ initialEntries, initialIndex }),
+      defaultNotFoundComponent: () => <p>Not Found</p>,
     });
 
   /** Function to wait for the router to load and display the correct page. */

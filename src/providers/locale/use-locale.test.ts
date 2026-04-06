@@ -7,7 +7,7 @@ import { useLocale } from './use-locale';
 
 describe(useLocale, () => {
   it('throws an error without an I18nProvider', () => {
-    expect(() => renderHook(useLocale)).toThrowError(
+    expect(() => renderHook(useLocale)).toThrow(
       'useLingui hook was used without I18nProvider.',
     );
   });
@@ -70,7 +70,9 @@ describe(useLocale, () => {
 
       await act(() => setLocale('de-AT' as Locale));
 
-      expect(consoleError).toBeCalledWith('Unable to load messages for de-AT');
+      expect(consoleError).toHaveBeenCalledWith(
+        'Unable to load messages for de-AT',
+      );
 
       const [updatedLocale] = result.current;
 

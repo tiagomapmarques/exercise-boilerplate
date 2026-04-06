@@ -6,7 +6,7 @@ import { useProgressBar } from './use-progress-bar';
 
 describe(useProgressBar, () => {
   it('throws an error without an ProgressBarProvider', () => {
-    expect(() => renderHook(useProgressBar)).toThrowError(
+    expect(() => renderHook(useProgressBar)).toThrow(
       'useProgressBar hook was used without ProgressBarProvider.',
     );
   });

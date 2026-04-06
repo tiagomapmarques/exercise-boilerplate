@@ -9,6 +9,7 @@ import { viteStaticCopy } from 'vite-plugin-static-copy';
 import { countries } from './src/providers/locale/constants';
 
 const devtools =
+  // biome-ignore lint/style/noProcessEnv: Accessed at build-time only
   process.env.NODE_ENV === 'development'
     ? (await import('@tanstack/devtools-vite')).devtools
     : undefined;
@@ -24,6 +25,7 @@ export default defineConfig({
       targets: countries.map((country) => ({
         src: `./node_modules/country-flag-icons/1x1/${country}.svg`,
         dest: 'flags',
+        rename: { stripBase: true },
       })),
     }),
     legacy({
