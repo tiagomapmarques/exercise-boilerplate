@@ -189,7 +189,10 @@ const createProgressBarRenderProvider = (
     );
   }
 
-  return { provider: ProgressBarRenderProvider, result: { store, actions } };
+  return {
+    provider: ProgressBarRenderProvider,
+    result: { progressBar: { store, actions } },
+  };
 };
 
 type Providers = {

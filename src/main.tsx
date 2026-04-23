@@ -2,6 +2,7 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { RouterProvider } from '@tanstack/react-router';
 
+// biome-ignore lint/style/noRestrictedImports: Specific import in order to have better tree-shaking
 import { loadLocale } from '@/providers/locale/utilities';
 
 import { router } from './router';

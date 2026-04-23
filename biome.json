@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.4.10/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.4.12/schema.json",
   "files": {
     "ignoreUnknown": false,
     "includes": [
@@ -129,7 +129,7 @@
             },
             "patterns": [
               {
-                "group": ["@/*/*/*/*"]
+                "group": ["@/*/*/*"]
               },
               {
                 "group": ["../*"]
@@ -227,6 +227,7 @@
         "recommended": true,
         "noAmbiguousAnchorText": "warn",
         "noBeforeInteractiveScriptOutsideDocument": "warn",
+        "noComponentHookFactories": "warn",
         "noConditionalExpect": "warn",
         "noContinue": "warn",
         "noDivRegex": "warn",
@@ -240,11 +241,14 @@
         "noFloatingClasses": "warn",
         "noFloatingPromises": "warn",
         "noForIn": "warn",
+        "noIdenticalTestTitle": "warn",
         "noImpliedEval": "warn",
         "noIncrementDecrement": "warn",
         "noInlineStyles": "warn",
+        "noJsxNamespace": "warn",
         "noJsxPropsBind": "off",
         "noLeakedRender": "warn",
+        "noMisleadingReturnType": "warn",
         "noMisusedPromises": "warn",
         "noMultiAssign": "warn",
         "noMultiStr": "warn",
@@ -272,6 +276,7 @@
         "noUnnecessaryConditions": "warn",
         "noUnsafePlusOperands": "warn",
         "noUselessReturn": "warn",
+        "noUselessTypeConversion": "warn",
         "noVueArrowFuncInWatch": "off",
         "noVueOptionsApi": "off",
         "noVueRefAsOperand": "off",
@@ -280,22 +285,31 @@
         "useAwaitThenable": "off",
         "useConsistentEnumValueType": "warn",
         "useConsistentMethodSignatures": "warn",
+        "useConsistentTestIt": "warn",
         "useDestructuring": "warn",
+        "useDisposables": "warn",
         "useErrorCause": "warn",
         "useExhaustiveSwitchCases": "warn",
         "useExpect": "warn",
+        "useExplicitReturnType": "off",
         "useExplicitType": "off",
         "useFind": "warn",
         "useGlobalThis": "warn",
+        "useIframeSandbox": "warn",
         "useImportsFirst": "warn",
         "useInlineScriptId": "warn",
         "useNamedCaptureGroup": "warn",
         "useNullishCoalescing": "warn",
         "usePlaywrightValidDescribeCallback": "warn",
+        "useQwikLoaderLocation": "warn",
+        "useReactAsyncServerFunction": "warn",
+        "useReduceTypeParameter": "warn",
         "useRegexpExec": "warn",
         "useSortedClasses": "warn",
         "useSpread": "warn",
+        "useStringStartsEndsWith": "warn",
         "useUnicodeRegex": "warn",
+        "useVarsOnTop": "warn",
         "useVueConsistentDefinePropsDeclaration": "off",
         "useVueDefineMacrosOrder": "off",
         "useVueMultiWordComponentNames": "off"
@@ -354,13 +368,14 @@
   },
   "overrides": [
     {
-      "includes": ["**/*.test.*"],
+      "includes": ["**/*.test.*", "**/src/testing/**/*"],
       "linter": {
         "rules": {
           "style": {
             "noMagicNumbers": "off"
           },
           "nursery": {
+            "noComponentHookFactories": "off",
             "useNamedCaptureGroup": "off"
           }
         }

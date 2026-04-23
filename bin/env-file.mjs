@@ -1,16 +1,14 @@
 #!/usr/bin/env node
-import { existsSync, writeFileSync } from 'node:fs';
+import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 
 import { log } from './common/logs.mjs';
 
 const startTime = Date.now();
 
 const envFile = `${import.meta.dirname}/../.env`;
-const defaultEnvFileContent = `
-VITE_API_KEY=PUBLIC_API_KEY_VALUE
-`;
+const envExampleFile = `${import.meta.dirname}/../.env.example`;
 
 if (!existsSync(envFile)) {
-  writeFileSync(envFile, defaultEnvFileContent.slice(1), 'utf8');
+  writeFileSync(envFile, readFileSync(envExampleFile).toString(), 'utf8');
   log(`Generated .env file in ${Date.now() - startTime}ms`);
 }

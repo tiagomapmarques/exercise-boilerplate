@@ -7,6 +7,12 @@ import { configure } from '@testing-library/react';
 import { mockConsole } from '@/testing/utilities';
 
 import '@/main.css';
+import type { ResolvedConfig } from 'vitest/node';
+
+const testEnvironment = globalThis as
+  // biome-ignore lint/style/useNamingConvention: It is an internal vitest tool so the name is already set
+  { __vitest_worker__?: { config?: ResolvedConfig } } | undefined;
+const isWatch = Boolean(testEnvironment?.__vitest_worker__?.config?.watch);
 
 configure({
   testIdAttribute: 'data-slot',
@@ -27,7 +33,7 @@ const consoleLogMock = mockConsole('log', console.log);
 const consoleWarnMock = mockConsole('warn', console.warn);
 const consoleErrorMock = mockConsole('error', console.error);
 afterEach(({ task, expect }) => {
-  if (task.result && !task.result.errors) {
+  if (!isWatch && task.result && !task.result.errors) {
     if (consoleLogMock.mock.calls.length > 0) {
       expect.fail('Unexpected `console.log` calls.');
     }

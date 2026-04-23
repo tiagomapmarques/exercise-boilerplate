@@ -32,7 +32,9 @@ const isLocale = (locale = ''): locale is Locale => {
   return Boolean(locale) && locales.includes(locale as Locale);
 };
 
-const isLanguage = (localeOrLanguage = ''): localeOrLanguage is Language => {
+const isLanguage = (
+  localeOrLanguage = '',
+): localeOrLanguage is Language | `${Language}-${string}` => {
   const [language] = localeOrLanguage.split('-');
   return Boolean(language) && languages.includes(language as Language);
 };
@@ -45,7 +47,8 @@ const getInitialLocale = (locale?: string) => {
     return userPreference;
   }
   if (isLanguage(userPreference)) {
-    return languageMap[userPreference.split('-')[0] as Language];
+    const [language] = userPreference.split('-') as [Language, unknown];
+    return languageMap[language];
   }
   return fallbackLocale;
 };
