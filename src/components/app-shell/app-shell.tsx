@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useLingui } from '@lingui/react';
 import { AppShell as MantineAppShell, MantineProvider } from '@mantine/core';
 import { Outlet, useRouter } from '@tanstack/react-router';
@@ -21,8 +21,16 @@ const Content = () => {
   const { start, complete } = useProgressBar();
 
   useEffect(() => {
-    router.subscribe('onBeforeNavigate', start);
-    router.subscribe('onResolved', complete);
+    const unsubscribeOnBeforeNavigate = router.subscribe(
+      'onBeforeNavigate',
+      start,
+    );
+    const unsubscribeOnResolved = router.subscribe('onResolved', complete);
+
+    return () => {
+      unsubscribeOnBeforeNavigate();
+      unsubscribeOnResolved();
+    };
   }, [router, start, complete]);
 
   return (
@@ -38,13 +46,23 @@ const Content = () => {
 
 export const AppShell = () => {
   useGlobalThrobber();
-
   const router = useRouter();
+
   const [opened, setOpened] = useState(false);
+  const close = useCallback(() => {
+    setOpened(false);
+  }, []);
 
   useEffect(() => {
-    router.subscribe('onBeforeNavigate', () => setOpened(false));
-  }, [router]);
+    const unsubscribeOnBeforeNavigate = router.subscribe(
+      'onBeforeNavigate',
+      close,
+    );
+
+    return () => {
+      unsubscribeOnBeforeNavigate();
+    };
+  }, [router, close]);
 
   return (
     <MantineProvider defaultColorScheme="auto" theme={theme}>

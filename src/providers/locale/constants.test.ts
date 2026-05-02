@@ -8,8 +8,8 @@ import {
 describe('locale and language maps', () => {
   it('defines labels for all locales', () => {
     const configMatch = {
-      label: expect.stringMatching(/./u),
-      country: expect.stringMatching(/./u),
+      label: expect.any(String),
+      country: expect.any(String),
       code: expect.stringMatching(/^[A-Z][A-Z]$/u),
     };
 

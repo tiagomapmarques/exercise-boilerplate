@@ -3,15 +3,16 @@ import { createNprogress } from '@mantine/nprogress';
 
 import {
   type ProgressBarActions,
-  ProgressBarActionsContext,
+  type ProgressBarCleanup,
+  ProgressBarContext,
+  type ProgressBarContextValue,
   type ProgressBarStore,
-  ProgressBarStoreContext,
 } from './contexts';
 
 export type ProgressBarProviderProps = PropsWithChildren<
   | {
       initialStore: ProgressBarStore;
-      initialActions: ProgressBarActions & { cleanup?: () => void };
+      initialActions: ProgressBarActions & { cleanup: ProgressBarCleanup };
     }
   | { initialStore?: never; initialActions?: never }
 >;
@@ -21,34 +22,22 @@ export const ProgressBarProvider = ({
   initialActions,
   children,
 }: ProgressBarProviderProps) => {
-  const { cleanup: initialCleanup, ...rest } = initialActions || {};
+  const [value] = useState<ProgressBarContextValue>(() => {
+    const [store, { cleanup, ...actions }] =
+      initialStore && initialActions
+        ? [initialStore, initialActions]
+        : createNprogress();
 
-  const [{ store, actions, cleanup }, setState] = useState({
-    store: initialStore,
-    actions: initialActions ? (rest as ProgressBarActions) : undefined,
-    cleanup: initialCleanup,
+    return { store, actions, cleanup };
   });
 
-  if (!(store && actions)) {
-    const nProgress = createNprogress();
-    const { cleanup: nProgressCleanup, ...other } = nProgress[1];
-
-    setState({
-      store: nProgress[0],
-      actions: other,
-      cleanup: nProgressCleanup,
-    });
-  }
-
   useEffect(() => {
-    return () => cleanup?.();
-  }, [cleanup]);
+    return () => value.cleanup();
+  }, [value.cleanup]);
 
-  return store && actions && cleanup ? (
-    <ProgressBarStoreContext.Provider value={store}>
-      <ProgressBarActionsContext.Provider value={actions}>
-        {children}
-      </ProgressBarActionsContext.Provider>
-    </ProgressBarStoreContext.Provider>
-  ) : null;
+  return (
+    <ProgressBarContext.Provider value={value}>
+      {children}
+    </ProgressBarContext.Provider>
+  );
 };

@@ -1,16 +1,21 @@
 #!/usr/bin/env node
+import { execSync } from 'node:child_process';
 import { readFileSync, writeFileSync } from 'node:fs';
 import Ajv from 'ajv';
 import { parse } from 'node-html-parser';
-
-import { execAsync } from './common/exec.mjs';
 
 const gitIgnoreFile = `${import.meta.dirname}/../.gitignore`;
 
 const biomeConfigFile = `${import.meta.dirname}/../biome.json`;
 const biomeConfigContent = readFileSync(biomeConfigFile).toString();
 
-const getExpectedSetting = (section) => {
+const nonReactRuleRegex =
+  /[a-z](?<framework>Qwik|Solid|Vue|ReactNative|Next)[A-Z]/u;
+
+const getExpectedSetting = (section, rule) => {
+  if (nonReactRuleRegex.test(rule)) {
+    return 'off';
+  }
   return ['nursery', 'suspicious'].includes(section) ? 'warn' : 'error';
 };
 
@@ -36,9 +41,8 @@ const getNewRules = async () => {
   let sectionIndex = -1;
   for (const rule of rules) {
     if (rule) {
-      config[sections[sectionIndex]][rule] = getExpectedSetting(
-        sections[sectionIndex],
-      );
+      const setting = getExpectedSetting(sections[sectionIndex], rule);
+      config[sections[sectionIndex]][rule] = setting;
     } else {
       sectionIndex += 1;
       config[sections[sectionIndex]] = { recommended: true };
@@ -112,11 +116,11 @@ const getValidRules = async (config) => {
   return JSON.parse(jsonString).linter.rules;
 };
 
-const writeBiomeConfig = async (config) => {
+const writeBiomeConfig = (config) => {
   const content = `${JSON.stringify(config, undefined, 2)}\n`;
 
   writeFileSync(biomeConfigFile, content);
-  await execAsync(`pnpm biome check --write ${biomeConfigFile}`);
+  execSync(`pnpm biome check --write ${biomeConfigFile}`);
 };
 
 const biomeConfig = JSON.parse(biomeConfigContent);
@@ -125,4 +129,4 @@ biomeConfig.files.includes = getIncludes();
 biomeConfig.linter.rules = await buildNewRules(biomeConfig.linter.rules);
 biomeConfig.linter.rules = await getValidRules(biomeConfig);
 
-await writeBiomeConfig(biomeConfig);
+writeBiomeConfig(biomeConfig);

@@ -1,7 +1,10 @@
 import { Trans } from '@lingui/react';
 import { Stack, Text } from '@mantine/core';
 
-import { license, name, version } from '../../../package.json';
+// biome-ignore lint/style/noRestrictedImports: Used for example purposes only
+import { license, name, version } from '../../../package.json' with {
+  type: 'json',
+};
 
 export const About = () => {
   return (

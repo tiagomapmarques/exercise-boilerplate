@@ -14,7 +14,7 @@ const devtools =
     ? (await import('@tanstack/devtools-vite')).devtools
     : undefined;
 
-// biome-ignore lint/style/noDefaultExport: Necessary for it to work
+// biome-ignore lint/style/noDefaultExport: Required by vite
 export default defineConfig({
   plugins: [
     devtools?.(),

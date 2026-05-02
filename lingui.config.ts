@@ -3,7 +3,7 @@ import { formatter } from '@lingui/format-po';
 
 import { fallbackLocale, locales } from './src/providers/locale/constants';
 
-// biome-ignore lint/style/noDefaultExport: Necessary for it to work
+// biome-ignore lint/style/noDefaultExport: Required by lingui
 export default defineConfig({
   sourceLocale: fallbackLocale,
   locales,

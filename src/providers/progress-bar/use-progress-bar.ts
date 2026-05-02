@@ -1,15 +1,15 @@
 import { useContext } from 'react';
 
-import { ProgressBarActionsContext } from './contexts';
+import { ProgressBarContext } from './contexts';
 
 /** Gets the available actions of a `ProgressBarProvider`. */
 export const useProgressBar = () => {
-  const actions = useContext(ProgressBarActionsContext);
+  const value = useContext(ProgressBarContext);
 
-  if (!actions) {
+  if (!value?.actions) {
     throw new Error(
       'useProgressBar hook was used without ProgressBarProvider.',
     );
   }
-  return actions;
+  return value.actions;
 };

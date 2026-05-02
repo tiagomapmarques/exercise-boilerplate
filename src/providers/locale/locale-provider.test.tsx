@@ -14,8 +14,8 @@ import { LocaleProvider } from './locale-provider';
 import { useLocale } from './use-locale';
 import { loadLocale } from './utilities';
 
-vi.mock('./utilities', async (importOriginal) => {
-  const original = await importOriginal<typeof import('./utilities')>();
+vi.mock('./utilities', async (importActual) => {
+  const original = await importActual<typeof import('./utilities')>();
   return {
     ...original,
     loadLocale: vi.fn(original.loadLocale),
@@ -137,7 +137,7 @@ describe(LocaleProvider, () => {
 
   it('can be used multiple times on a single page', () => {
     const messagesEn = { 'mock-key': 'English' };
-    const messagesDe = { 'mock-key': 'Deutch' };
+    const messagesDe = { 'mock-key': 'Deutsch' };
     const messagesFr = { 'mock-key': 'Français' };
 
     const Consumer = () => {
@@ -169,7 +169,7 @@ describe(LocaleProvider, () => {
     );
 
     expect(screen.getByText('English English')).toBeVisible();
-    expect(screen.getByText('Deutch Deutch')).toBeVisible();
+    expect(screen.getByText('Deutsch Deutsch')).toBeVisible();
     expect(screen.getByText('Français Français')).toBeVisible();
 
     expect(screen.queryByText('mock-key')).not.toBeInTheDocument();

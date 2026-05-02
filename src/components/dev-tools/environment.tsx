@@ -9,7 +9,7 @@ import {
   Title,
 } from '@mantine/core';
 
-import classNames from './environment.module.css';
+import classes from './environment.module.css';
 
 export const Environment = () => {
   const environment = Object.entries({ ...import.meta.env }).sort(
@@ -24,14 +24,14 @@ export const Environment = () => {
   );
 
   return (
-    <Container fluid className={classNames.container}>
-      <Title size="md" className={classNames.title}>
+    <Container fluid className={classes.container}>
+      <Title size="md" className={classes.title}>
         Environment variables
       </Title>
 
       <Divider />
 
-      <SimpleGrid spacing="md" className={classNames.grid}>
+      <SimpleGrid spacing="md" className={classes.grid}>
         {environment.map(([key, value]) => (
           <Box key={`Environment-${key}`}>
             <Group justify="space-between">

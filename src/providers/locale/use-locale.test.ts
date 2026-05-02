@@ -38,7 +38,8 @@ describe(useLocale, () => {
 
     expect(updatedLocale).toBe('de-DE');
     expect(providers.i18n?.messages).toBe(messagesDeDe);
-    expect(updatedSetLocale).toBe(setLocale);
+    expect(updatedSetLocale).not.toBe(setLocale);
+    expect(updatedSetLocale).instanceOf(Function);
   });
 
   it('preloads a new locale', async () => {

@@ -1,10 +1,10 @@
-import type { PropsWithChildren } from 'react';
+import type { Dispatch, PropsWithChildren, SetStateAction } from 'react';
 import { Trans, useLingui } from '@lingui/react';
 import { Burger, Group, Text } from '@mantine/core';
 
 export type BurgerMenuProps = PropsWithChildren<{
   opened: boolean;
-  setOpened: React.Dispatch<React.SetStateAction<boolean>> | undefined;
+  setOpened: Dispatch<SetStateAction<boolean>> | undefined;
 }>;
 
 export const BurgerMenu = ({

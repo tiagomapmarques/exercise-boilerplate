@@ -10,8 +10,8 @@ import {
 } from './progress-bar-provider';
 import { useProgressBar } from './use-progress-bar';
 
-vi.mock('@mantine/nprogress', async (importOriginal) => {
-  const original = await importOriginal<typeof import('@mantine/nprogress')>();
+vi.mock('@mantine/nprogress', async (importActual) => {
+  const original = await importActual<typeof import('@mantine/nprogress')>();
   return {
     ...original,
     createNprogress: vi.fn(original.createNprogress),

@@ -1,5 +1,5 @@
 ARG NODE_VERSION=24.15.0
-ARG PNPM_VERSION=10.33.2
+ARG PNPM_VERSION=11.0.3
 
 FROM alpine AS cache
 
@@ -28,6 +28,12 @@ RUN pnpm install --ignore-scripts --prod
 
 # Build application
 COPY . /app
+# `package.json` file was updated to an unchanged version with the previous
+# COPY command. Since pnpm re-runs the install command if that file is changed,
+# we need to manually re-run the install command to prevent postinstall scripts
+# from being run. This will both let docker cache the `node_modules` folder
+# in the previous RUN command and prevent potentially dangerous code to run.
+RUN pnpm install --ignore-scripts --prod
 RUN pnpm build
 
 # Serve application

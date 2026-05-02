@@ -17,7 +17,7 @@ server.register(fastifyStatic, {
 });
 
 // Serve all other routes as the base route
-server.setNotFoundHandler((_, reply) => reply.sendFile('/'));
+server.setNotFoundHandler((_, reply) => reply.sendFile('index.html'));
 
 // Run the server
 await server.listen({

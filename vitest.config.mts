@@ -2,15 +2,14 @@ import process from 'node:process';
 import { playwright } from '@vitest/browser-playwright';
 import { defineConfig } from 'vitest/config';
 
-import viteConfig from './vite.config.mjs';
-
-const browserList = ['chromium', 'firefox', 'webkit'] as const;
+import viteConfig from './vite.config.mts';
 
 const getBrowsers = () => {
+  const browserList = ['chromium', 'firefox', 'webkit'] as const;
   const isWatch = !process.argv.includes('--run');
 
   const defaultBrowsers = isWatch
-    ? [browserList[Math.floor(Math.random() * 10) % browserList.length]]
+    ? [browserList[Math.floor(Math.random() * browserList.length)]]
     : browserList;
 
   const browserRegex = /^--(?<browser>chromium|firefox|webkit)$/u;
@@ -21,12 +20,13 @@ const getBrowsers = () => {
   return argvBrowsers.length > 0 ? argvBrowsers : defaultBrowsers;
 };
 
-// biome-ignore lint/style/noDefaultExport: Necessary for it to work
+// biome-ignore lint/style/noDefaultExport: Required by vitest
 export default defineConfig({
   ...viteConfig,
   test: {
-    globals: true,
+    include: ['**/*.test.ts?(x)'],
     setupFiles: './vitest.setup.mts',
+    globals: true,
     mockReset: true,
     browser: {
       enabled: true,

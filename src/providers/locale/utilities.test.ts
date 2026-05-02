@@ -5,9 +5,8 @@ import type { Mock } from '@/testing';
 
 import { loadLocale } from './utilities';
 
-vi.mock('@lingui/detect-locale', async (importOriginal) => {
-  const original =
-    await importOriginal<typeof import('@lingui/detect-locale')>();
+vi.mock('@lingui/detect-locale', async (importActual) => {
+  const original = await importActual<typeof import('@lingui/detect-locale')>();
   return {
     ...original,
     detect: vi.fn(original.detect),

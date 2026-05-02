@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.4.12/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.4.13/schema.json",
   "files": {
     "ignoreUnknown": false,
     "includes": [
@@ -30,6 +30,9 @@
   },
   "linter": {
     "enabled": true,
+    "domains": {
+      "project": "all"
+    },
     "rules": {
       "a11y": {
         "recommended": true,
@@ -54,7 +57,7 @@
         "recommended": true,
         "noGlobalDirnameFilename": "error",
         "noNestedComponentDefinitions": "error",
-        "noNextAsyncClientComponent": "error",
+        "noNextAsyncClientComponent": "off",
         "noNodejsModules": "off",
         "noProcessGlobal": "off",
         "noReactPropAssignments": "error",
@@ -94,7 +97,7 @@
       },
       "security": {
         "recommended": true,
-        "noSecrets": "off"
+        "noSecrets": "error"
       },
       "style": {
         "recommended": true,
@@ -132,7 +135,7 @@
                 "group": ["@/*/*/*"]
               },
               {
-                "group": ["../*"]
+                "group": ["../**"]
               }
             ]
           }
@@ -219,7 +222,6 @@
         "useNumberToFixedDigitsArgument": "warn",
         "useStaticResponseMethods": "warn",
         "useStrictMode": "warn",
-        "noReactSpecificProps": "off",
         "noDuplicateProperties": "off",
         "noUnknownAtRules": "off"
       },
@@ -245,9 +247,11 @@
         "noImpliedEval": "warn",
         "noIncrementDecrement": "warn",
         "noInlineStyles": "warn",
+        "noJsxLeakedDollar": "warn",
         "noJsxNamespace": "warn",
         "noJsxPropsBind": "off",
         "noLeakedRender": "warn",
+        "noLoopFunc": "warn",
         "noMisleadingReturnType": "warn",
         "noMisusedPromises": "warn",
         "noMultiAssign": "warn",
@@ -265,6 +269,9 @@
         "noPlaywrightWaitForSelector": "warn",
         "noPlaywrightWaitForTimeout": "warn",
         "noProto": "warn",
+        "noReactNativeDeepImports": "off",
+        "noReactNativeLiteralColors": "off",
+        "noReactNativeRawText": "off",
         "noRedundantDefaultExport": "warn",
         "noReturnAssign": "warn",
         "noScriptUrl": "warn",
@@ -274,6 +281,7 @@
         "noUndeclaredEnvVars": "warn",
         "noUnknownAttribute": "warn",
         "noUnnecessaryConditions": "warn",
+        "noUnnecessaryTemplateExpression": "warn",
         "noUnsafePlusOperands": "warn",
         "noUselessReturn": "warn",
         "noUselessTypeConversion": "warn",
@@ -282,12 +290,14 @@
         "noVueRefAsOperand": "off",
         "useArraySome": "warn",
         "useArraySortCompare": "warn",
-        "useAwaitThenable": "off",
+        "useAwaitThenable": "warn",
         "useConsistentEnumValueType": "warn",
         "useConsistentMethodSignatures": "warn",
         "useConsistentTestIt": "warn",
         "useDestructuring": "warn",
         "useDisposables": "warn",
+        "useDomNodeTextContent": "warn",
+        "useDomQuerySelector": "warn",
         "useErrorCause": "warn",
         "useExhaustiveSwitchCases": "warn",
         "useExpect": "warn",
@@ -301,11 +311,13 @@
         "useNamedCaptureGroup": "warn",
         "useNullishCoalescing": "warn",
         "usePlaywrightValidDescribeCallback": "warn",
-        "useQwikLoaderLocation": "warn",
+        "useQwikLoaderLocation": "off",
         "useReactAsyncServerFunction": "warn",
+        "useReactNativePlatformComponents": "off",
         "useReduceTypeParameter": "warn",
         "useRegexpExec": "warn",
-        "useSortedClasses": "warn",
+        "useRegexpTest": "warn",
+        "useSortedClasses": "off",
         "useSpread": "warn",
         "useStringStartsEndsWith": "warn",
         "useUnicodeRegex": "warn",

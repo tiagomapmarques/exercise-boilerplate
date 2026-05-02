@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 /** Hides the global throbber on mount and shows it on unmount. */
 export const useGlobalThrobber = () => {
   useEffect(() => {
-    const globalThrobber = document.getElementById('global-throbber');
+    const globalThrobber = document.querySelector('#global-throbber');
 
     if (!globalThrobber) {
       // biome-ignore lint/suspicious/noConsole: Useful error at runtime

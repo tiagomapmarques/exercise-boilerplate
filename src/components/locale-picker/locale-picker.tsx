@@ -47,9 +47,13 @@ export const LocalePicker = () => {
           <Menu.Item
             key={`LocalePicker-Dropdown-Item-${supportedLocale}`}
             leftSection={<CountryFlag locale={supportedLocale} />}
-            onMouseOver={() => preloadLocale(supportedLocale)}
-            onFocus={() => preloadLocale(supportedLocale)}
             onClick={() => handleClick(supportedLocale)}
+            onMouseOver={() => {
+              preloadLocale(supportedLocale);
+            }}
+            onFocus={() => {
+              preloadLocale(supportedLocale);
+            }}
           >
             {localeLabels[supportedLocale].label}
           </Menu.Item>

@@ -7,11 +7,10 @@ import { configure } from '@testing-library/react';
 import { mockConsole } from '@/testing/utilities';
 
 import '@/main.css';
-import type { ResolvedConfig } from 'vitest/node';
 
 const testEnvironment = globalThis as
   // biome-ignore lint/style/useNamingConvention: It is an internal vitest tool so the name is already set
-  { __vitest_worker__?: { config?: ResolvedConfig } } | undefined;
+  { __vitest_worker__?: { config?: { watch?: boolean } } } | undefined;
 const isWatch = Boolean(testEnvironment?.__vitest_worker__?.config?.watch);
 
 configure({

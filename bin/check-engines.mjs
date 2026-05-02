@@ -1,7 +1,7 @@
 #!/usr/bin/env node
+import { exec } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 
-import { execAsync } from './common/exec.mjs';
 import {
   error,
   hasLoggedError,
@@ -20,6 +20,12 @@ const dockerFileCi = `${import.meta.dirname}/../Dockerfile.ci`;
 const nodeVersionFile = `${import.meta.dirname}/../.node-version`;
 
 const errorOnWarnings = process.argv[2] === '--error-on-warnings';
+
+const execAsync = (command) => {
+  return new Promise((resolve) => {
+    exec(command, (_error, stdout) => resolve(stdout));
+  });
+};
 
 const getInternetVersions = async () => {
   const fetchPnpm = async () => {

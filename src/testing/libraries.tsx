@@ -26,12 +26,11 @@ import {
 } from '@testing-library/react';
 import { userEvent } from 'vitest/browser';
 
-import type { Locale } from '@/providers/locale';
+import { fallbackLocale, type Locale } from '@/providers/locale/constants';
 import {
   type ProgressBarActions,
-  ProgressBarActionsContext,
+  ProgressBarContext,
   type ProgressBarStore,
-  ProgressBarStoreContext,
 } from '@/providers/progress-bar/contexts';
 
 import { messages } from './utilities';
@@ -138,7 +137,7 @@ const createI18nRenderProvider = (props: I18nProps | boolean | undefined) => {
   }
 
   const {
-    locale = 'en-GB',
+    locale = fallbackLocale,
     i18n: customI18n,
     ...parsedProps
   } = typeof props === 'object' ? props : {};
@@ -168,30 +167,30 @@ const createProgressBarRenderProvider = (
     return { provider: Fragment, result: undefined };
   }
 
-  const defaultProgress = createNprogress();
+  const [nProgressStore, nProgressActions] = createNprogress();
+  const originalCleanup = nProgressActions.cleanup;
 
-  const { store = defaultProgress[0], actions: customActions } =
+  const { store = nProgressStore, actions: customActions } =
     typeof props === 'object' ? props : {};
 
-  const actions = { ...defaultProgress[1], ...customActions };
+  const { cleanup, ...actions } = { ...nProgressActions, ...customActions };
+  const value = { store, actions, cleanup };
 
   function ProgressBarRenderProvider({ children }: PropsWithChildren) {
     useEffect(() => {
-      return () => defaultProgress[1].cleanup();
+      return () => originalCleanup();
     }, []);
 
     return (
-      <ProgressBarStoreContext.Provider value={store}>
-        <ProgressBarActionsContext.Provider value={actions}>
-          {children}
-        </ProgressBarActionsContext.Provider>
-      </ProgressBarStoreContext.Provider>
+      <ProgressBarContext.Provider value={value}>
+        {children}
+      </ProgressBarContext.Provider>
     );
   }
 
   return {
     provider: ProgressBarRenderProvider,
-    result: { progressBar: { store, actions } },
+    result: { progressBar: value },
   };
 };
 

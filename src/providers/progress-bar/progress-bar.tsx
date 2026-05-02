@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import { NavigationProgress } from '@mantine/nprogress';
 
-import { ProgressBarStoreContext } from './contexts';
+import { ProgressBarContext } from './contexts';
 import classes from './progress-bar.module.css';
 
 export type ProgressBarProps = {
@@ -9,9 +9,9 @@ export type ProgressBarProps = {
 };
 
 export const ProgressBar = ({ label }: ProgressBarProps) => {
-  const store = useContext(ProgressBarStoreContext);
+  const value = useContext(ProgressBarContext);
 
-  if (!store) {
+  if (!value?.store) {
     throw new Error(
       'ProgressBar component was used without ProgressBarProvider.',
     );
@@ -19,7 +19,7 @@ export const ProgressBar = ({ label }: ProgressBarProps) => {
 
   return (
     <NavigationProgress
-      store={store}
+      store={value.store}
       className={classes.NavigationProgress}
       aria-label={label}
     />

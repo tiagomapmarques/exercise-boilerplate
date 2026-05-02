@@ -1,5 +1,3 @@
-/** biome-ignore-all lint/suspicious/noConsole: Useful as this is a script */
-
 /** Adds red to the background of the text */
 export const redBg = (string) => `\x1b[41m${string}\x1b[0m`;
 
@@ -43,8 +41,9 @@ export const error = (...args) => {
   const mappedArgs = args.map((string) => {
     return string.replaceAll('\n', `\n${redBg('▏FAIL▕')} `);
   });
+  const output = [redBg('▏FAIL▕'), ...mappedArgs].join(' ');
 
-  console.log(redBg('▏FAIL▕'), ...mappedArgs);
+  process.stdout.write(`${output}\n`);
 };
 
 /** Logs warning to the terminal. */
@@ -53,8 +52,9 @@ export const warn = (...args) => {
   const mappedArgs = args.map((string) => {
     return string.replaceAll('\n', `\n${yellowBg('▏WARN▕')} `);
   });
+  const output = [yellowBg('▏WARN▕'), ...mappedArgs].join(' ');
 
-  console.log(yellowBg('▏WARN▕'), ...mappedArgs);
+  process.stdout.write(`${output}\n`);
 };
 
 /** Logs information to the terminal. */
@@ -63,12 +63,14 @@ export const info = (...args) => {
   const mappedArgs = args.map((string) => {
     return string.replaceAll('\n', `\n${blueFg('▏INFO▕')} `);
   });
+  const output = [blueFg('▏INFO▕'), ...mappedArgs].join(' ');
 
-  console.log(blueFg('▏INFO▕'), ...mappedArgs);
+  process.stdout.write(`${output}\n`);
 };
 
 /** Logs to the terminal. */
 export const log = (...args) => {
   logCount.log += 1;
-  console.log(...args);
+
+  process.stdout.write(`${args.join(' ')}\n`);
 };

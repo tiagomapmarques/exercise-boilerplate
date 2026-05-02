@@ -55,7 +55,7 @@ export const Navigation = () => {
 
   useEffect(() => {
     updateDocumentTitle(i18n, pathname);
-  }, [i18n, i18n.messages, pathname]);
+  }, [i18n, pathname]);
 
   return (
     <Stack style={{ flexGrow: 1 }}>

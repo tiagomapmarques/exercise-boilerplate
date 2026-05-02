@@ -15,6 +15,8 @@ import {
  *
  * If given an `i18n` instance, it will load the fetched Messages onto the
  * `i18n` instance and activate the Locale.
+ *
+ * NOTE: This is an internal function, not part of the provider's API.
  */
 export const fetchAndActivateLocale = async (locale: Locale, i18n?: I18n) => {
   try {
@@ -61,6 +63,8 @@ const getInitialLocale = (locale?: string) => {
  * onto the instance and (re-)activate the Locale. If no Locale was set in the
  * `i18n` instance, it will use the Locale suggested by the browser instead
  * (still with `fallbackLocale` as a fallback).
+ *
+ * NOTE: This is an internal function, not part of the provider's API.
  */
 export const loadLocale = async (i18n?: I18n) => {
   await fetchAndActivateLocale(getInitialLocale(i18n?.locale), i18n);
