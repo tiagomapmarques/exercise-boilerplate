@@ -50,5 +50,7 @@ WORKDIR /reports
 
 # Export coverage
 COPY --from=runner /app/coverage /reports/coverage
+COPY --from=runner /app/playwright-report /reports/e2e
+COPY --from=runner /app/test-results /reports/e2e/test-results
 COPY --from=runner /app/licenses.json /reports/licenses.json
 COPY --from=runner /app/licenses.dev.json /reports/licenses.dev.json

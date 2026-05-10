@@ -17,6 +17,8 @@
       "!**/reports",
       "!**/__screenshots__",
       "!**/.vitest-attachments",
+      "!**/playwright-report",
+      "!**/test-results",
       "!**/.idea",
       "!**/.vscode",
       "!**/.zed",
@@ -403,6 +405,21 @@
           "nursery": {
             "noComponentHookFactories": "off",
             "useNamedCaptureGroup": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["**/*.spec.*"],
+      "linter": {
+        "rules": {
+          "nursery": {
+            "useConsistentTestIt": {
+              "level": "error",
+              "options": {
+                "function": "test"
+              }
+            }
           }
         }
       }

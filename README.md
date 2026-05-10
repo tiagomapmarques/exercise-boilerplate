@@ -9,7 +9,8 @@ coding conventions, see [DEVELOPMENT.md](DEVELOPMENT.md).
 - **TanStack Router** — file-based routing with automatic code splitting
 - **Mantine** — component library with CSS modules
 - **Lingui** — i18n with PO file support
-- **Vitest** — browser-mode testing via Playwright
+- **Vitest** — browser-mode unit and integration testing via Playwright
+- **Playwright** — end-to-end testing
 - **Biome** — linting and formatting
 - **Docker** — multi-stage production builds
 
@@ -44,8 +45,10 @@ coding conventions, see [DEVELOPMENT.md](DEVELOPMENT.md).
 | `pnpm build` | Production build |
 | `pnpm serve` | Serve the built output |
 | `pnpm build:watch` | Production build in watch mode and serve simultaneously |
-| `pnpm test` | Run all tests once, bail on first failure |
-| `pnpm test:watch` | Run all tests in watch mode |
+| `pnpm test` | Run all unit/integration tests once, bail on first failure |
+| `pnpm test:watch` | Run all unit/integration tests in watch mode |
+| `pnpm test:e2e` | Run all e2e tests once |
+| `pnpm test:e2e:watch` | Run all e2e tests in watch mode |
 | `pnpm typecheck` | Type check source code and tests |
 | `pnpm lint` | Lint and format source code and tests (writes fixes) |
 | `pnpm lint:rewrite` | Update `biome.json` after bumping `@biomejs/biome` |

@@ -54,11 +54,14 @@ const getNewRules = async () => {
 const buildNewRules = async (previous) => {
   const linterRules = await getNewRules();
 
-  for (const [section, rules] of Object.entries(previous)) {
+  for (const [section, allRules] of Object.entries(previous)) {
     const expected = getExpectedSetting(section);
+    const rules = Object.entries(allRules).filter(
+      ([rule, setting]) => !(rule === 'recommended' && setting === true),
+    );
 
-    for (const [rule, setting] of Object.entries(rules)) {
-      if (setting !== undefined && setting !== true && setting !== expected) {
+    for (const [rule, setting] of rules) {
+      if (setting !== expected) {
         linterRules[section][rule] = setting;
       }
     }

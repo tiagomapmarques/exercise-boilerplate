@@ -16,6 +16,8 @@ coverage
 reports
 __screenshots__
 .vitest-attachments
+playwright-report
+test-results
 
 # Local
 .idea
