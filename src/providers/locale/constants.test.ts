@@ -1,31 +1,31 @@
 import {
   fallbackLocale,
   languageMap,
-  localeLabels,
+  localeMetadata,
   locales,
 } from './constants';
 
 describe('locale and language maps', () => {
-  it('defines labels for all locales', () => {
-    const configMatch = {
-      label: expect.any(String),
-      country: expect.any(String),
-      code: expect.stringMatching(/^[A-Z][A-Z]$/u),
-    };
+  const metadata = Object.values(localeMetadata);
 
-    expect(localeLabels).toStrictEqual({
-      'en-GB': configMatch,
-      'fr-FR': configMatch,
-      'de-DE': configMatch,
+  describe.each(metadata)('for $label', ({ label, country, code }) => {
+    it('defines a label', () => {
+      expect(label).toBeTypeOf('string');
+    });
+
+    it('defines a country', () => {
+      expect(country).toBeTypeOf('string');
+    });
+
+    it('defines a country code', () => {
+      expect(code).toMatch(/^[A-Z][A-Z]$/u);
     });
   });
 
   it('defines default locales for all languages', () => {
-    expect(languageMap).toStrictEqual({
-      en: expect.stringMatching(/^en-[A-Z][A-Z]$/u),
-      fr: expect.stringMatching(/^fr-[A-Z][A-Z]$/u),
-      de: expect.stringMatching(/^de-[A-Z][A-Z]$/u),
-    });
+    for (const [language, locale] of Object.entries(languageMap)) {
+      expect(locale).toMatch(new RegExp(`^${language}-[A-Z][A-Z]$`, 'u'));
+    }
   });
 
   it('defines a valid default locale', () => {

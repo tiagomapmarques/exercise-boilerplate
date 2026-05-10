@@ -24,7 +24,7 @@ export const Environment = () => {
   );
 
   return (
-    <Container fluid className={classes.container}>
+    <Container fluid className={classes.Environment}>
       <Title size="md" className={classes.title}>
         Environment variables
       </Title>

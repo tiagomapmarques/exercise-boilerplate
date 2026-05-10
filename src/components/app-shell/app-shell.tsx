@@ -12,10 +12,11 @@ import {
 import { BurgerMenu } from '@/components/burger-menu';
 import { DevTools } from '@/components/dev-tools';
 import { Navigation } from '@/components/navigation';
-import { useGlobalThrobber } from '@/services/global';
+import { useDocumentHead, useGlobalThrobber } from '@/services/global';
 import { theme } from '@/theme';
 
-const Content = () => {
+const AppContent = () => {
+  useDocumentHead();
   const router = useRouter();
   const { i18n } = useLingui();
   const { start, complete } = useProgressBar();
@@ -86,7 +87,7 @@ export const AppShell = () => {
             </MantineAppShell.Navbar>
 
             <MantineAppShell.Main>
-              <Content />
+              <AppContent />
             </MantineAppShell.Main>
           </MantineAppShell>
         </ProgressBarProvider>

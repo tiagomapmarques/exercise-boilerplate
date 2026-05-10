@@ -20,10 +20,14 @@ describe(AppShell, () => {
   );
 
   it('adds router outlet', async () => {
-    const rootRoute = createRootRoute({ component: AppShell });
+    const rootRoute = createRootRoute({
+      staticData: { getTitle: () => '' },
+      component: AppShell,
+    });
     rootRoute.addChildren({
       indexRoute: createRoute({
         path: '/',
+        staticData: { getTitle: () => '' },
         component: () => <div data-slot="Router-Outlet" />,
         getParentRoute: () => rootRoute,
       }),

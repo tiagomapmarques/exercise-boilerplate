@@ -1,10 +1,12 @@
 import { useContext } from 'react';
 import { NavigationProgress } from '@mantine/nprogress';
 
-import { ProgressBarContext } from './contexts';
+import { ProgressBarContext } from './context';
 import classes from './progress-bar.module.css';
 
+/** Props for the `ProgressBar` component. */
 export type ProgressBarProps = {
+  /** Accessible label applied as `aria-label`. */
   label: string;
 };
 

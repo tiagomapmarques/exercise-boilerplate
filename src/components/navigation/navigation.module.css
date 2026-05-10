@@ -1,0 +1,16 @@
+.Navigation {
+  flex-grow: 1;
+}
+
+.bottom {
+  flex-grow: 1;
+}
+
+.NavigationLink {
+  color: var(--mantine-color-text);
+  text-decoration: none;
+}
+
+.linkActive {
+  color: var(--mantine-primary-color-5);
+}

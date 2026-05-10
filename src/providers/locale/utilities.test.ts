@@ -29,19 +29,22 @@ describe(loadLocale, () => {
     ${undefined} | ${'fr'}      | ${'fr-FR'}
     ${undefined} | ${'de-DE'}   | ${'de-DE'}
     ${undefined} | ${'de-AT'}   | ${'de-DE'}
-    ${undefined} | ${'es-ES'}   | ${'en-GB'}
-    ${undefined} | ${'es'}      | ${'en-GB'}
+    ${undefined} | ${'es-'}     | ${'es-ES'}
+    ${undefined} | ${'pl-PL'}   | ${'en-GB'}
+    ${undefined} | ${'pl-'}     | ${'en-GB'}
+    ${undefined} | ${'pl'}      | ${'en-GB'}
     ${''}        | ${'de-DE'}   | ${'de-DE'}
+    ${''}        | ${'de-'}     | ${'de-DE'}
     ${''}        | ${'de'}      | ${'de-DE'}
-    ${''}        | ${'es'}      | ${'en-GB'}
+    ${''}        | ${'pl'}      | ${'en-GB'}
     ${'de-DE'}   | ${'en'}      | ${'de-DE'}
     ${'de'}      | ${'en-GB'}   | ${'de-DE'}
-    ${'de-DE'}   | ${'es'}      | ${'de-DE'}
-    ${'de'}      | ${'es-ES'}   | ${'de-DE'}
-    ${'es-ES'}   | ${'de'}      | ${'en-GB'}
-    ${'es'}      | ${'de-DE'}   | ${'en-GB'}
-    ${'es-ES'}   | ${'es'}      | ${'en-GB'}
-    ${'es'}      | ${'es-ES'}   | ${'en-GB'}
+    ${'de-DE'}   | ${'pl'}      | ${'de-DE'}
+    ${'de'}      | ${'pl-PL'}   | ${'de-DE'}
+    ${'pl-PL'}   | ${'de'}      | ${'en-GB'}
+    ${'pl'}      | ${'de-DE'}   | ${'en-GB'}
+    ${'pl-PL'}   | ${'pl'}      | ${'en-GB'}
+    ${'pl'}      | ${'pl-PL'}   | ${'en-GB'}
   `(
     'guesses $expected locale from $browser and $loaded',
     async ({ loaded, browser, expected }) => {

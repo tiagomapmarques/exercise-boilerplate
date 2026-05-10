@@ -6,7 +6,9 @@ const icons = {
   down: ChevronDown,
 };
 
+/** Props for the `ChevronIcon` component. */
 export type ChevronIconProps = ComponentProps<typeof ChevronUp> & {
+  /** Chevron icon to display. */
   icon: keyof typeof icons;
 };
 

@@ -1,11 +1,13 @@
 import { messages as messagesDeDe } from '@/locales/de-DE.po';
 import { messages as messagesEnGb } from '@/locales/en-GB.po';
+import { messages as messagesEsEs } from '@/locales/es-ES.po';
 import { messages as messagesFrFr } from '@/locales/fr-FR.po';
 
 export const messages = {
   'en-GB': messagesEnGb,
   'fr-FR': messagesFrFr,
   'de-DE': messagesDeDe,
+  'es-ES': messagesEsEs,
 };
 
 /**
@@ -48,33 +50,33 @@ export const mockConsole = <Type extends 'log' | 'warn' | 'error'>(
  */
 export class ControlledPromise {
   private promise: Promise<void>;
-  private resolve: (() => void) | undefined;
-  private reject: (() => void) | undefined;
+  private resolveCallback: (() => void) | undefined;
+  private rejectCallback: (() => void) | undefined;
 
-  private get resolved() {
-    return !(this.resolve ?? this.reject);
+  private get settled() {
+    return !(this.resolveCallback ?? this.rejectCallback);
   }
 
   public constructor() {
     this.promise = Promise.resolve();
-    this.resolve = undefined;
-    this.reject = undefined;
+    this.resolveCallback = undefined;
+    this.rejectCallback = undefined;
   }
 
   /** Method to create and await a promise, or return the promise already being awaited. */
   public wait() {
-    if (this.resolved) {
+    if (this.settled) {
       this.promise = new Promise<void>((resolve, reject) => {
-        this.resolve = resolve;
-        this.reject = reject;
+        this.resolveCallback = resolve;
+        this.rejectCallback = reject;
       })
         .then(() => {
-          this.resolve = undefined;
-          this.reject = undefined;
+          this.resolveCallback = undefined;
+          this.rejectCallback = undefined;
         })
         .catch((error) => {
-          this.resolve = undefined;
-          this.reject = undefined;
+          this.resolveCallback = undefined;
+          this.rejectCallback = undefined;
           throw error;
         });
     }
@@ -83,33 +85,33 @@ export class ControlledPromise {
   }
 
   /** Method to resolve the currently awaited promise. */
-  public continue() {
-    if (this.resolved) {
+  public resolve() {
+    if (this.settled) {
       // biome-ignore lint/suspicious/noConsole: Useful to detect potential test errors
       console.warn(
-        'A ControlledPromise tried to `continue` with no previous `wait` call.',
+        'A ControlledPromise tried to `resolve` with no previous `wait` call.',
       );
     }
 
-    this.resolve?.();
+    this.resolveCallback?.();
     return this.promise;
   }
 
   /** Method to reject the currently awaited promise. */
-  public throw() {
-    if (this.resolved) {
+  public reject() {
+    if (this.settled) {
       // biome-ignore lint/suspicious/noConsole: Useful to detect potential test errors
       console.warn(
-        'A ControlledPromise tried to `throw` with no previous `wait` call.',
+        'A ControlledPromise tried to `reject` with no previous `wait` call.',
       );
     }
 
-    this.reject?.();
+    this.rejectCallback?.();
     return this.promise;
   }
 
   public reset() {
-    if (!this.resolved) {
+    if (!this.settled) {
       // biome-ignore lint/suspicious/noConsole: Useful to detect potential test errors
       console.warn(
         'A ControlledPromise tried to `reset` before being resolved.',
@@ -117,7 +119,7 @@ export class ControlledPromise {
     }
 
     this.promise = Promise.resolve();
-    this.resolve = undefined;
-    this.reject = undefined;
+    this.resolveCallback = undefined;
+    this.rejectCallback = undefined;
   }
 }

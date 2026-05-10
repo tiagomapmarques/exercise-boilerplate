@@ -7,11 +7,14 @@ import {
   ProgressBarContext,
   type ProgressBarContextValue,
   type ProgressBarStore,
-} from './contexts';
+} from './context';
 
+/** Props for the `ProgressBarProvider` component. */
 export type ProgressBarProviderProps = PropsWithChildren<
   | {
+      /** Pre-built store to inject. */
       initialStore: ProgressBarStore;
+      /** Pre-built actions to inject. */
       initialActions: ProgressBarActions & { cleanup: ProgressBarCleanup };
     }
   | { initialStore?: never; initialActions?: never }

@@ -1,4 +1,4 @@
-/** biome-ignore-all lint/style/noRestrictedImports: Needed for test setup and as single export point */
+/** biome-ignore-all lint/style/noRestrictedImports: Sub-module imports intentional — allows individual modules to be mocked in tests without importing the full barrel */
 import {
   type ComponentProps,
   Fragment,
@@ -15,23 +15,23 @@ import {
   createRootRoute,
   createRouter,
   RouterProvider,
+  type StaticDataRouteOption,
 } from '@tanstack/react-router';
 import {
   act,
   render as baseRender,
   renderHook as baseRenderHook,
-  screen as baseScreen,
   type RenderHookOptions,
   type RenderOptions,
 } from '@testing-library/react';
-import { userEvent } from 'vitest/browser';
+import { userEvent as baseUserEvent } from 'vitest/browser';
 
 import { fallbackLocale, type Locale } from '@/providers/locale/constants';
 import {
   type ProgressBarActions,
   ProgressBarContext,
   type ProgressBarStore,
-} from '@/providers/progress-bar/contexts';
+} from '@/providers/progress-bar/context';
 
 import { messages } from './utilities';
 
@@ -41,25 +41,23 @@ export * from 'vitest';
 export type { PrettyDOMOptions } from 'vitest/browser';
 export * from 'vitest/browser';
 
-// Wrap `userEvent.*` in an `act` due to inner state changes in the router
-const userEventClick = userEvent.click;
-userEvent.click = async (...args) => {
-  await act(() => userEventClick(...args));
-};
-const userEventHover = userEvent.hover;
-userEvent.hover = async (...args) => {
-  await act(() => userEventHover(...args));
-};
+/** `userEvent` from `vitest/browser` with every method wrapped in `act` to flush React state updates before assertions. */
+export const userEvent: typeof baseUserEvent = new Proxy(baseUserEvent, {
+  get(target, prop, receiver) {
+    const value: unknown = Reflect.get(target, prop, receiver);
+    if (typeof value !== 'function') {
+      return value;
+    }
+    return (...args: unknown[]) =>
+      act(() =>
+        (value as (...methodArgs: unknown[]) => unknown).call(target, ...args),
+      );
+  },
+});
 
-// Attach `render` and `renderHook` to screen
-export const screen = baseScreen as typeof baseScreen & {
-  render: typeof baseRender;
-  renderHook: typeof baseRenderHook;
-};
-screen.render = baseRender;
-screen.renderHook = baseRenderHook;
-
-type RouterHistoryProps = Partial<Parameters<typeof createMemoryHistory>[0]>;
+type RouterHistoryProps = Partial<
+  Parameters<typeof createMemoryHistory>[0] & StaticDataRouteOption
+>;
 type RouterProviderProps = Partial<
   Omit<
     ComponentProps<typeof RouterProvider>,
@@ -77,6 +75,7 @@ const createRouterRenderProvider = (
   const {
     initialEntries = ['/'],
     initialIndex,
+    getTitle = () => '',
     router: customRouter,
     ...parsedProps
   }: RouterHistoryProps & RouterProviderProps = typeof props === 'object'
@@ -86,7 +85,7 @@ const createRouterRenderProvider = (
   const router =
     customRouter ||
     createRouter({
-      routeTree: createRootRoute({}),
+      routeTree: createRootRoute({ staticData: { getTitle } }),
       history: createMemoryHistory({ initialEntries, initialIndex }),
       defaultNotFoundComponent: () => <p>Not Found</p>,
     });
@@ -259,7 +258,7 @@ export const render = (
     providers: { ...defaultRenderProviders, ...providers },
   });
 
-  const { rerender: originalRerender, ...renderResult } = screen.render(ui, {
+  const { rerender: originalRerender, ...renderResult } = baseRender(ui, {
     ...options,
     wrapper,
   });
@@ -286,7 +285,7 @@ export const renderHook = <HookReturn, HookProps>(
     providers,
   });
 
-  const renderResult = screen.renderHook(hook, { ...options, wrapper });
+  const renderResult = baseRenderHook(hook, { ...options, wrapper });
 
   return { ...renderResult, providers: result };
 };

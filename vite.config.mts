@@ -6,7 +6,9 @@ import react from '@vitejs/plugin-react-swc';
 import { defineConfig } from 'vite';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
 
+// Intentional import to avoid pulling in the full locale module at build time
 import { countries } from './src/providers/locale/constants';
+import { deferRenderBlocking } from './vite-plugin-defer-render-blocking.mts';
 
 const devtools =
   // biome-ignore lint/style/noProcessEnv: Accessed at build-time only
@@ -18,7 +20,10 @@ const devtools =
 export default defineConfig({
   plugins: [
     devtools?.(),
-    tanstackRouter({ target: 'react', autoCodeSplitting: true }),
+    tanstackRouter({
+      target: 'react',
+      autoCodeSplitting: true,
+    }),
     lingui(),
     react({ plugins: [['@lingui/swc-plugin', {}]] }),
     viteStaticCopy({
@@ -33,6 +38,7 @@ export default defineConfig({
       modernPolyfills: true,
       renderLegacyChunks: false,
     }),
+    deferRenderBlocking(),
   ],
   resolve: {
     tsconfigPaths: true,
@@ -40,6 +46,7 @@ export default defineConfig({
   build: {
     rollupOptions: {
       output: {
+        // Isolate React into a stable vendor chunk - it changes rarely, improving cache hit rate
         manualChunks(id) {
           if (/\/node_modules\/react(?:-dom)?\//u.test(id)) {
             return 'vendor';

@@ -8,7 +8,7 @@ import {
   userEvent,
   waitFor,
 } from '@/testing';
-import { localeLabels, useLocale } from '@/providers/locale';
+import { localeMetadata, useLocale } from '@/providers/locale';
 
 import { LocalePicker } from './locale-picker';
 
@@ -82,7 +82,7 @@ describe(LocalePicker, () => {
       'up',
     );
 
-    for (const { label, country } of Object.values(localeLabels)) {
+    for (const { label, country } of Object.values(localeMetadata)) {
       expect(
         screen.getByRole('menuitem', { name: `${country} ${label}` }),
       ).toBeVisible();

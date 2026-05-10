@@ -8,7 +8,9 @@ const icons = {
   dark: Moon,
 };
 
+/** Props for the `ColorSchemeIcon` component. */
 export type ColorSchemeIconProps = ComponentProps<typeof Sun> & {
+  /** Color scheme the icon represents. */
   colorScheme: keyof typeof icons;
 };
 

@@ -3,7 +3,7 @@ import { Button, Menu, Text } from '@mantine/core';
 
 import {
   type Locale,
-  localeLabels,
+  localeMetadata,
   locales,
   useLocale,
 } from '@/providers/locale';
@@ -38,7 +38,7 @@ export const LocalePicker = () => {
           leftSection={<CountryFlag locale={locale} />}
           rightSection={<ChevronIcon icon={open ? 'up' : 'down'} />}
         >
-          <Text size="sm">{localeLabels[locale].label}</Text>
+          <Text size="sm">{localeMetadata[locale].label}</Text>
         </Button>
       </Menu.Target>
 
@@ -55,7 +55,7 @@ export const LocalePicker = () => {
               preloadLocale(supportedLocale);
             }}
           >
-            {localeLabels[supportedLocale].label}
+            {localeMetadata[supportedLocale].label}
           </Menu.Item>
         ))}
       </Menu.Dropdown>

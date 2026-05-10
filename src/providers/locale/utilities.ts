@@ -25,7 +25,7 @@ export const fetchAndActivateLocale = async (locale: Locale, i18n?: I18n) => {
     i18n?.load(locale, messages);
     i18n?.activate(locale);
   } catch {
-    // biome-ignore lint/suspicious/noConsole: Useful error at runtime
+    // biome-ignore lint/suspicious/noConsole: The app renders without translations or with already loaded translations rather than crashing.
     console.error(`Unable to load messages for ${locale}`);
   }
 };
@@ -38,7 +38,7 @@ const isLanguage = (
   localeOrLanguage = '',
 ): localeOrLanguage is Language | `${Language}-${string}` => {
   const [language] = localeOrLanguage.split('-');
-  return Boolean(language) && languages.includes(language as Language);
+  return languages.some((item) => item === language);
 };
 
 const getInitialLocale = (locale?: string) => {

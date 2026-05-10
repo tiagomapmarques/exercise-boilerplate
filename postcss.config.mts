@@ -2,7 +2,7 @@
 export default {
   plugins: {
     'postcss-preset-mantine': {
-      autoRem: true,
+      autoRem: true, // Auto-converts px to rem, required for Mantine's responsive spacing
     },
   },
 };

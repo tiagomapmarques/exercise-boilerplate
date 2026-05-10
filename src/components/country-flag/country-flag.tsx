@@ -1,8 +1,10 @@
 import { Image } from '@mantine/core';
 
-import { type Locale, localeLabels } from '@/providers/locale';
+import { type Locale, localeMetadata } from '@/providers/locale';
 
+/** Props for the `CountryFlag` component. */
 export type CountryFlagProps = {
+  /** Locale whose country flag to display. */
   locale: Locale;
 };
 
@@ -11,8 +13,8 @@ export const CountryFlag = ({ locale }: CountryFlagProps) => {
     <Image
       height="16"
       radius="sm"
-      src={`/flags/${localeLabels[locale].code}.svg`}
-      alt={localeLabels[locale].country}
+      src={`/flags/${localeMetadata[locale].code}.svg`}
+      alt={localeMetadata[locale].country}
     />
   );
 };

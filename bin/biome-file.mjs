@@ -108,10 +108,15 @@ const getValidRules = async (config) => {
 
   for (const property of badProperties) {
     jsonString = jsonString.replace(
-      new RegExp(`\\s*"${property}"\\s*:\\s*.*\\s*,\\n`, 'u'),
+      new RegExp(`\\s*"${property}"\\s*:\\s*.*\\s*,?\\n`, 'u'),
       '\n',
     );
   }
+
+  jsonString = jsonString.replace(
+    /,(?<closeBrace>\s*[}\]])/gu,
+    '$<closeBrace>',
+  );
 
   return JSON.parse(jsonString).linter.rules;
 };

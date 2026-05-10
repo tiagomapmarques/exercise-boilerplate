@@ -5,17 +5,22 @@ import { defineConfig } from 'vitest/config';
 import viteConfig from './vite.config.mts';
 
 const getBrowsers = () => {
-  const browserList = ['chromium', 'firefox', 'webkit'] as const;
   const isWatch = !process.argv.includes('--run');
+  const browserList = ['chromium', 'firefox', 'webkit'] as const;
+  const browserRegex = new RegExp(
+    `^--(?<browser>${browserList.join('|')})$`,
+    'u',
+  );
 
   const defaultBrowsers = isWatch
     ? [browserList[Math.floor(Math.random() * browserList.length)]]
     : browserList;
 
-  const browserRegex = /^--(?<browser>chromium|firefox|webkit)$/u;
   const argvBrowsers = process.argv
-    .filter((arg) => browserRegex.test(arg))
-    .map((browser) => browser.slice(2) as (typeof defaultBrowsers)[number]);
+    .map((arg) => browserRegex.exec(arg)?.groups?.browser)
+    .filter((browser): browser is (typeof browserList)[number] =>
+      Boolean(browser),
+    );
 
   return argvBrowsers.length > 0 ? argvBrowsers : defaultBrowsers;
 };

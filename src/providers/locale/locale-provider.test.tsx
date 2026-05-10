@@ -63,7 +63,7 @@ describe(LocaleProvider, () => {
     expect(i18n?.messages).toEqual({});
     expect(screen.queryByTestId('Content')).not.toBeInTheDocument();
 
-    await act(() => loader.continue());
+    await act(() => loader.resolve());
 
     expect(i18n?.locale).toBe('custom-locale');
     expect(i18n?.messages).toEqual({ 'mock-key': 'Mock Value' });
@@ -78,7 +78,7 @@ describe(LocaleProvider, () => {
       { providers: { i18n: false } },
     );
 
-    await act(() => loader.continue());
+    await act(() => loader.resolve());
 
     expect(loadLocale).toHaveBeenCalledTimes(1);
 
@@ -126,7 +126,7 @@ describe(LocaleProvider, () => {
       { providers: { i18n: false } },
     );
 
-    await act(() => loader.continue());
+    await act(() => loader.resolve());
 
     expect(screen.getByTestId('Content')).toHaveAttribute(
       'data-locale',

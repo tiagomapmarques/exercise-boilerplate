@@ -5,8 +5,14 @@ import { I18nProvider } from '@lingui/react';
 import type { Locale } from './constants';
 import { loadLocale } from './utilities';
 
+/** Props for the `LocaleProvider` component. */
 export type LocaleProviderProps = PropsWithChildren<
-  | { initialLocale: Locale; initialMessages: Messages }
+  | {
+      /** Pre-loaded locale - skips auto-detection. */
+      initialLocale: Locale;
+      /** Pre-loaded messages for `initialLocale`. */
+      initialMessages: Messages;
+    }
   | { initialLocale?: never; initialMessages?: never }
 >;
 

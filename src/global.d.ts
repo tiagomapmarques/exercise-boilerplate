@@ -1,7 +1,7 @@
 // Add `.env` types to `import.meta.env` for type-safety
 // biome-ignore lint/style/useConsistentTypeDefinitions: Required by Vite for ImportMetaEnv augmentation
 declare interface ImportMetaEnv {
-  // Example environment variable — replace or extend with your own VITE_* keys
+  // Example environment variable - replace or extend with your own VITE_* keys
   readonly VITE_API_KEY?: string;
 }
 

@@ -9,9 +9,9 @@ import { mockConsole } from '@/testing/utilities';
 import '@/main.css';
 
 const testEnvironment = globalThis as
-  // biome-ignore lint/style/useNamingConvention: It is an internal vitest tool so the name is already set
-  { __vitest_worker__?: { config?: { watch?: boolean } } } | undefined;
-const isWatch = Boolean(testEnvironment?.__vitest_worker__?.config?.watch);
+  // biome-ignore lint/style/useNamingConvention: Internal Vitest API - `process.argv` is unavailable in the browser environment
+  { __vitest_worker__?: { config?: { watch?: boolean } } };
+const isWatch = Boolean(testEnvironment.__vitest_worker__?.config?.watch);
 
 configure({
   testIdAttribute: 'data-slot',

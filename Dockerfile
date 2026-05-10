@@ -1,11 +1,11 @@
 ARG NODE_VERSION=24.15.0
-ARG PNPM_VERSION=11.0.3
+ARG PNPM_VERSION=11.0.9
 
 FROM alpine AS cache
 
 RUN apk add --no-cache jq
 
-# Remove "version" from package.json file
+# Remove "version" from package.json so version bumps don't invalidate the pnpm install cache layer
 WORKDIR /cache
 COPY ./package.json /tmp
 RUN jq 'del(.version)' < /tmp/package.json > /cache/package.json

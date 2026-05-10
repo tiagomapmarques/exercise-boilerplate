@@ -30,5 +30,5 @@
     /* Compatibility */
     "useDefineForClassFields": true
   },
-  "include": ["./src", "./*.js", "./*.mjs", "./*.ts", "./*.mts"]
+  "include": ["./src", "./*.mjs", "./*.ts", "./*.mts"]
 }
