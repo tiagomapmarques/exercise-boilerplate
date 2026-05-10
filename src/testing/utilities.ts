@@ -2,12 +2,14 @@ import { messages as messagesDeDe } from '@/locales/de-DE.po';
 import { messages as messagesEnGb } from '@/locales/en-GB.po';
 import { messages as messagesEsEs } from '@/locales/es-ES.po';
 import { messages as messagesFrFr } from '@/locales/fr-FR.po';
+import { messages as messagesItIt } from '@/locales/it-IT.po';
 
 export const messages = {
   'en-GB': messagesEnGb,
   'fr-FR': messagesFrFr,
   'de-DE': messagesDeDe,
   'es-ES': messagesEsEs,
+  'it-IT': messagesItIt,
 };
 
 /**

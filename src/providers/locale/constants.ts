@@ -4,6 +4,7 @@ export const languageMap = {
   fr: 'fr-FR',
   de: 'de-DE',
   es: 'es-ES',
+  it: 'it-IT',
 } as const;
 
 /** Maps each locale to its display label, country name, and flag code. */
@@ -12,6 +13,7 @@ export const localeMetadata = {
   'fr-FR': { label: 'Français (FR)', country: 'France', code: 'FR' },
   'de-DE': { label: 'Deutsch (DE)', country: 'Deutschland', code: 'DE' },
   'es-ES': { label: 'Español (ES)', country: 'España', code: 'ES' },
+  'it-IT': { label: 'Italiano (IT)', country: 'Italia', code: 'IT' },
 } as const;
 
 /** Supported locale. */
