@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.4.14/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.4.16/schema.json",
   "files": {
     "ignoreUnknown": false,
     "includes": [
@@ -23,6 +23,7 @@
       "!**/.vscode",
       "!**/.zed",
       "!**/.env",
+      "!**/DEVELOPMENT.local.md",
       "!**/TODO"
     ]
   },
@@ -126,7 +127,12 @@
               "node:console": {},
               "console": {},
               "@lingui/core": {
-                "allowImportNames": ["I18n", "Messages", "setupI18n"]
+                "allowImportNames": [
+                  "I18n",
+                  "MessageDescriptor",
+                  "Messages",
+                  "setupI18n"
+                ]
               },
               "@testing-library/react": {},
               "vitest": {},
@@ -230,6 +236,7 @@
       "nursery": {
         "recommended": true,
         "noAmbiguousAnchorText": "warn",
+        "noBaseToString": "warn",
         "noBeforeInteractiveScriptOutsideDocument": "warn",
         "noComponentHookFactories": "warn",
         "noConditionalExpect": "warn",
@@ -290,6 +297,7 @@
         "noUselessReturn": "warn",
         "noUselessTypeConversion": "warn",
         "noVueArrowFuncInWatch": "off",
+        "noVueImportCompilerMacros": "off",
         "noVueOptionsApi": "off",
         "noVueRefAsOperand": "off",
         "useArraySome": "warn",
@@ -325,12 +333,15 @@
         "useSortedClasses": "off",
         "useSpread": "warn",
         "useStringStartsEndsWith": "warn",
+        "useTestHooksInOrder": "warn",
         "useTestHooksOnTop": "warn",
+        "useThisInClassMethods": "warn",
         "useUnicodeRegex": "warn",
         "useVarsOnTop": "warn",
         "useVueConsistentDefinePropsDeclaration": "off",
         "useVueDefineMacrosOrder": "off",
-        "useVueMultiWordComponentNames": "off"
+        "useVueMultiWordComponentNames": "off",
+        "useVueNextTickPromise": "off"
       }
     }
   },

@@ -4,12 +4,69 @@ import { messages as messagesEsEs } from '@/locales/es-ES.po';
 import { messages as messagesFrFr } from '@/locales/fr-FR.po';
 import { messages as messagesItIt } from '@/locales/it-IT.po';
 
+/** All compiled translation messages for every supported locale, keyed by locale code. */
 export const messages = {
   'en-GB': messagesEnGb,
   'fr-FR': messagesFrFr,
   'de-DE': messagesDeDe,
   'es-ES': messagesEsEs,
   'it-IT': messagesItIt,
+};
+
+/** The default `document.title` set by Vitest's browser runner before the app writes its own. */
+export const initialDocumentTitle = document.title;
+
+/**
+ * Mocks the getter and setter of a property defined on the prototype chain of
+ * `object` before a test and resets it after.
+ */
+export const mockObjectProperty = <
+  T extends object,
+  K extends string & keyof T,
+>(
+  object: T,
+  property: K,
+) => {
+  const resetValue = object[property];
+
+  let prototype = Object.getPrototypeOf(object) as object | null;
+  while (prototype) {
+    if (Object.getOwnPropertyDescriptor(prototype, property)) {
+      break;
+    }
+    prototype = Object.getPrototypeOf(prototype) as object | null;
+  }
+  const descriptor = Object.getOwnPropertyDescriptor(prototype, property);
+
+  if (!(descriptor?.set && descriptor.get)) {
+    throw new Error(
+      `mockObjectProperty: '${property}' must be a read/write accessor on the prototype chain of the given object`,
+    );
+  }
+
+  const originalGetter = descriptor.get.bind(object) as () => T[K];
+  const originalSetter = descriptor.set.bind(object) as (value: T[K]) => void;
+
+  const getter = vi.fn(originalGetter);
+  const setter = vi.fn(originalSetter);
+
+  beforeEach(() => {
+    getter.mockImplementation(originalGetter);
+    setter.mockImplementation(originalSetter);
+
+    Object.defineProperty(object, property, {
+      get: getter,
+      set: setter,
+      configurable: true,
+    });
+  });
+
+  afterEach(() => {
+    delete (object as Record<string, unknown>)[property];
+    (object as Record<string, unknown>)[property] = resetValue;
+  });
+
+  return { getter, setter };
 };
 
 /**
@@ -112,6 +169,7 @@ export class ControlledPromise {
     return this.promise;
   }
 
+  /** Method to reset the promise to its initial state, discarding any pending resolution. */
   public reset() {
     if (!this.settled) {
       // biome-ignore lint/suspicious/noConsole: Useful to detect potential test errors

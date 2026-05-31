@@ -1,8 +1,7 @@
 import { theme } from './theme';
 
 describe('theme', () => {
-  it('exports a theme', () => {
-    expect(theme).toBeDefined();
+  it('is defined', () => {
     expect(theme).toBeInstanceOf(Object);
   });
 });

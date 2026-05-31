@@ -1,11 +1,18 @@
 import { setupI18n } from '@lingui/core';
 
-import { renderHook } from '@/testing';
+import {
+  initialDocumentTitle,
+  mockObjectProperty,
+  renderHook,
+} from '@/testing';
 import { fallbackLocale } from '@/providers/locale';
 
 import { useDocumentHead } from './use-document-head';
 
 describe(useDocumentHead, () => {
+  const documentTitle = mockObjectProperty(document, 'title');
+  const documentLang = mockObjectProperty(document.documentElement, 'lang');
+
   it('updates app title', async () => {
     const { providers } = renderHook(useDocumentHead, {
       providers: {
@@ -32,7 +39,7 @@ describe(useDocumentHead, () => {
     expect(document.documentElement.lang).toBe('de-DE');
   });
 
-  it('does not update title with empty messages but still update language', async () => {
+  it('does not update title with empty messages but still updates language', async () => {
     const i18n = setupI18n({
       locale: fallbackLocale,
       messages: { [fallbackLocale]: {} },
@@ -47,7 +54,7 @@ describe(useDocumentHead, () => {
 
     await providers.waitForRouter?.();
 
-    expect(document.title).toBe('Vitest Browser Tester');
+    expect(document.title).toBe(initialDocumentTitle);
     expect(document.documentElement.lang).toBe(fallbackLocale);
   });
 
@@ -64,5 +71,64 @@ describe(useDocumentHead, () => {
     await providers.waitForRouter?.();
 
     expect(document.title).toBe('Exercise boilerplate - Custom page title');
+  });
+
+  it('does not update title if the value has not changed', async () => {
+    document.title = 'Exercise boilerplate';
+    documentTitle.setter.mockClear();
+
+    const { providers } = renderHook(useDocumentHead, {
+      providers: {
+        router: true,
+        i18n: true,
+      },
+    });
+
+    await providers.waitForRouter?.();
+
+    expect(documentTitle.setter).not.toHaveBeenCalled();
+  });
+
+  it('does not update document language if the value has not changed', async () => {
+    document.documentElement.lang = fallbackLocale;
+    documentLang.setter.mockClear();
+
+    const { providers } = renderHook(useDocumentHead, {
+      providers: {
+        router: true,
+        i18n: true,
+      },
+    });
+
+    await providers.waitForRouter?.();
+
+    expect(documentLang.setter).not.toHaveBeenCalled();
+  });
+
+  it('interpolates values into the page title', async () => {
+    const i18n = setupI18n({
+      locale: fallbackLocale,
+      messages: {
+        [fallbackLocale]: {
+          'titles.app': 'Exercise boilerplate',
+          'test.greeting': 'Hello, {name}!',
+        },
+      },
+    });
+
+    const { providers } = renderHook(useDocumentHead, {
+      initialProps: { name: 'World' },
+      providers: {
+        router: {
+          getTitle: (i18nInstance, values) =>
+            i18nInstance.t({ id: 'test.greeting', values }),
+        },
+        i18n: { i18n },
+      },
+    });
+
+    await providers.waitForRouter?.();
+
+    expect(document.title).toBe('Exercise boilerplate - Hello, World!');
   });
 });

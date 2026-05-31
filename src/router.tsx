@@ -1,4 +1,4 @@
-import type { I18n } from '@lingui/core';
+import type { I18n, MessageDescriptor } from '@lingui/core';
 import { createRouter } from '@tanstack/react-router';
 
 import { NotFoundContainer } from '@/containers/not-found-container';
@@ -22,7 +22,7 @@ declare module '@tanstack/react-router' {
   }
   // biome-ignore lint/style/useConsistentTypeDefinitions: Required by TanStack Router for module augmentation
   interface StaticDataRouteOption {
-    /** Returns the page title for the route, translated using the active `i18n` instance. */
-    getTitle: (i18n: I18n) => string;
+    /** Returns the page title for the route, translated using the active `i18n` instance and optional message values. */
+    getTitle: (i18n: I18n, values?: MessageDescriptor['values']) => string;
   }
 }

@@ -1,6 +1,4 @@
-/**
- * Error class that includes the status of a response as well as the message/reason.
- */
+/** Error class that includes the HTTP status alongside the response message. */
 export class FetchError extends Error {
   public readonly status: number;
 

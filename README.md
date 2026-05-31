@@ -1,23 +1,14 @@
 # Exercise boilerplate
 
-A production-ready React application template. For architectural decisions and
-coding conventions, see [DEVELOPMENT.md](DEVELOPMENT.md).
+A production-ready React application template.
 
-## Stack
-
-- **React** + TypeScript
-- **TanStack Router** — file-based routing with automatic code splitting
-- **Mantine** — component library with CSS modules
-- **Lingui** — i18n with PO file support
-- **Vitest** — browser-mode unit and integration testing via Playwright
-- **Playwright** — end-to-end testing
-- **Biome** — linting and formatting
-- **Docker** — multi-stage production builds
+For architectural decisions and coding conventions, see
+[DEVELOPMENT.md](DEVELOPMENT.md).
 
 ## Requirements
 
 - Node 24 (LTS) or 26
-- pnpm
+- pnpm 11
 
 ## Quick start
 
@@ -36,6 +27,18 @@ coding conventions, see [DEVELOPMENT.md](DEVELOPMENT.md).
 
 - pnpm docker:build
 - pnpm docker:run
+
+## Stack
+
+- **TypeScript**
+- **React**
+- **TanStack Router**
+- **Mantine**
+- **Lingui**
+- **Vitest**
+- **Playwright**
+- **Biome**
+- **Docker**
 
 ## Scripts
 
@@ -59,10 +62,3 @@ coding conventions, see [DEVELOPMENT.md](DEVELOPMENT.md).
 | `pnpm dependencies:update` | Automatically upgrade minor/patch versions and refresh lock file |
 | `pnpm docker:ci` | Build CI image, run checks and extract reports |
 
-## Compatibility
-
-Production build targets the `defaults` browserslist query — single modern
-bundle with polyfills injected, no ES5 fallback. IE11 is not supported.
-
-`@types/node` tracks Node 26 for local typings — avoid Node 26-only APIs in
-production code paths, the Docker build runs Node 24 LTS.

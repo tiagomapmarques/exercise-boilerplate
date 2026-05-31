@@ -1,7 +1,8 @@
 # Development guide
 
-Architectural decisions, coding conventions, and tooling configuration. For
-operational instructions, see [README.md](README.md).
+Architectural decisions, coding conventions, and tooling configuration.
+
+For operational instructions, see [README.md](README.md).
 
 ## Project structure
 
@@ -30,14 +31,14 @@ own package at any time.
 
 In practice this means:
 
-- Each directory exposes its API through an `index.ts` barrel export. Consumers
-  import from the directory, not from internal files.
+- Each feature module exposes its API through an `index.ts` barrel export.
+  Consumers import from the module directory, not from internal files.
+  Category directories (`components/`, `containers/`, `providers/`,
+  `utilities/`) never have a barrel — a category-level barrel would bundle
+  unrelated modules together and defeat tree-shaking.
 - Types should always be exported, even if nothing in the project currently
   imports them — it depends only on the API the developer wants to create for
   consumers.
-- Public hooks, functions, and types carry a JSDoc comment describing what they
-  do. Components are the exception — their props type and tests serve as
-  documentation.
 - Everything is a named export — no default exports.
 
 ## Documentation
@@ -79,10 +80,10 @@ packages → internal aliases → relative paths → CSS.
 
 ## Routing
 
-Routes use TanStack Router's file-based routing with automatic code splitting.
-Each route is split across two files: a `.ts` file that owns configuration
-(static data, loaders, search params) and a `.lazy.ts` file that owns the
-component. The Vite plugin handles code splitting automatically.
+Routes use TanStack Router's file-based routing. Each route is split across
+two files: a `.ts` file that owns configuration (static data, loaders, search
+params) and a `.lazy.ts` file that owns the component. The Vite plugin handles
+code splitting automatically.
 
 ```ts
 // src/routes/about.ts — configuration
@@ -103,28 +104,30 @@ manually. The root route (`__root.ts`) renders an `AppShell`, which wraps any
 mandatory global providers and the global layout. Its `getTitle` returns `''`
 as a no-op fallback, never used in practice.
 
-The router is configured with `defaultNotFoundComponent: NotFoundContainer` and
+The router uses `defaultNotFoundComponent: NotFoundContainer` and
 `defaultErrorComponent: UnexpectedErrorContainer` to handle unknown URLs and
-unexpected render/load errors globally.
+unexpected render/load errors globally. It is also configured with
+`defaultPreload: 'intent'`, so routes and their data preload when the user
+shows intent to navigate (hover/focus on a link).
 
-The router is configured with `defaultPreload: 'intent'`, so routes and their
-data preload when the user shows intent to navigate (hover/focus on a link).
+Containers must never import other containers. Each container is imported
+directly by its own route file and nowhere else.
 
 ## Internationalisation
 
 Translations use [Lingui](https://lingui.dev/) with PO files. Supported locales
 are defined in `src/providers/locale/constants.ts`.
 
-**To add a translation string**, use `<Trans>` or `useLingui` in source code,
-then run:
+**To add a translation string**, use `<Trans>` or `useLingui` in the source
+code, then run:
 
 ```sh
 pnpm i18n
 ```
 
-This extracts all strings into the `.po` files and compiles them. Edit the
-extracted entries in `src/locales/{locale}.po`, then run `pnpm i18n` again to
-compile and format the files.
+This extracts all strings in the source code into the `.po` files and formats
+them. Edit the extracted entries in `src/locales/{locale}.po`, then run the
+script again to make sure you did not forget a translation.
 
 Locale detection is automatic and takes the browser language into account. The
 fallback is `en-GB`.
@@ -153,12 +156,13 @@ or state-modifier classes (`bottom`, `linkActive`).
 
 ## State management
 
-There is no centralized state library. State is managed with React context
-providers. Each provider lives under `src/providers/` with its own context,
-hook, and types. Add new providers there if a feature needs shared state.
+There is no centralised state library. State is managed with either React
+context providers or by using `useSyncExternalStore`. Each provider lives under
+`src/providers/` with its own context, hook, and types. Add new providers there
+if a feature needs shared state.
 
-Providers should be self-contained and avoid coupling to other providers. They
-should support multiple instances so they can be nested to provide sub-contexts.
+Providers must not couple to other providers and should support multiple
+instances so they can be nested to provide sub-contexts.
 
 Each provider module follows this file structure:
 
@@ -170,15 +174,12 @@ providers/my-feature/
   index.ts                 Barrel export
 ```
 
-When adding a new provider, also add a simplified testing variant to
-`createWrapper` in `@/testing/libraries.tsx` so it can be injected via the
-`providers` option in `render` and `renderHook`.
-
 ## Code conventions
 
 Variable, parameter, and property names must be fully spelled out — no
 abbreviations, even in short lambdas or callbacks. Industry-standard
-initialisms (`i18n`, `url`, `id`) are fine.
+initialisms or library-specific terms (`i18n`, `url`, `id`, `props`, and
+similar) are fine.
 
 Everything must be defined before its first use in a file. If `main` calls
 `helper`, `helper` appears earlier in the file. This applies to functions,
@@ -186,9 +187,7 @@ variables, and types — do not rely on hoisting.
 
 ## Testing
 
-In watch mode, tests will use a non-deterministic browser. This means every
-time you run the tests in watch mode, a random browser will be selected to run
-the tests in.
+In watch mode, tests will use a non-deterministic browser.
 
 Unexpected `console.log`, `console.warn`, and `console.error` calls cause test
 failures — but only outside watch mode. This keeps CI clean while allowing
@@ -217,15 +216,35 @@ describe('useMyHook', () => { ... }); // avoid
 ```
 
 Use strings only for nested `describe` blocks that describe a scenario or
-behaviour: `describe('when the locale is unknown', ...)`.
+behaviour: `describe('the locale is unknown', ...)`. A string is also
+acceptable for a top-level block that covers a group of related constants
+rather than a single function or hook.
 
 Each `it` block describes a single observable behaviour. Tests within a
 `describe` may assume all preceding tests have passed — write them as a
 sequential feature specification, not independent scenarios.
 
+Tests should read naturally: nested `describe` blocks are prefixed with "when",
+and `it` blocks are read literally:
+
+```ts
+describe(MyComponent, () => {
+  it('displays a header', () => { ... });       // "it displays a header"
+
+  describe('loading', () => {                   // "when loading..."
+    it('displays a skeleton', () => { ... });   // "...it displays a skeleton"
+  });
+});
+```
+
 Avoid mocks. Prefer real implementations and the provider injection described
 below. Only mock when a dependency is non-deterministic or has side effects
 that cannot be fully controlled otherwise.
+
+All mocks are reset before each test — no explicit `mockClear()` needed.
+`vi.fn(impl)` implementations are also cleared. Properly set them in a
+`beforeEach` and clear them in an `afterEach` to keep the environment as
+pristine as possible.
 
 ### Render utilities
 
@@ -258,6 +277,10 @@ renderHook(() => useMyHook(), options); // wrong
 Both return a `providers` field on the result object, which gives access to the
 provider instances (e.g. `providers.router`, `providers.i18n`) for assertions.
 
+When adding a new provider, register a simplified testing variant in
+`createWrapper` in `@/testing/libraries.tsx` so it can be injected via the
+`providers` option in `render` and `renderHook`.
+
 ### ControlledPromise
 
 Use `ControlledPromise` from `@/testing/utilities` to pause async flows
@@ -277,10 +300,9 @@ await promise.reject(); // reject: assert error state
 
 ### End-to-end tests
 
-E2E tests live under `e2e/` and use Playwright directly (not Vitest). They
-run against a production build served on `localhost:8080` — `pnpm test:e2e`
-handles the build and server automatically via `webServer` in
-`playwright.config.mts`.
+E2E tests use Playwright directly (not Vitest). They run against a production
+build served on `localhost:8080` — `pnpm test:e2e` handles the build and
+server automatically via `webServer` in `playwright.config.mts`.
 
 Organise specs by feature area as subdirectories. Each spec file covers a
 user scenario end-to-end — navigation, interactions, and observable outcomes.
@@ -294,15 +316,24 @@ Coverage is enforced at 100% for `src/**`, with the exception of: `routes/`,
 `main.tsx`. All new code must be fully covered or added to the exclusion list
 with justification.
 
+## Compatibility
+
+Production build targets the `defaults` browserslist query — single modern
+bundle with polyfills injected, no ES5 fallback. IE11 is not supported.
+
+`@types/node` tracks Node 26 for local typings — avoid Node 26-only APIs in
+production code paths, the Docker build runs Node 24 LTS.
+
 ## Dependencies
 
-`dependencies` contains everything that contributes to the production build —
-runtime code, bundlers, compilers, plugins, and code generators. `devDependencies`
-is reserved for tooling with zero influence on build output: linters, type
-checkers, test runners, and similar.
+`dependencies` contains everything that contributes to the production build:
+runtime code, bundlers, compilers, plugins, and code generators.
+`devDependencies` is reserved for tooling with zero influence on build output:
+linters, type checkers, test runners, and similar.
 
 This deviates from the common npm convention for libraries, but this is an
-end-project — the split is about audit scope and build machine safety. Keeping
-build tools in `dependencies` ensures they are included in `pnpm audit --prod`
+end-project — the split is about audit scope, build machine safety, and
+transparency over what code may run on the end-user's device. Keeping build
+tools in `dependencies` ensures they are included in `pnpm audit --prod`
 reviews, and prevents `devDependencies` postinstall scripts from running on
 machines that should only produce a production build.

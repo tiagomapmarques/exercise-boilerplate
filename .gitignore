@@ -24,4 +24,5 @@ test-results
 .vscode
 .zed
 .env
+DEVELOPMENT.local.md
 TODO

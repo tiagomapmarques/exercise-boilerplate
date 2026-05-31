@@ -9,9 +9,10 @@ const getDependencyNames = (command) => {
   const names = content
     .split('\n')
     .filter((line) => line.startsWith('   ') && Boolean(line.trim()))
-    .map((line) => line.trim().split(' ')[0]);
+    .map((line) => line.trim().split(' ')[0])
+    .filter((name, index, array) => array.indexOf(name) === index);
 
-  return [...new Set(names)];
+  return names;
 };
 
 const otherArgs = process.argv.slice(2).join(' ');
@@ -23,6 +24,6 @@ const outputBuffer = execSync(`pnpm taze major ${excludeArg} ${otherArgs}`);
 const output =
   outputBuffer.toString().trim().split('\n').length > 1
     ? outputBuffer
-    : 'No dependency updates found';
+    : 'No major dependency updates found';
 
 log(output);

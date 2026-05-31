@@ -1,10 +1,9 @@
-/** biome-ignore-all lint/nursery/noConditionalExpect: Needed to detect unexpected logging in successful tests */
-/** biome-ignore-all lint/style/noRestrictedImports: Needed to avoid import loops and mock leaks */
 /** biome-ignore-all lint/suspicious/noConsole: Needed for mocking console calls */
 
+// biome-ignore lint/style/noRestrictedImports: Needed to avoid import loops and mock leaks
 import { configure } from '@testing-library/react';
 
-import { mockConsole } from '@/testing/utilities';
+import { initialDocumentTitle, mockConsole } from '@/testing/utilities';
 
 import '@/main.css';
 
@@ -18,10 +17,9 @@ configure({
 });
 
 // Reset environment
-const originalDocumentTitle = document.title;
 beforeEach(() => {
   // Document title
-  document.title = originalDocumentTitle;
+  document.title = initialDocumentTitle;
 
   // Local storage
   globalThis.localStorage.clear();

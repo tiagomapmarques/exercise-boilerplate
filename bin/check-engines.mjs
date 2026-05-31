@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-import { exec } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 
 import {
@@ -21,24 +20,11 @@ const nodeVersionFile = `${import.meta.dirname}/../.node-version`;
 
 const errorOnWarnings = process.argv[2] === '--error-on-warnings';
 
-const execAsync = (command) => {
-  return new Promise((resolve) => {
-    exec(command, (_error, stdout) => resolve(stdout));
-  });
-};
-
 const getInternetVersions = async () => {
   const fetchPnpm = async () => {
-    const output = await execAsync('pnpm self-update 9001');
-
-    const latestLine =
-      output
-        .split('\n')
-        .filter((line) => line.includes('latest-'))
-        .pop() || '';
-
-    const latest = latestLine.split(': ').pop() || '';
-
+    const response = await fetch('https://registry.npmjs.org/pnpm');
+    const data = await response.json();
+    const { latest } = data['dist-tags'];
     return { latest, lts: latest };
   };
 

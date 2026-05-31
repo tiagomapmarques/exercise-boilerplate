@@ -39,9 +39,9 @@ export const hasLoggedAnything = () =>
 export const error = (...args) => {
   logCount.error += 1;
   const mappedArgs = args.map((string) => {
-    return string.replaceAll('\n', `\n${redBg('▏FAIL▕')} `);
+    return string.replaceAll('\n', `\n${redBg('[FAIL]')} `);
   });
-  const output = [redBg('▏FAIL▕'), ...mappedArgs].join(' ');
+  const output = [redBg('[FAIL]'), ...mappedArgs].join(' ');
 
   process.stdout.write(`${output}\n`);
 };
@@ -50,9 +50,9 @@ export const error = (...args) => {
 export const warn = (...args) => {
   logCount.warn += 1;
   const mappedArgs = args.map((string) => {
-    return string.replaceAll('\n', `\n${yellowBg('▏WARN▕')} `);
+    return string.replaceAll('\n', `\n${yellowBg('[WARN]')} `);
   });
-  const output = [yellowBg('▏WARN▕'), ...mappedArgs].join(' ');
+  const output = [yellowBg('[WARN]'), ...mappedArgs].join(' ');
 
   process.stdout.write(`${output}\n`);
 };
@@ -61,9 +61,9 @@ export const warn = (...args) => {
 export const info = (...args) => {
   logCount.info += 1;
   const mappedArgs = args.map((string) => {
-    return string.replaceAll('\n', `\n${blueFg('▏INFO▕')} `);
+    return string.replaceAll('\n', `\n${blueFg('[INFO]')} `);
   });
-  const output = [blueFg('▏INFO▕'), ...mappedArgs].join(' ');
+  const output = [blueFg('[INFO]'), ...mappedArgs].join(' ');
 
   process.stdout.write(`${output}\n`);
 };

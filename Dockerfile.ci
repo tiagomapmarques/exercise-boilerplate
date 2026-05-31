@@ -1,6 +1,6 @@
-ARG NODE_VERSION=24.15.0
-ARG PNPM_VERSION=11.0.9
-ARG PLAYWRIGHT_VERSION=1.59.1
+ARG NODE_VERSION=24.16.0
+ARG PNPM_VERSION=11.5.0
+ARG PLAYWRIGHT_VERSION=1.60.0
 
 FROM alpine AS cache
 
@@ -53,4 +53,4 @@ COPY --from=runner /app/coverage /reports/coverage
 COPY --from=runner /app/playwright-report /reports/e2e
 COPY --from=runner /app/test-results /reports/e2e/test-results
 COPY --from=runner /app/licenses.json /reports/licenses.json
-COPY --from=runner /app/licenses.dev.json /reports/licenses.dev.json
+COPY --from=runner /app/licenses.prod.json /reports/licenses.prod.json

@@ -49,5 +49,6 @@ export default defineConfig({
   webServer: {
     command: 'pnpm build && pnpm serve',
     url: 'http://localhost:8080',
+    reuseExistingServer: true,
   },
 });
