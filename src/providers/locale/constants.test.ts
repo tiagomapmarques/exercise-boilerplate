@@ -29,8 +29,8 @@ describe('locale and language maps', () => {
   });
 
   it('defines a valid default locale', () => {
-    expect(fallbackLocale).toBeTruthy();
+    expect(fallbackLocale).toBeDefined();
 
-    expect(locales.includes(fallbackLocale)).toBeTruthy();
+    expect(locales).toContain(fallbackLocale);
   });
 });

@@ -65,7 +65,7 @@ describe(BurgerMenu, () => {
       await userEvent.click(screen.getByRole('button', { name: 'Menu' }));
 
       expect(setOpened).toHaveBeenCalledTimes(1);
-      expect(setOpened.mock.results[0].value).toBeTruthy();
+      expect(setOpened.mock.results[0].value).toBe(true);
 
       setOpened.mockImplementation((fn) => fn(true));
       rerender(<BurgerMenu opened={true} setOpened={setOpened} />);
@@ -73,7 +73,7 @@ describe(BurgerMenu, () => {
       await userEvent.click(screen.getByRole('button', { name: 'Menu' }));
 
       expect(setOpened).toHaveBeenCalledTimes(2);
-      expect(setOpened.mock.results[1].value).toBeFalsy();
+      expect(setOpened.mock.results[1].value).toBe(false);
     });
   });
 });

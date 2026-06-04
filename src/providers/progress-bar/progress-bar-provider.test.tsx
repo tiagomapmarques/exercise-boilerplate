@@ -43,11 +43,11 @@ describe(ProgressBarProvider, () => {
       },
     });
 
-    expect(createNprogress).toHaveBeenCalledTimes(1);
+    expect(createNprogress).toHaveBeenCalledOnce();
 
     rerender(<ProgressBarProvider />);
 
-    expect(createNprogress).toHaveBeenCalledTimes(1);
+    expect(createNprogress).toHaveBeenCalledOnce();
   });
 
   it('cleans up nProgress when unmounting', () => {
@@ -72,7 +72,7 @@ describe(ProgressBarProvider, () => {
 
     unmount();
 
-    expect(nProgress[1].cleanup).toHaveBeenCalledTimes(1);
+    expect(nProgress[1].cleanup).toHaveBeenCalledOnce();
   });
 
   it('works in tandem with `useProgressBar` and `ProgressBar`', () => {
@@ -143,7 +143,7 @@ describe(ProgressBarProvider, () => {
 
     unmount();
 
-    expect(customActions.cleanup).toHaveBeenCalledTimes(1);
+    expect(customActions.cleanup).toHaveBeenCalledOnce();
   });
 
   it('can be used multiple times on a single page', () => {

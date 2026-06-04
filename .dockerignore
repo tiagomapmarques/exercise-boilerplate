@@ -5,6 +5,7 @@ Thumbs.db
 # Node + Install
 node_modules
 node-compile-cache
+.pnpm-store
 licenses.*json
 .tanstack
 *.gen.ts
@@ -24,5 +25,5 @@ test-results
 .vscode
 .zed
 .env
-DEVELOPMENT.local.md
+DEVELOPER.md
 TODO

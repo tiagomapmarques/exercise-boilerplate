@@ -32,13 +32,13 @@ export const LocaleProvider = ({
         },
       );
 
-      if (Object.keys(initialMessages || {}).length === 0) {
+      if (initialLocale) {
+        setI18n(initialI18n);
+      } else {
         loadLocale(initialI18n)
           .then(() => setI18n(initialI18n))
           // biome-ignore lint/suspicious/noConsole: Useful error at runtime
           .catch(console.error);
-      } else {
-        setI18n(initialI18n);
       }
     }
   }, [i18n, initialLocale, initialMessages]);

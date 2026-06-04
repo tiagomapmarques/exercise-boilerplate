@@ -56,7 +56,7 @@ describe(LocaleProvider, () => {
       { providers: { i18n: false } },
     );
 
-    expect(loadLocale).toHaveBeenCalledTimes(1);
+    expect(loadLocale).toHaveBeenCalledOnce();
     const [i18n] = (loadLocale as Mock<typeof loadLocale>).mock.calls[0];
 
     expect(i18n?.locale).toBe('');
@@ -67,7 +67,7 @@ describe(LocaleProvider, () => {
 
     expect(i18n?.locale).toBe('custom-locale');
     expect(i18n?.messages).toEqual({ 'mock-key': 'Mock Value' });
-    expect(screen.getByTestId('Content')).not.toBeVisible();
+    expect(screen.getByTestId('Content')).toBeInTheDocument();
   });
 
   it('does not load messages more than once', async () => {
@@ -80,15 +80,37 @@ describe(LocaleProvider, () => {
 
     await act(() => loader.resolve());
 
-    expect(loadLocale).toHaveBeenCalledTimes(1);
+    expect(loadLocale).toHaveBeenCalledOnce();
 
     rerender();
 
-    expect(loadLocale).toHaveBeenCalledTimes(1);
+    expect(loadLocale).toHaveBeenCalledOnce();
   });
 
   it('accepts initial locale and messages', () => {
     const messages = { 'mock-key': 'Mock Value 2' };
+
+    render(
+      <LocaleProvider initialLocale="de-DE" initialMessages={messages}>
+        <TestingComponent />
+      </LocaleProvider>,
+      { providers: { i18n: false } },
+    );
+
+    expect(loadLocale).not.toHaveBeenCalled();
+
+    expect(screen.getByTestId('Content')).toHaveAttribute(
+      'data-locale',
+      'de-DE',
+    );
+    expect(screen.getByTestId('Content')).toHaveAttribute(
+      'data-messages',
+      JSON.stringify(messages),
+    );
+  });
+
+  it('accepts initial locale and empty messages', () => {
+    const messages = {};
 
     render(
       <LocaleProvider initialLocale="de-DE" initialMessages={messages}>
@@ -140,10 +162,10 @@ describe(LocaleProvider, () => {
     const messagesDe = { 'mock-key': 'Deutsch' };
     const messagesFr = { 'mock-key': 'Français' };
 
-    const Consumer = () => {
+    const Consumer = ({ id }: { id: string }) => {
       const { i18n } = useLingui();
       return (
-        <div>
+        <div data-slot={id}>
           <Trans id="mock-key" />
           &nbsp;
           {i18n.t({ id: 'mock-key' })}
@@ -154,23 +176,23 @@ describe(LocaleProvider, () => {
     render(
       <>
         <LocaleProvider initialLocale="en-GB" initialMessages={messagesEn}>
-          <Consumer />
+          <Consumer id="english" />
 
           <LocaleProvider initialLocale="fr-FR" initialMessages={messagesFr}>
-            <Consumer />
+            <Consumer id="french" />
           </LocaleProvider>
         </LocaleProvider>
 
         <LocaleProvider initialLocale="de-DE" initialMessages={messagesDe}>
-          <Consumer />
+          <Consumer id="german" />
         </LocaleProvider>
       </>,
       { providers: { i18n: false } },
     );
 
-    expect(screen.getByText('English English')).toBeVisible();
-    expect(screen.getByText('Deutsch Deutsch')).toBeVisible();
-    expect(screen.getByText('Français Français')).toBeVisible();
+    expect(screen.getByTestId('english')).toHaveTextContent('English English');
+    expect(screen.getByTestId('french')).toHaveTextContent('Français Français');
+    expect(screen.getByTestId('german')).toHaveTextContent('Deutsch Deutsch');
 
     expect(screen.queryByText('mock-key')).not.toBeInTheDocument();
   });

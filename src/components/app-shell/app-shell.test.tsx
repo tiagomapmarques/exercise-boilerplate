@@ -13,7 +13,6 @@ import { AppShell } from './app-shell';
 describe(AppShell, () => {
   const wrapper = ({ children }: PropsWithChildren) => (
     <>
-      {/** biome-ignore lint/correctness/useUniqueElementIds: ID must match index.html */}
       <div id="global-throbber" />
       {children}
     </>

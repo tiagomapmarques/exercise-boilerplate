@@ -115,7 +115,7 @@ describe(LocalePicker, () => {
       screen.getByRole('menuitem', { name: 'Great Britain English (GB)' }),
     );
 
-    expect(start).toHaveBeenCalledTimes(1);
+    expect(start).toHaveBeenCalledOnce();
 
     // NOTE: Using `findByRole` due to webkit failing the assertion otherwise.
     expect(
@@ -123,7 +123,7 @@ describe(LocalePicker, () => {
     ).toBeVisible();
 
     await waitFor(() => {
-      expect(complete).toHaveBeenCalledTimes(1);
+      expect(complete).toHaveBeenCalledOnce();
     });
   });
 

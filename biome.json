@@ -8,6 +8,7 @@
       "!**/.DS_Store",
       "!**/node_modules",
       "!**/node-compile-cache",
+      "!**/.pnpm-store",
       "!**/licenses.*json",
       "!**/.tanstack",
       "!**/*.gen.ts",
@@ -23,7 +24,7 @@
       "!**/.vscode",
       "!**/.zed",
       "!**/.env",
-      "!**/DEVELOPMENT.local.md",
+      "!**/DEVELOPER.md",
       "!**/TODO"
     ]
   },
@@ -412,6 +413,9 @@
         "rules": {
           "style": {
             "noMagicNumbers": "off"
+          },
+          "correctness": {
+            "useUniqueElementIds": "off"
           },
           "nursery": {
             "noComponentHookFactories": "off",

@@ -18,7 +18,6 @@ describe(useGlobalThrobber, () => {
   describe('with div#global-throbber', () => {
     const wrapper = ({ children }: PropsWithChildren) => (
       <>
-        {/** biome-ignore lint/correctness/useUniqueElementIds: ID must match index.html */}
         <div
           id="global-throbber"
           data-slot="GlobalThrobber"

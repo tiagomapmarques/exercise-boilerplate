@@ -70,8 +70,8 @@ export const mockObjectProperty = <
 };
 
 /**
- * Mocks the `console.log`, `console.warn` or `console.error` function before
- * a test and resets it after.
+ * Mocks the `console.log`, `console.warn` or `console.error` function before a
+ * test and resets it after.
  */
 export const mockConsole = <Type extends 'log' | 'warn' | 'error'>(
   type: Type,

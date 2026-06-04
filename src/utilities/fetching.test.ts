@@ -10,8 +10,7 @@ describe(FetchError, () => {
     expect(fetchError.message).toBe(error.message);
     expect(fetchError.name).toBe(error.name);
 
-    expect(fetchError.stack).toEqual(expect.any(String));
-    expect(fetchError.stack).toBeTruthy();
+    expect(fetchError.stack).toMatch(/.+/u);
   });
 
   it('includes a status', () => {

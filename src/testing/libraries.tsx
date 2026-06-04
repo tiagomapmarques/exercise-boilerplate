@@ -269,8 +269,8 @@ export const render = (
 };
 
 /**
- * Wrapper on the `renderHook` function of `@testing-library/react`. It takes
- * in a `providers` object to auto-wrap the component in the selected app
+ * Wrapper on the `renderHook` function of `@testing-library/react`. It takes in
+ * a `providers` object to auto-wrap the component in the selected app
  * providers. By default, it does not add any app providers.
  */
 export const renderHook = <HookReturn, HookProps>(
