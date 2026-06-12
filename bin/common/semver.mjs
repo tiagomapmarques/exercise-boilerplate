@@ -1,68 +1,57 @@
 import { blueFg, redFg, yellowFg } from './logs.mjs';
 
-const semverSize = 3;
+/** Parses a semver string, capturing any trailing `-prerelease`/`+build` info. */
+export const parseSemver = (semver) => {
+  const [major = 0, minor = 0, patch = 0] = semver
+    .split('.')
+    .map((segment) => Number.parseInt(segment, 10) || 0);
 
-/** Parses a stringified semver into its major, minor and patch versions. */
-export const parseSemver = (semver, round, digits = 6) => {
-  const prefix = [...new Array(digits)].reduce((index) => `${index}0`, '');
-  const exponentialMajorOrDefault = round === 'major' ? 2 : 0;
-  const exponential = round === 'minor' ? 1 : exponentialMajorOrDefault;
+  const reassembled = `${major}.${minor}.${patch}`;
+  const patchInfo = semver.startsWith(reassembled)
+    ? semver.slice(reassembled.length)
+    : '';
 
-  const semverSplit = semver.split('.').map((value) => value.split('-')[0]);
-  const semverParsed = [...new Array(semverSize)].map(
-    (_, index) => `${semverSplit[index] || 0}`,
-  );
-
-  const number =
-    Number(
-      semverParsed
-        .map((value = '0') => `${prefix}${value}`.slice(-digits))
-        .join(''),
-    ) /
-    10 ** (digits * exponential);
-
-  const safeNumber = `${prefix}${number}`;
-
-  const major = Number(safeNumber.slice(0, -digits * 2));
-  const minor = Number(safeNumber.slice(-digits * 2).slice(0, digits));
-  const patch = Number(safeNumber.slice(-digits));
-
-  return { number, major, minor, patch };
+  return { major, minor, patch, patchInfo };
 };
 
-/** Transforms a parsed semver to a colored string. */
-const semverToLog = (
-  { major, minor, patch },
-  highlight,
-  highlightEnd = false,
-) => {
-  if (highlight === 'major') {
-    const suffix = `.${minor}.${patch}`;
-    return `${redFg(major)}${highlightEnd ? redFg(suffix) : suffix}`;
+/** Compares two parsed semvers, returning a negative, zero, or positive number. */
+export const compareSemver = (left, right) => {
+  if (left.major !== right.major) {
+    return left.major - right.major;
   }
-
-  if (highlight === 'minor') {
-    const suffix = `.${patch}`;
-    return `${major}.${yellowFg(minor)}${highlightEnd ? yellowFg(suffix) : suffix}`;
+  if (left.minor !== right.minor) {
+    return left.minor - right.minor;
   }
-
-  if (highlight === 'patch') {
-    return `${major}.${minor}.${blueFg(patch)}`;
+  if (left.patch !== right.patch) {
+    return left.patch - right.patch;
   }
-
-  return `${major}.${minor}.${patch}`;
+  if (left.patchInfo === right.patchInfo) {
+    return 0;
+  }
+  if (left.patchInfo === '') {
+    return 1;
+  }
+  if (right.patchInfo === '') {
+    return -1;
+  }
+  return left.patchInfo > right.patchInfo ? 1 : -1;
 };
 
-/** Compares 2 parsed semver and returns the first one highlighted if its is an updated version. */
+/** Renders `latest` with the highlighted segment that exceeds `current`. */
 export const highlightSemver = (latest, current) => {
+  const { major, minor, patch, patchInfo } = latest;
+
   if (latest.major > current.major) {
-    return semverToLog(latest, 'major');
+    return `${redFg(major)}.${minor}.${patch}${patchInfo}`;
   }
   if (latest.minor > current.minor) {
-    return semverToLog(latest, 'minor');
+    return `${major}.${yellowFg(minor)}.${patch}${patchInfo}`;
   }
   if (latest.patch > current.patch) {
-    return semverToLog(latest, 'patch');
+    return `${major}.${minor}.${blueFg(patch)}${patchInfo}`;
   }
-  return `${latest.major}.${latest.minor}.${latest.patch}`;
+  if (latest.patchInfo !== current.patchInfo) {
+    return `${major}.${minor}.${patch}${blueFg(patchInfo)}`;
+  }
+  return `${major}.${minor}.${patch}${patchInfo}`;
 };

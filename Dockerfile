@@ -1,7 +1,8 @@
 ARG NODE_VERSION=24.16.0
-ARG PNPM_VERSION=11.5.1
+ARG PNPM_VERSION=11.6.0
+ARG ALPINE_VERSION=3.24.0
 
-FROM alpine AS cache
+FROM alpine:${ALPINE_VERSION} AS cache
 
 RUN apk add --no-cache jq
 

@@ -1,76 +1,45 @@
-/** Adds red to the background of the text */
+/** Wraps text with a red background. */
 export const redBg = (string) => `\x1b[41m${string}\x1b[0m`;
 
-/** Adds yellow to the background of the text */
+/** Wraps text with a yellow background. */
 export const yellowBg = (string) => `\x1b[43m${string}\x1b[0m`;
 
-/** Adds blue to the background of the text */
+/** Wraps text with a blue background. */
 export const blueBg = (string) => `\x1b[44m${string}\x1b[0m`;
 
-/** Adds red to the foreground of the text */
+/** Wraps text with red foreground. */
 export const redFg = (string) => `\x1b[31m${string}\x1b[0m`;
 
-/** Adds yellow to the foreground of the text */
+/** Wraps text with yellow foreground. */
 export const yellowFg = (string) => `\x1b[33m${string}\x1b[0m`;
 
-/** Adds blue to the foreground of the text */
+/** Wraps text with blue foreground. */
 export const blueFg = (string) => `\x1b[34m${string}\x1b[0m`;
 
-const logCount = { error: 0, warn: 0, info: 0, log: 0 };
+const writeLine = (stream, prefix, args) => {
+  const body = args
+    .map((string) => string.replaceAll('\n', `\n${prefix}`))
+    .join(' ');
 
-/** Gets a copy of the call counters for `error`, `warn` and `log` functions. */
-export const getLogCounts = () => ({ ...logCount });
+  stream.write(`${prefix}${body}\n`);
+};
 
-/** Gets whether the `error` function has been called. */
-export const hasLoggedError = () => logCount.error > 0;
-
-/** Gets whether the `error` or `warn` functions have been called. */
-export const hasLoggedWarnOrError = () => hasLoggedError() || logCount.warn > 0;
-
-/** Gets whether the `error`, `warn` or `info` functions have been called. */
-export const hasLoggedInfoWarnOrError = () =>
-  hasLoggedWarnOrError() || logCount.info > 0;
-
-/** Gets whether any of the log functions have been called. */
-export const hasLoggedAnything = () =>
-  hasLoggedInfoWarnOrError() || logCount.log > 0;
-
-/** Logs error to the terminal. */
+/** Logs an error to the terminal with a red `[FAIL]` prefix. */
 export const error = (...args) => {
-  logCount.error += 1;
-  const mappedArgs = args.map((string) => {
-    return string.replaceAll('\n', `\n${redBg('[FAIL]')} `);
-  });
-  const output = [redBg('[FAIL]'), ...mappedArgs].join(' ');
-
-  process.stdout.write(`${output}\n`);
+  writeLine(process.stderr, `${redBg('[FAIL]')} `, args);
 };
 
-/** Logs warning to the terminal. */
+/** Logs a warning to the terminal with a yellow `[WARN]` prefix. */
 export const warn = (...args) => {
-  logCount.warn += 1;
-  const mappedArgs = args.map((string) => {
-    return string.replaceAll('\n', `\n${yellowBg('[WARN]')} `);
-  });
-  const output = [yellowBg('[WARN]'), ...mappedArgs].join(' ');
-
-  process.stdout.write(`${output}\n`);
+  writeLine(process.stderr, `${yellowBg('[WARN]')} `, args);
 };
 
-/** Logs information to the terminal. */
+/** Logs informational output with a blue `[INFO]` prefix. */
 export const info = (...args) => {
-  logCount.info += 1;
-  const mappedArgs = args.map((string) => {
-    return string.replaceAll('\n', `\n${blueFg('[INFO]')} `);
-  });
-  const output = [blueFg('[INFO]'), ...mappedArgs].join(' ');
-
-  process.stdout.write(`${output}\n`);
+  writeLine(process.stdout, `${blueFg('[INFO]')} `, args);
 };
 
-/** Logs to the terminal. */
+/** Logs plain output without a prefix. */
 export const log = (...args) => {
-  logCount.log += 1;
-
-  process.stdout.write(`${args.join(' ')}\n`);
+  writeLine(process.stdout, '', args);
 };
