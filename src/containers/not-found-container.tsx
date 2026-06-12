@@ -16,7 +16,7 @@ export const NotFoundContainer = () => {
       </Text>
 
       <Button onClick={() => navigate({ to: '/' })}>
-        <Trans id="actions.go-to-start" />
+        <Trans id="actions.navigation.go-to-start" />
       </Button>
     </Stack>
   );

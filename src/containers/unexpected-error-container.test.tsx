@@ -28,14 +28,16 @@ describe(UnexpectedErrorContainer, () => {
       providers: { router: { initialEntries: ['/initial-route'] } },
     });
 
-    act(() => providers.router?.history.push('/'));
+    act(() => providers.router?.instance.history.push('/'));
 
-    expect(providers.router?.latestLocation.pathname).toBe('/');
+    expect(providers.router?.instance.latestLocation.pathname).toBe('/');
 
     await userEvent.click(
       await screen.findByRole('button', { name: 'Go back' }),
     );
 
-    expect(providers.router?.latestLocation.pathname).toBe('/initial-route');
+    expect(providers.router?.instance.latestLocation.pathname).toBe(
+      '/initial-route',
+    );
   });
 });

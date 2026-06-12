@@ -21,7 +21,7 @@ describe(useDocumentHead, () => {
       },
     });
 
-    await providers.waitForRouter?.();
+    await providers.router?.waitForReady();
 
     expect(document.title).toBe('Exercise boilerplate');
   });
@@ -34,7 +34,7 @@ describe(useDocumentHead, () => {
       },
     });
 
-    await providers.waitForRouter?.();
+    await providers.router?.waitForReady();
 
     expect(document.documentElement.lang).toBe('de-DE');
   });
@@ -52,7 +52,7 @@ describe(useDocumentHead, () => {
       },
     });
 
-    await providers.waitForRouter?.();
+    await providers.router?.waitForReady();
 
     expect(document.title).toBe(initialDocumentTitle);
     expect(document.documentElement.lang).toBe(fallbackLocale);
@@ -68,7 +68,7 @@ describe(useDocumentHead, () => {
       },
     });
 
-    await providers.waitForRouter?.();
+    await providers.router?.waitForReady();
 
     expect(document.title).toBe('Exercise boilerplate - Custom page title');
   });
@@ -84,7 +84,7 @@ describe(useDocumentHead, () => {
       },
     });
 
-    await providers.waitForRouter?.();
+    await providers.router?.waitForReady();
 
     expect(documentTitle.setter).not.toHaveBeenCalled();
   });
@@ -100,7 +100,7 @@ describe(useDocumentHead, () => {
       },
     });
 
-    await providers.waitForRouter?.();
+    await providers.router?.waitForReady();
 
     expect(documentLang.setter).not.toHaveBeenCalled();
   });
@@ -110,7 +110,7 @@ describe(useDocumentHead, () => {
       locale: fallbackLocale,
       messages: {
         [fallbackLocale]: {
-          'titles.app': 'Exercise boilerplate',
+          'labels.app.name': 'Exercise boilerplate',
           'test.greeting': 'Hello, {name}!',
         },
       },
@@ -127,7 +127,7 @@ describe(useDocumentHead, () => {
       },
     });
 
-    await providers.waitForRouter?.();
+    await providers.router?.waitForReady();
 
     expect(document.title).toBe('Exercise boilerplate - Hello, World!');
   });

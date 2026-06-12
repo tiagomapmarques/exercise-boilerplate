@@ -4,6 +4,7 @@ export class FetchError extends Error {
 
   public constructor(message: string, status: number) {
     super(message);
+    this.name = 'FetchError';
     this.status = status;
   }
 }

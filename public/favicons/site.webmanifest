@@ -1,6 +1,9 @@
 {
   "name": "Exercise boilerplate",
   "short_name": "EB",
+  "description": "A production-ready React application template.",
+  "start_url": "/",
+  "scope": "/",
   "icons": [
     {
       "src": "/favicons/android-chrome-192x192.png",

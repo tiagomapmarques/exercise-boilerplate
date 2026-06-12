@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"POT-Creation-Date: 2025-03-23 01:47+0100\n"
+"POT-Creation-Date: 2025-03-23 13:44+0100\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -13,14 +13,23 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
-msgid "actions.go-back"
+msgid "actions.navigation.go-back"
 msgstr "Go back"
 
-msgid "actions.go-to-start"
+msgid "actions.navigation.go-to-start"
 msgstr "Go to start"
 
-msgid "messages.loading"
-msgstr "Loading"
+msgid "labels.app.name"
+msgstr "Exercise boilerplate"
+
+msgid "labels.color-scheme.dark-mode"
+msgstr "Dark mode"
+
+msgid "labels.navigation.menu"
+msgstr "Menu"
+
+msgid "messages.navigation.loading"
+msgstr "Loading page"
 
 msgid "pages.about.license"
 msgstr "License: {license}"
@@ -45,12 +54,3 @@ msgstr "Oops… something went wrong on our end"
 
 msgid "pages.unexpected-error.title"
 msgstr "Unexpected error"
-
-msgid "titles.app"
-msgstr "Exercise boilerplate"
-
-msgid "titles.dark-mode"
-msgstr "Dark mode"
-
-msgid "titles.menu"
-msgstr "Menu"

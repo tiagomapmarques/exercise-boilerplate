@@ -90,22 +90,23 @@ const createRouterRenderProvider = (
       defaultNotFoundComponent: () => <p>Not Found</p>,
     });
 
-  /** Function to wait for the router to load and display the correct page. */
-  const waitForRouter = async () => {
+  /** Function to wait for the router to finish loading the current route. */
+  const waitForReady = async () => {
     await act(() => router.latestLoadPromise);
   };
 
-  function RouterRenderProvider({ children }: PropsWithChildren) {
-    return (
-      <RouterProvider
-        router={router}
-        defaultComponent={() => children}
-        {...parsedProps}
-      />
-    );
-  }
+  const RouterRenderProvider = ({ children }: PropsWithChildren) => (
+    <RouterProvider
+      router={router}
+      defaultComponent={() => children}
+      {...parsedProps}
+    />
+  );
 
-  return { provider: RouterRenderProvider, result: { router, waitForRouter } };
+  return {
+    provider: RouterRenderProvider,
+    result: { router: { instance: router, waitForReady } },
+  };
 };
 
 type MantineProps = Omit<MantineProviderProps, 'children'>;
@@ -119,11 +120,11 @@ const createMantineRenderProvider = (
 
   const parsedProps = typeof props === 'object' ? props : {};
 
-  function MantineRenderProvider({ children }: PropsWithChildren) {
-    return <MantineProvider {...parsedProps}>{children}</MantineProvider>;
-  }
+  const MantineRenderProvider = ({ children }: PropsWithChildren) => (
+    <MantineProvider {...parsedProps}>{children}</MantineProvider>
+  );
 
-  return { provider: MantineRenderProvider, result: undefined };
+  return { provider: MantineRenderProvider, result: {} };
 };
 
 type I18nProps = Partial<Omit<I18nProviderProps, 'children'>> & {
@@ -143,13 +144,11 @@ const createI18nRenderProvider = (props: I18nProps | boolean | undefined) => {
 
   const i18n = customI18n || setupI18n({ locale, messages });
 
-  function I18nRenderProvider({ children }: PropsWithChildren) {
-    return (
-      <I18nProvider i18n={i18n} {...parsedProps}>
-        {children}
-      </I18nProvider>
-    );
-  }
+  const I18nRenderProvider = ({ children }: PropsWithChildren) => (
+    <I18nProvider i18n={i18n} {...parsedProps}>
+      {children}
+    </I18nProvider>
+  );
 
   return { provider: I18nRenderProvider, result: { i18n } };
 };
@@ -175,7 +174,7 @@ const createProgressBarRenderProvider = (
   const { cleanup, ...actions } = { ...nProgressActions, ...customActions };
   const value = { store, actions, cleanup };
 
-  function ProgressBarRenderProvider({ children }: PropsWithChildren) {
+  const ProgressBarRenderProvider = ({ children }: PropsWithChildren) => {
     useEffect(() => {
       return () => originalCleanup();
     }, []);
@@ -185,7 +184,7 @@ const createProgressBarRenderProvider = (
         {children}
       </ProgressBarContext.Provider>
     );
-  }
+  };
 
   return {
     provider: ProgressBarRenderProvider,

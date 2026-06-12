@@ -16,7 +16,7 @@ export const UnexpectedErrorContainer = () => {
       </Text>
 
       <Button onClick={() => router.history.back()}>
-        <Trans id="actions.go-back" />
+        <Trans id="actions.navigation.go-back" />
       </Button>
     </Stack>
   );

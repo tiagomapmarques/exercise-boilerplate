@@ -7,8 +7,8 @@ describe(FetchError, () => {
     const fetchError = new FetchError(message, 500);
 
     expect(fetchError).instanceOf(Error);
+    expect(fetchError.name).toBe('FetchError');
     expect(fetchError.message).toBe(error.message);
-    expect(fetchError.name).toBe(error.name);
 
     expect(fetchError.stack).toMatch(/.+/u);
   });

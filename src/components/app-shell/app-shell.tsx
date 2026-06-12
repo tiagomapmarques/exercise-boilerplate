@@ -1,6 +1,10 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useLingui } from '@lingui/react';
-import { AppShell as MantineAppShell, MantineProvider } from '@mantine/core';
+import {
+  createTheme,
+  AppShell as MantineAppShell,
+  MantineProvider,
+} from '@mantine/core';
 import { Outlet, useRouter } from '@tanstack/react-router';
 
 import { LocaleProvider } from '@/providers/locale';
@@ -12,11 +16,13 @@ import {
 import { BurgerMenu } from '@/components/burger-menu';
 import { DevTools } from '@/components/dev-tools';
 import { Navigation } from '@/components/navigation';
-import { useDocumentHead, useGlobalThrobber } from '@/services/global';
-import { theme } from '@/theme';
+import { useDocumentHead, useDocumentThrobber } from '@/services/document';
+
+const theme = createTheme({});
 
 const AppContent = () => {
   useDocumentHead();
+  useDocumentThrobber();
   const router = useRouter();
   const { i18n } = useLingui();
   const { start, complete } = useProgressBar();
@@ -36,7 +42,7 @@ const AppContent = () => {
 
   return (
     <>
-      <ProgressBar label={i18n.t({ id: 'messages.loading' })} />
+      <ProgressBar label={i18n.t({ id: 'messages.navigation.loading' })} />
 
       <Outlet />
 
@@ -46,7 +52,6 @@ const AppContent = () => {
 };
 
 export const AppShell = () => {
-  useGlobalThrobber();
   const router = useRouter();
 
   const [opened, setOpened] = useState(false);

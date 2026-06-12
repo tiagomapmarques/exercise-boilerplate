@@ -23,7 +23,6 @@ WORKDIR /app
 
 # Install dependencies
 COPY --from=cache /cache/package.json /app
-COPY ./.npm* /app
 COPY ./pnpm-* /app
 RUN pnpm install --ignore-scripts --prod
 
@@ -36,7 +35,11 @@ COPY . /app
 # in the previous RUN command and prevent potentially dangerous code to run.
 RUN pnpm install --ignore-scripts --prod
 RUN pnpm build
+RUN chown -R node:node /app
 
 # Serve application
+USER node
 EXPOSE 8080
+HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 \
+  CMD wget -qO- http://localhost:8080/health || exit 1
 CMD ["pnpm", "serve"]

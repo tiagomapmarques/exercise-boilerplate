@@ -15,11 +15,14 @@ export const LocalePicker = () => {
   const { start, complete } = useProgressBar();
   const [locale, setLocale, preloadLocale] = useLocale();
   const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleClick = async (newLocale: Locale) => {
+    setLoading(true);
     start();
     await setLocale(newLocale);
     complete();
+    setLoading(false);
   };
 
   return (
@@ -35,6 +38,7 @@ export const LocalePicker = () => {
         <Button
           variant="default"
           justify="space-between"
+          disabled={loading}
           leftSection={<CountryFlag locale={locale} />}
           rightSection={<ChevronIcon icon={open ? 'up' : 'down'} />}
         >
@@ -48,12 +52,8 @@ export const LocalePicker = () => {
             key={`LocalePicker-Dropdown-Item-${supportedLocale}`}
             leftSection={<CountryFlag locale={supportedLocale} />}
             onClick={() => handleClick(supportedLocale)}
-            onMouseOver={() => {
-              preloadLocale(supportedLocale);
-            }}
-            onFocus={() => {
-              preloadLocale(supportedLocale);
-            }}
+            onMouseEnter={() => preloadLocale(supportedLocale)}
+            onFocus={() => preloadLocale(supportedLocale)}
           >
             {localeMetadata[supportedLocale].label}
           </Menu.Item>

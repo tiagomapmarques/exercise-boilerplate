@@ -33,7 +33,7 @@ export const Environment = () => {
 
       <SimpleGrid spacing="md" className={classes.grid}>
         {environment.map(([key, value]) => (
-          <Box key={`Environment-${key}`}>
+          <Box key={`Environment-SimpleGrid-${key}`}>
             <Group justify="space-between">
               <Text truncate size="sm">
                 {key}

@@ -83,7 +83,8 @@ describe(ProgressBarProvider, () => {
           <ProgressBar label="Mock label" />
           <div
             data-slot="Content"
-            data-keys={Object.keys(progressBar).length}
+            data-start={typeof progressBar.start}
+            data-complete={typeof progressBar.complete}
           />
         </>
       );
@@ -96,7 +97,8 @@ describe(ProgressBarProvider, () => {
       { providers: { i18n: false } },
     );
 
-    expect(screen.getByTestId('Content').dataset.keys).toEqual('7');
+    expect(screen.getByTestId('Content').dataset.start).toBe('function');
+    expect(screen.getByTestId('Content').dataset.complete).toBe('function');
     expect(
       screen.getByRole('progressbar', { name: 'Mock label' }),
     ).not.toBeVisible();

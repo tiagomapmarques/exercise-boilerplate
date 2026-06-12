@@ -1,6 +1,8 @@
 import { createNprogress } from '@mantine/nprogress';
 
 import {
+  act,
+  ControlledPromise,
   fireEvent,
   type Mock,
   render,
@@ -19,7 +21,7 @@ vi.mock('@/providers/locale/use-locale', async (importActual) => {
     ...original,
     useLocale: vi.fn(() => {
       const result = original.useLocale();
-      return [result[0], result[1], vi.fn(result[2])];
+      return [result[0], vi.fn(result[1]), vi.fn(result[2])];
     }),
   };
 });
@@ -125,6 +127,37 @@ describe(LocalePicker, () => {
     await waitFor(() => {
       expect(complete).toHaveBeenCalledOnce();
     });
+  });
+
+  it('disables the button while changing locale', async () => {
+    const promise = new ControlledPromise();
+
+    render(<LocalePicker />, {
+      providers: { progressBar: true },
+    });
+
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Great Britain English (GB)' }),
+    );
+
+    // NOTE: Using `findByRole` due to webkit failing the assertion otherwise.
+    expect(await screen.findByRole('menu')).toBeVisible();
+
+    useLocaleRefs.setLocale.mockImplementation(() => promise.wait());
+
+    await userEvent.click(
+      screen.getByRole('menuitem', { name: 'France Français (FR)' }),
+    );
+
+    expect(
+      screen.getByRole('button', { name: 'Great Britain English (GB)' }),
+    ).toBeDisabled();
+
+    await act(() => promise.resolve());
+
+    expect(
+      screen.getByRole('button', { name: 'Great Britain English (GB)' }),
+    ).not.toBeDisabled();
   });
 
   it('preloads locale on hover', async () => {

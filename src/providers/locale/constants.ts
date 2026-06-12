@@ -1,12 +1,3 @@
-/** Maps Languages to their default Locales. */
-export const languageMap = {
-  en: 'en-GB',
-  fr: 'fr-FR',
-  de: 'de-DE',
-  es: 'es-ES',
-  it: 'it-IT',
-} as const;
-
 /** Maps each locale to its display label, country name, and flag code. */
 export const localeMetadata = {
   'en-GB': { label: 'English (GB)', country: 'Great Britain', code: 'GB' },
@@ -22,12 +13,6 @@ export type Locale = keyof typeof localeMetadata;
 /** List of supported locales. */
 export const locales = Object.keys(localeMetadata) as Locale[];
 
-/** Supported language. */
-export type Language = keyof typeof languageMap;
-
-/** List of supported languages. */
-export const languages = Object.keys(languageMap) as Language[];
-
 /** Supported country. */
 export type Country = (typeof localeMetadata)[Locale]['code'];
 
@@ -35,6 +20,21 @@ export type Country = (typeof localeMetadata)[Locale]['code'];
 export const countries = Object.values(localeMetadata).map(
   ({ code }) => code,
 ) as Country[];
+
+/** Maps Languages to their default Locales. */
+export const languageMap = {
+  en: 'en-GB',
+  fr: 'fr-FR',
+  de: 'de-DE',
+  es: 'es-ES',
+  it: 'it-IT',
+} as const satisfies Record<string, Locale>;
+
+/** Supported language. */
+export type Language = keyof typeof languageMap;
+
+/** List of supported languages. */
+export const languages = Object.keys(languageMap) as Language[];
 
 /** Fallback locale for the app. */
 export const fallbackLocale = 'en-GB' satisfies Locale;
