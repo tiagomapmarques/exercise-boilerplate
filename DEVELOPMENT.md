@@ -50,7 +50,8 @@ the attribute.
 
 Keep comments to a single sentence — the name and a short description should be
 enough to fully understand it. Documentation describes what code does, not where
-it is used.
+it is used. End JSDoc blocks and multi-line `//` runs with a full stop;
+single-line `//` comments stay unpunctuated.
 
 Markdown documentation files and multi-line code comments use a maximum line
 length of 80 characters. Fill lines to the limit - break at the latest word
@@ -329,8 +330,12 @@ with justification.
 Production build targets the `defaults` browserslist query — single modern
 bundle with polyfills injected, no ES5 fallback. IE11 is not supported.
 
-`@types/node` tracks Node 26 for local typings — avoid Node 26-only APIs in
-production code paths, the Docker build runs Node 24 LTS.
+The project's default Node version should always be LTS for stability and
+security. However, the project should also support the latest version of Node in
+order to make sure it is compatible with future versions of Node — hence the two
+Node versions listed in the `package.json` file (LTS and latest). Note that
+latest-only APIs should be avoided and that the `@types/node` does not always
+neatly track the latest Node version available.
 
 ## Dependencies
 

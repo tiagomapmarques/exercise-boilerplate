@@ -95,7 +95,7 @@ const createRouterRenderProvider = (
     await act(() => router.latestLoadPromise);
   };
 
-  function RouterRenderProvider({ children }: PropsWithChildren) {
+  const RouterRenderProvider = ({ children }: PropsWithChildren) => {
     return (
       <RouterProvider
         router={router}
@@ -103,7 +103,7 @@ const createRouterRenderProvider = (
         {...parsedProps}
       />
     );
-  }
+  };
 
   return { provider: RouterRenderProvider, result: { router, waitForRouter } };
 };
@@ -119,9 +119,9 @@ const createMantineRenderProvider = (
 
   const parsedProps = typeof props === 'object' ? props : {};
 
-  function MantineRenderProvider({ children }: PropsWithChildren) {
+  const MantineRenderProvider = ({ children }: PropsWithChildren) => {
     return <MantineProvider {...parsedProps}>{children}</MantineProvider>;
-  }
+  };
 
   return { provider: MantineRenderProvider, result: undefined };
 };
@@ -143,13 +143,13 @@ const createI18nRenderProvider = (props: I18nProps | boolean | undefined) => {
 
   const i18n = customI18n || setupI18n({ locale, messages });
 
-  function I18nRenderProvider({ children }: PropsWithChildren) {
+  const I18nRenderProvider = ({ children }: PropsWithChildren) => {
     return (
       <I18nProvider i18n={i18n} {...parsedProps}>
         {children}
       </I18nProvider>
     );
-  }
+  };
 
   return { provider: I18nRenderProvider, result: { i18n } };
 };
@@ -175,7 +175,7 @@ const createProgressBarRenderProvider = (
   const { cleanup, ...actions } = { ...nProgressActions, ...customActions };
   const value = { store, actions, cleanup };
 
-  function ProgressBarRenderProvider({ children }: PropsWithChildren) {
+  const ProgressBarRenderProvider = ({ children }: PropsWithChildren) => {
     useEffect(() => {
       return () => originalCleanup();
     }, []);
@@ -185,7 +185,7 @@ const createProgressBarRenderProvider = (
         {children}
       </ProgressBarContext.Provider>
     );
-  }
+  };
 
   return {
     provider: ProgressBarRenderProvider,

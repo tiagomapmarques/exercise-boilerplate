@@ -1,170 +1,265 @@
 #!/usr/bin/env node
+import { exec as execCallback } from 'node:child_process';
 import { readFileSync } from 'node:fs';
+import { promisify } from 'node:util';
 
+import { error, info, log, redBg, warn } from './common/logs.mjs';
 import {
-  error,
-  hasLoggedError,
-  hasLoggedInfoWarnOrError,
-  hasLoggedWarnOrError,
-  info,
-  log,
-  redBg,
-  warn,
-} from './common/logs.mjs';
-import { highlightSemver, parseSemver } from './common/semver.mjs';
+  compareSemver,
+  highlightSemver,
+  parseSemver,
+  removePatch,
+} from './common/semver.mjs';
 
-const packageJsonFile = `${import.meta.dirname}/../package.json`;
-const dockerFile = `${import.meta.dirname}/../Dockerfile`;
-const dockerFileCi = `${import.meta.dirname}/../Dockerfile.ci`;
-const nodeVersionFile = `${import.meta.dirname}/../.node-version`;
+const execPromise = promisify(execCallback);
 
-const errorOnWarnings = process.argv[2] === '--error-on-warnings';
+const projectRoot = `${import.meta.dirname}/..`;
+const errorOnWarnings = process.argv.includes('--error-on-warnings');
+const fetchTimeout = 5000;
+const alpineStableTagPattern = /^\d+\.\d+\.\d+$/u;
 
-const getInternetVersions = async () => {
-  const fetchPnpm = async () => {
-    const response = await fetch('https://registry.npmjs.org/pnpm');
-    const data = await response.json();
-    const { latest } = data['dist-tags'];
-    return { latest, lts: latest };
-  };
-
-  const fetchNode = async () => {
-    const response = await fetch(
-      'https://nodejs.org/download/release/index.json',
-    );
-    const data = await response.json();
-    return {
-      latest: data.find((item) => !item.lts)?.version.slice(1),
-      lts: data.find((item) => item.lts)?.version.slice(1),
-    };
-  };
-
-  const [node, pnpm] = await Promise.all([fetchNode(), fetchPnpm()]);
-
-  return { node, pnpm };
+const fetchJson = async (url) => {
+  const response = await fetch(url, {
+    signal: AbortSignal.timeout(fetchTimeout),
+  });
+  if (!response.ok) {
+    throw new Error(`HTTP ${response.status} ${url}`);
+  }
+  return response.json();
 };
 
-const getLocalVersions = () => {
-  const semverPrefix = /(?<prefix>~|\^)/gu;
-
-  const { engines, devDependencies } = JSON.parse(
-    readFileSync(packageJsonFile).toString(),
+const fetchNodeRelease = async () => {
+  const releases = await fetchJson(
+    'https://nodejs.org/download/release/index.json',
   );
 
-  const [latestNode, ltsNode] = engines.node
-    .replaceAll(semverPrefix, '')
-    .split('||')
-    .map((version) => version.trim());
+  return {
+    latest: releases.find((release) => !release.lts)?.version.slice(1),
+    lts: releases.find((release) => release.lts)?.version.slice(1),
+  };
+};
 
-  const [latestPnpm, ltsPnpm] = engines.pnpm
-    .replaceAll(semverPrefix, '')
-    .split('||')
-    .map((version) => version.trim());
+const fetchPnpmRelease = async () => {
+  const { stdout } = await execPromise('pnpm config get registry');
+  const registry = stdout.trim();
+  const { 'dist-tags': distTags } = await fetchJson(`${registry}/pnpm`);
 
-  const latestPlaywright = devDependencies.playwright.replaceAll(
-    semverPrefix,
+  return distTags.latest;
+};
+
+const fetchAlpineRelease = async () => {
+  const { results } = await fetchJson(
+    'https://registry.hub.docker.com/v2/repositories/library/alpine/tags?page_size=100',
+  );
+  const versions = results
+    .map((tag) => tag.name)
+    .filter((name) => alpineStableTagPattern.test(name));
+
+  return versions.reduce(
+    (highest, current) =>
+      compareSemver(parseSemver(current), parseSemver(highest)) > 0
+        ? current
+        : highest,
     '',
   );
-
-  return {
-    node: { latest: latestNode, lts: ltsNode },
-    pnpm: { latest: latestPnpm, lts: ltsPnpm },
-    playwright: { latest: latestPlaywright },
-  };
 };
 
-const getDockerVersions = (file) => {
-  const dockerContent = readFileSync(file).toString();
+const stripRangeRegex = /^[~^>=<]*/u;
+const stripRangePrefix = (version) =>
+  version.trim().replace(stripRangeRegex, '');
+const parseEnginesRange = (range) =>
+  range
+    .split('||')
+    .map(stripRangePrefix)
+    .sort((left, right) =>
+      compareSemver(parseSemver(left), parseSemver(right)),
+    );
 
-  const [nodeMatch = ''] =
-    /ARG NODE_VERSION=\d+.\d+.\d+/u.exec(dockerContent) || [];
-  const nodeVersion = nodeMatch.slice('ARG NODE_VERSION='.length);
-
-  const [pnpmMatch = ''] =
-    /ARG PNPM_VERSION=\d+.\d+.\d+/u.exec(dockerContent) || [];
-  const pnpmVersion = pnpmMatch.slice('ARG PNPM_VERSION='.length);
-
-  const [playwrightMatch = ''] =
-    /ARG PLAYWRIGHT_VERSION=\d+.\d+.\d+/u.exec(dockerContent) || [];
-  const playwrightVersion = playwrightMatch.slice(
-    'ARG PLAYWRIGHT_VERSION='.length,
+const readPackageJson = () => {
+  const { engines, devDependencies } = JSON.parse(
+    readFileSync(`${projectRoot}/package.json`).toString(),
   );
+  const [lts, ...otherNodeVersions] = parseEnginesRange(engines.node);
+  const pnpmVersions = parseEnginesRange(engines.pnpm);
 
   return {
-    node: { latest: nodeVersion },
-    pnpm: { latest: pnpmVersion },
-    ...(playwrightVersion && {
-      playwright: { latest: playwrightVersion },
-    }),
+    node: { latest: otherNodeVersions.at(-1), lts },
+    pnpm: pnpmVersions.at(-1),
+    playwright: stripRangePrefix(devDependencies.playwright),
   };
 };
 
-const internet = await getInternetVersions();
-const local = getLocalVersions();
-const docker = getDockerVersions(dockerFile);
-const dockerCi = getDockerVersions(dockerFileCi);
-const nodeVersion = {
-  node: {
-    latest: readFileSync(nodeVersionFile).toString().trim().slice(1),
-  },
+const readDockerArg = (content, name) =>
+  content.match(new RegExp(`ARG ${name}=(.+)`, 'u'))?.[1];
+
+const readDockerArgs = (file) => {
+  const content = readFileSync(file).toString();
+
+  return {
+    node: readDockerArg(content, 'NODE_VERSION'),
+    pnpm: readDockerArg(content, 'PNPM_VERSION'),
+    playwright: readDockerArg(content, 'PLAYWRIGHT_VERSION'),
+    alpine: readDockerArg(content, 'ALPINE_VERSION'),
+  };
 };
 
-const compare = (name, current, latest, forceError) => {
+const issues = { info: 0, warn: 0, error: 0 };
+
+const checkForUpdate = ({ name, current, latest, severity }) => {
   if (!current) {
+    error(`\nCould not determine the current version of ${name}.\n`);
+    issues.error += 1;
+    return;
+  }
+  if (!latest) {
+    error(`\nCould not determine the latest version of ${name}.\n`);
+    issues.error += 1;
     return;
   }
 
-  const isImportant = name.includes(' ');
-  const warnOrError = forceError || errorOnWarnings ? error : warn;
-  const logger = isImportant ? warnOrError : info;
+  const currentParsed = parseSemver(current);
+  const latestParsed = parseSemver(latest);
+  const ordering = compareSemver(latestParsed, currentParsed);
 
-  const currentNumber = parseSemver(current);
-  const latestNumber = parseSemver(latest);
+  if (ordering === 0) {
+    return;
+  }
 
-  if (latestNumber.number > currentNumber.number) {
-    const highlight = highlightSemver(latestNumber, currentNumber);
-    logger(`New ${name} version available: ${highlight} (current: ${current})`);
-  } else if (latestNumber.number < currentNumber.number) {
-    error(`\nCurrent version of ${name} (${redBg(current)}) is not valid.\n`);
+  if (ordering < 0) {
+    error(
+      `\nCurrent version of ${name} (${redBg(current)}) is invalid/unknown.\n`,
+    );
+    issues.error += 1;
+    return;
+  }
+
+  const highlight = highlightSemver(latestParsed, currentParsed);
+  const message = `Update ${name} to ${highlight} (current: ${current})`;
+
+  if (severity === 'error' || (severity === 'warn' && errorOnWarnings)) {
+    error(message);
+    issues.error += 1;
+  } else if (severity === 'warn') {
+    warn(message);
+    issues.warn += 1;
+  } else {
+    info(message);
+    issues.info += 1;
   }
 };
 
-const localNode = local.node.lts || local.node.latest;
-const localPnpm = local.pnpm.lts || local.pnpm.latest;
-const localPlaywright = local.playwright.lts || local.playwright.latest;
+const checkConsistency = ({ name, current, matches }) => {
+  if (!current) {
+    error(`\nCould not determine the current version of ${name}.\n`);
+    issues.error += 1;
+    return;
+  }
+  if (current !== matches) {
+    error(
+      `\nCurrent version of ${name} is ${redBg(current)}, expected ${matches}.\n`,
+    );
+    issues.error += 1;
+  }
+};
 
-// Compare non-LTS versions
-compare('node', local.node.latest, internet.node.latest);
-compare('pnpm', local.pnpm.latest, internet.pnpm.latest);
+const [nodeRelease, pnpmRelease, alpineRelease] = await Promise.all([
+  fetchNodeRelease(),
+  fetchPnpmRelease(),
+  fetchAlpineRelease(),
+]);
 
-// Compare LTS versions
-compare('node LTS', local.node.lts, internet.node.lts);
-compare('pnpm LTS', local.pnpm.lts, internet.pnpm.lts);
+const internet = {
+  node: nodeRelease,
+  pnpm: pnpmRelease,
+  alpine: alpineRelease,
+};
+const packageJson = readPackageJson();
+const docker = readDockerArgs(`${projectRoot}/Dockerfile`);
+const dockerCi = readDockerArgs(`${projectRoot}/Dockerfile.ci`);
+const nodeVersionFile = readFileSync(`${projectRoot}/.node-version`)
+  .toString()
+  .trim()
+  .slice(1);
 
-// Check if project versions are in sync
-if (!hasLoggedWarnOrError()) {
-  // Dockerfile
-  compare('node (Dockerfile)', docker.node.latest, localNode, true);
-  compare('pnpm (Dockerfile)', docker.pnpm.latest, localPnpm, true);
+const internetChecks = [
+  {
+    name: 'node LTS',
+    current: packageJson.node.lts,
+    latest: internet.node.lts,
+    severity: 'warn',
+  },
+  {
+    name: 'node',
+    current: packageJson.node.latest,
+    latest: internet.node.latest,
+    severity: 'info',
+  },
+  {
+    name: 'pnpm',
+    current: packageJson.pnpm,
+    latest: internet.pnpm,
+    severity: 'info',
+  },
+  {
+    name: 'alpine (Dockerfile)',
+    current: docker.alpine,
+    latest: removePatch(internet.alpine),
+    severity: 'info',
+  },
+];
 
-  // Dockerfile.ci
-  compare('node (Dockerfile.ci)', dockerCi.node.latest, localNode, true);
-  compare('pnpm (Dockerfile.ci)', dockerCi.pnpm.latest, localPnpm, true);
-  compare(
-    'playwright (Dockerfile.ci)',
-    dockerCi.playwright.latest,
-    localPlaywright,
-    true,
-  );
+const consistencyChecks = [
+  {
+    name: 'node (Dockerfile)',
+    current: docker.node,
+    matches: packageJson.node.lts,
+  },
+  {
+    name: 'pnpm (Dockerfile)',
+    current: docker.pnpm,
+    matches: packageJson.pnpm,
+  },
+  {
+    name: 'node (Dockerfile.ci)',
+    current: dockerCi.node,
+    matches: packageJson.node.lts,
+  },
+  {
+    name: 'pnpm (Dockerfile.ci)',
+    current: dockerCi.pnpm,
+    matches: packageJson.pnpm,
+  },
+  {
+    name: 'playwright (Dockerfile.ci)',
+    current: dockerCi.playwright,
+    matches: packageJson.playwright,
+  },
+  {
+    name: 'alpine (Dockerfile.ci)',
+    current: dockerCi.alpine,
+    matches: docker.alpine,
+  },
+  {
+    name: 'node (.node-version)',
+    current: nodeVersionFile,
+    matches: packageJson.node.lts,
+  },
+];
 
-  // .node-version
-  compare('node (.node-version)', nodeVersion.node.latest, localNode, true);
+for (const check of internetChecks) {
+  checkForUpdate(check);
+}
 
-  if (!hasLoggedInfoWarnOrError()) {
-    log('No engine updates found');
+if (issues.error === 0) {
+  for (const check of consistencyChecks) {
+    checkConsistency(check);
   }
 }
 
-if (hasLoggedError()) {
+if (issues.info === 0 && issues.warn === 0 && issues.error === 0) {
+  log('No engine updates found');
+}
+
+if (issues.error > 0) {
   process.exit(1);
 }

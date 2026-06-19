@@ -1,7 +1,8 @@
-ARG NODE_VERSION=24.16.0
-ARG PNPM_VERSION=11.5.1
+ARG NODE_VERSION=24.17.0
+ARG PNPM_VERSION=11.8.0
+ARG ALPINE_VERSION=3.24
 
-FROM alpine AS cache
+FROM alpine:${ALPINE_VERSION} AS cache
 
 RUN apk add --no-cache jq
 
@@ -10,7 +11,7 @@ WORKDIR /cache
 COPY ./package.json /tmp
 RUN jq 'del(.version)' < /tmp/package.json > /cache/package.json
 
-FROM node:${NODE_VERSION}-alpine AS base-image
+FROM node:${NODE_VERSION}-alpine${ALPINE_VERSION} AS base-image
 
 # Install pnpm
 ARG PNPM_VERSION

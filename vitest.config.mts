@@ -17,6 +17,7 @@ const getBrowsers = () => {
     : browserList;
 
   const argvBrowsers = process.argv
+    // biome-ignore lint/suspicious/noUnnecessaryConditions: False positive - exec can be null and groups undefined
     .map((arg) => browserRegex.exec(arg)?.groups?.browser)
     .filter((browser): browser is (typeof browserList)[number] =>
       Boolean(browser),
@@ -42,7 +43,7 @@ export default defineConfig({
     coverage: {
       enabled: true,
       provider: 'istanbul',
-      include: ['src/**'],
+      include: ['src/**/*.{ts,tsx}'],
       exclude: [
         'src/components/dev-tools/**',
         'src/routes/**',

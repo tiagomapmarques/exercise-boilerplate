@@ -14,6 +14,7 @@ const getBrowsers = () => {
     : browserList;
 
   const argvBrowsers = process.argv
+    // biome-ignore lint/suspicious/noUnnecessaryConditions: False positive - exec can be null and groups undefined
     .map((arg) => browserRegex.exec(arg)?.groups?.browser)
     .filter((browser): browser is (typeof browserList)[number] =>
       Boolean(browser),
@@ -38,6 +39,7 @@ export default defineConfig({
   workers: 1,
   reporter: [['list'], ['html', { open: 'never' }]],
   use: {
+    // biome-ignore lint/style/useNamingConvention: Defined by playwright
     baseURL: 'http://localhost:8080',
     headless: true,
     trace: 'on-all-retries',

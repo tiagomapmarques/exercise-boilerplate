@@ -75,7 +75,7 @@ describe(LocalePicker, () => {
       screen.getByRole('button', { name: 'Great Britain English (GB)' }),
     );
 
-    // NOTE: Using `findByRole` due to webkit failing the assertion otherwise.
+    // NOTE: Using `findByRole` due to webkit failing the assertion otherwise
     expect(await screen.findByRole('menu')).toBeVisible();
     expect(screen.getByTestId('ChevronIcon')).toHaveAttribute(
       'data-icon',
@@ -105,7 +105,7 @@ describe(LocalePicker, () => {
       screen.getByRole('button', { name: 'Deutschland Deutsch (DE)' }),
     );
 
-    // NOTE: Using `findByRole` due to webkit failing the assertion otherwise.
+    // NOTE: Using `findByRole` due to webkit failing the assertion otherwise
     expect(await screen.findByRole('menu')).toBeVisible();
 
     expect(start).not.toHaveBeenCalled();
@@ -117,7 +117,7 @@ describe(LocalePicker, () => {
 
     expect(start).toHaveBeenCalledOnce();
 
-    // NOTE: Using `findByRole` due to webkit failing the assertion otherwise.
+    // NOTE: Using `findByRole` due to webkit failing the assertion otherwise
     expect(
       await screen.findByRole('button', { name: 'Great Britain English (GB)' }),
     ).toBeVisible();
@@ -136,7 +136,7 @@ describe(LocalePicker, () => {
       screen.getByRole('button', { name: 'Great Britain English (GB)' }),
     );
 
-    // NOTE: Using `findByRole` due to webkit failing the assertion otherwise.
+    // NOTE: Using `findByRole` due to webkit failing the assertion otherwise
     expect(await screen.findByRole('menu')).toBeVisible();
 
     expect(useLocaleRefs.preloadLocale).not.toHaveBeenCalled();
@@ -159,7 +159,7 @@ describe(LocalePicker, () => {
       screen.getByRole('button', { name: 'Great Britain English (GB)' }),
     );
 
-    // NOTE: Using `findByRole` due to webkit failing the assertion otherwise.
+    // NOTE: Using `findByRole` due to webkit failing the assertion otherwise
     expect(await screen.findByRole('menu')).toBeVisible();
 
     expect(useLocaleRefs.preloadLocale).not.toHaveBeenCalled();

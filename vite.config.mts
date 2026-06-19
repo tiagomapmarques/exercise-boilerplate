@@ -16,6 +16,8 @@ const devtools =
     ? (await import('@tanstack/devtools-vite')).devtools
     : undefined;
 
+const vendorRegex = /\/node_modules\/react(?:-dom)?\//u;
+
 // biome-ignore lint/style/noDefaultExport: Required by vite
 export default defineConfig({
   plugins: [
@@ -48,7 +50,7 @@ export default defineConfig({
       output: {
         // Isolate React into a stable vendor chunk - it changes rarely, improving cache hit rate
         manualChunks(id) {
-          if (/\/node_modules\/react(?:-dom)?\//u.test(id)) {
+          if (vendorRegex.test(id)) {
             return 'vendor';
           }
         },

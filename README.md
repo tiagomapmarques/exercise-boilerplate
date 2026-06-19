@@ -14,12 +14,12 @@ For architectural decisions and coding conventions, see
 
 ### Development
 
-- pnpm i
+- pnpm install
 - pnpm start
 
 ### Production
 
-- pnpm i --prod
+- pnpm install --ignore-scripts --prod
 - pnpm build
 - pnpm serve
 
@@ -60,5 +60,6 @@ For architectural decisions and coding conventions, see
 | `pnpm check:ci` | Full CI health check (install → project → runtime → engines → uncommitted changes) |
 | `pnpm dependencies` | Interactive version upgrades |
 | `pnpm dependencies:update` | Automatically upgrade minor/patch versions and refresh lock file |
+| `pnpm docker:build` | Build the production Docker image |
+| `pnpm docker:run` | Run the production Docker image on port 8080 |
 | `pnpm docker:ci` | Build CI image, run checks and extract reports |
-
