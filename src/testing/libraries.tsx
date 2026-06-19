@@ -90,8 +90,8 @@ const createRouterRenderProvider = (
       defaultNotFoundComponent: () => <p>Not Found</p>,
     });
 
-  /** Function to wait for the router to load and display the correct page. */
-  const waitForRouter = async () => {
+  /** Function to wait for the router to finish loading the current route. */
+  const waitForReady = async () => {
     await act(() => router.latestLoadPromise);
   };
 
@@ -105,7 +105,10 @@ const createRouterRenderProvider = (
     );
   };
 
-  return { provider: RouterRenderProvider, result: { router, waitForRouter } };
+  return {
+    provider: RouterRenderProvider,
+    result: { router: { instance: router, waitForReady } },
+  };
 };
 
 type MantineProps = Omit<MantineProviderProps, 'children'>;
@@ -123,7 +126,7 @@ const createMantineRenderProvider = (
     return <MantineProvider {...parsedProps}>{children}</MantineProvider>;
   };
 
-  return { provider: MantineRenderProvider, result: undefined };
+  return { provider: MantineRenderProvider, result: {} };
 };
 
 type I18nProps = Partial<Omit<I18nProviderProps, 'children'>> & {

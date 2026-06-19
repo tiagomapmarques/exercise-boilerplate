@@ -18,7 +18,7 @@ export const ColorSchemePicker = () => {
     <Switch
       size="md"
       display="inline-flex"
-      aria-label={i18n.t({ id: 'titles.dark-mode' })}
+      aria-label={i18n.t({ id: 'labels.color-scheme.dark-mode' })}
       checked={colorScheme === 'dark'}
       thumbIcon={<ColorSchemeIcon colorScheme={colorScheme} />}
       onChange={toggleColorScheme}

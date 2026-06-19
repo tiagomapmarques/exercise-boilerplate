@@ -1,10 +1,7 @@
 import { Trans } from '@lingui/react';
 import { Stack, Text } from '@mantine/core';
 
-// biome-ignore lint/style/noRestrictedImports: Used for example purposes only
-import { license, name, version } from '../../../package.json' with {
-  type: 'json',
-};
+import { license, name, version } from '@/build-info';
 
 const versionLabel = `v${version}`;
 

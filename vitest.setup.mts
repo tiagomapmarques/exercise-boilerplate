@@ -7,10 +7,17 @@ import { initialDocumentTitle, mockConsole } from '@/testing/utilities';
 
 import '@/main.css';
 
-const testEnvironment = globalThis as
+const internalVitestWatchFlag =
   // biome-ignore lint/style/useNamingConvention: Internal Vitest API - `process.argv` is unavailable in the browser environment
-  { __vitest_worker__?: { config?: { watch?: boolean } } };
-const isWatch = Boolean(testEnvironment.__vitest_worker__?.config?.watch);
+  (globalThis as { __vitest_worker__?: { config?: { watch?: unknown } } })
+    .__vitest_worker__?.config?.watch;
+
+if (typeof internalVitestWatchFlag !== 'boolean') {
+  throw new Error(
+    '`__vitest_worker__.config.watch` is not a boolean - the internal Vitest API changed.',
+  );
+}
+const isWatch = internalVitestWatchFlag === true;
 
 configure({
   testIdAttribute: 'data-slot',

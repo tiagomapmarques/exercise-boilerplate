@@ -10,13 +10,20 @@ import { viteStaticCopy } from 'vite-plugin-static-copy';
 import { countries } from './src/providers/locale/constants';
 import { deferRenderBlocking } from './vite-plugin-defer-render-blocking.mts';
 
+// Long-lived foundational dependencies bundled into a stable vendor chunk -
+// they change rarely, improving cache hit rate. Mantine is intentionally
+// excluded so each route only pays for the components it uses.
+const vendorPathPrefixes = [
+  '/node_modules/react/',
+  '/node_modules/react-dom/',
+  '/node_modules/@lingui/',
+  '/node_modules/@tanstack/react-router/',
+];
+
 const devtools =
-  // biome-ignore lint/style/noProcessEnv: Accessed at build-time only
   process.env.NODE_ENV === 'development'
     ? (await import('@tanstack/devtools-vite')).devtools
     : undefined;
-
-const vendorRegex = /\/node_modules\/react(?:-dom)?\//u;
 
 // biome-ignore lint/style/noDefaultExport: Required by vite
 export default defineConfig({
@@ -48,9 +55,8 @@ export default defineConfig({
   build: {
     rollupOptions: {
       output: {
-        // Isolate React into a stable vendor chunk - it changes rarely, improving cache hit rate
         manualChunks(id) {
-          if (vendorRegex.test(id)) {
+          if (vendorPathPrefixes.some((path) => id.includes(path))) {
             return 'vendor';
           }
         },

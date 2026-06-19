@@ -1,5 +1,7 @@
 .Environment {
   container-type: inline-size;
+  max-height: var(--tsd-main-panel-height);
+  overflow-y: auto;
 
   .title {
     padding-block: var(--mantine-spacing-md);
@@ -22,10 +24,5 @@
     @container (min-width: 88rem) {
       --sg-cols: 4;
     }
-  }
-
-  code {
-    font-family: system-ui;
-    font-stretch: condensed;
   }
 }

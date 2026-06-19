@@ -14,7 +14,7 @@ export const useDocumentHead = (values?: MessageDescriptor['values']) => {
         ?.getTitle,
   });
 
-  const appTitle = i18n.t({ id: 'titles.app' });
+  const appTitle = i18n.t({ id: 'labels.app.name' });
   const pageTitle = getTitle?.(i18n, values);
   const documentTitle = pageTitle ? `${appTitle} - ${pageTitle}` : appTitle;
 

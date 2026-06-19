@@ -414,6 +414,9 @@
         "rules": {
           "correctness": {
             "noNodejsModules": "off"
+          },
+          "style": {
+            "noProcessEnv": "off"
           }
         }
       }

@@ -1,56 +1,50 @@
 import process from 'node:process';
 import { defineConfig, devices } from 'playwright/test';
 
-const getBrowsers = () => {
-  const isWatch = process.argv.includes('--ui');
-  const browserList = ['chromium', 'firefox', 'webkit'] as const;
-  const browserRegex = new RegExp(
-    `^--(?<browser>${browserList.join('|')})$`,
-    'u',
-  );
+import {
+  type Browser,
+  getRandomBrowser,
+  resolveBrowsers,
+  toBrowser,
+} from './browsers.mts';
 
-  const defaultBrowsers = isWatch
-    ? [browserList[Math.floor(Math.random() * browserList.length)]]
-    : browserList;
-
-  const argvBrowsers = process.argv
-    // biome-ignore lint/suspicious/noUnnecessaryConditions: False positive - exec can be null and groups undefined
-    .map((arg) => browserRegex.exec(arg)?.groups?.browser)
-    .filter((browser): browser is (typeof browserList)[number] =>
-      Boolean(browser),
-    );
-
-  return argvBrowsers.length > 0 ? argvBrowsers : defaultBrowsers;
-};
-
-const playwrightBrowsers: Record<
-  ReturnType<typeof getBrowsers>[number],
-  (typeof devices)[string]
-> = {
+const playwrightBrowsers: Record<Browser, (typeof devices)[string]> = {
   chromium: devices['Desktop Chrome'],
   firefox: devices['Desktop Firefox'],
   webkit: devices['Desktop Safari'],
 };
 
+// The --ui flag only reaches the main process. The watch state needs to be
+// propagated to the workers and a single browser needs to be pinned otherwise
+// workers will spawn different random browsers.
+if (process.argv.includes('--ui')) {
+  process.env.PLAYWRIGHT_IS_WATCH = '1';
+  process.env.PLAYWRIGHT_BROWSER ??= getRandomBrowser();
+}
+
+const isWatch = Boolean(process.env.PLAYWRIGHT_IS_WATCH);
+const requestedBrowser = toBrowser(process.env.PLAYWRIGHT_BROWSER);
+
+const baseUrl = `http://localhost:${isWatch ? '5173' : '8080'}`;
+
 // biome-ignore lint/style/noDefaultExport: Required by playwright
 export default defineConfig({
   testDir: './e2e',
   testMatch: ['**/*.spec.ts?(x)'],
-  workers: 1,
   reporter: [['list'], ['html', { open: 'never' }]],
   use: {
     // biome-ignore lint/style/useNamingConvention: Defined by playwright
-    baseURL: 'http://localhost:8080',
+    baseURL: baseUrl,
     headless: true,
-    trace: 'on-all-retries',
+    trace: 'retain-on-first-failure',
   },
-  projects: getBrowsers().map((browser) => ({
+  projects: resolveBrowsers(isWatch, requestedBrowser).map((browser) => ({
     name: browser,
     ...playwrightBrowsers[browser],
   })),
   webServer: {
-    command: 'pnpm build && pnpm serve',
-    url: 'http://localhost:8080',
-    reuseExistingServer: true,
+    command: isWatch ? 'pnpm start' : 'pnpm build && pnpm serve',
+    url: baseUrl,
+    reuseExistingServer: !process.env.CI,
   },
 });

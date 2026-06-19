@@ -38,7 +38,9 @@ describe(Navigation, () => {
       expect(await screen.findByRole('link', { name: 'Home' })).toBeVisible();
       expect(screen.getByRole('link', { name: 'About' })).toBeVisible();
 
-      expect(providers.router?.latestLocation.pathname).toBe('/unknown');
+      expect(providers.router?.instance.latestLocation.pathname).toBe(
+        '/unknown',
+      );
     });
 
     it('displays active route', async () => {
@@ -68,7 +70,7 @@ describe(Navigation, () => {
 
       await userEvent.click(await screen.findByRole('link', { name: 'Home' }));
 
-      expect(providers.router?.latestLocation.pathname).toBe('/');
+      expect(providers.router?.instance.latestLocation.pathname).toBe('/');
     });
 
     it('navigates to about page', async () => {
@@ -81,7 +83,7 @@ describe(Navigation, () => {
 
       await userEvent.click(await screen.findByRole('link', { name: 'About' }));
 
-      expect(providers.router?.latestLocation.pathname).toBe('/about');
+      expect(providers.router?.instance.latestLocation.pathname).toBe('/about');
     });
   });
 });

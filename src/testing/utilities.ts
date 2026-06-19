@@ -63,7 +63,7 @@ export const mockObjectProperty = <
 
   afterEach(() => {
     delete (object as Record<string, unknown>)[property];
-    (object as Record<string, unknown>)[property] = resetValue;
+    originalSetter(resetValue);
   });
 
   return { getter, setter };
@@ -101,7 +101,7 @@ export const mockConsole = <Type extends 'log' | 'warn' | 'error'>(
 };
 
 /**
- * Creates a Promise that you can control when to resolve and/or reject.
+ * Promise that you can control when to resolve and/or reject.
  *
  * This is useful when there is the need to stop execution to evaluate the
  * current state of a component or hook. For example on API calls or between
@@ -110,7 +110,7 @@ export const mockConsole = <Type extends 'log' | 'warn' | 'error'>(
 export class ControlledPromise {
   private promise: Promise<void>;
   private resolveCallback: (() => void) | undefined;
-  private rejectCallback: (() => void) | undefined;
+  private rejectCallback: ((reason?: unknown) => void) | undefined;
 
   private get settled() {
     return !(this.resolveCallback ?? this.rejectCallback);
@@ -157,7 +157,7 @@ export class ControlledPromise {
   }
 
   /** Method to reject the currently awaited promise. */
-  public reject() {
+  public reject(reason: unknown = new Error('Caller gave no reason.')) {
     if (this.settled) {
       // biome-ignore lint/suspicious/noConsole: Useful to detect potential test errors
       console.warn(
@@ -165,7 +165,7 @@ export class ControlledPromise {
       );
     }
 
-    this.rejectCallback?.();
+    this.rejectCallback?.(reason);
     return this.promise;
   }
 
@@ -174,8 +174,9 @@ export class ControlledPromise {
     if (!this.settled) {
       // biome-ignore lint/suspicious/noConsole: Useful to detect potential test errors
       console.warn(
-        'A ControlledPromise tried to `reset` before being resolved.',
+        'A ControlledPromise tried to `reset` before being resolved/rejected and will now be rejected.',
       );
+      this.rejectCallback?.(new Error('`reset` called before settling.'));
     }
 
     this.promise = Promise.resolve();

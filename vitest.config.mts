@@ -2,43 +2,24 @@ import process from 'node:process';
 import { playwright } from '@vitest/browser-playwright';
 import { defineConfig } from 'vitest/config';
 
+import { resolveBrowsers } from './browsers.mts';
 import viteConfig from './vite.config.mts';
 
-const getBrowsers = () => {
-  const isWatch = !process.argv.includes('--run');
-  const browserList = ['chromium', 'firefox', 'webkit'] as const;
-  const browserRegex = new RegExp(
-    `^--(?<browser>${browserList.join('|')})$`,
-    'u',
-  );
-
-  const defaultBrowsers = isWatch
-    ? [browserList[Math.floor(Math.random() * browserList.length)]]
-    : browserList;
-
-  const argvBrowsers = process.argv
-    // biome-ignore lint/suspicious/noUnnecessaryConditions: False positive - exec can be null and groups undefined
-    .map((arg) => browserRegex.exec(arg)?.groups?.browser)
-    .filter((browser): browser is (typeof browserList)[number] =>
-      Boolean(browser),
-    );
-
-  return argvBrowsers.length > 0 ? argvBrowsers : defaultBrowsers;
-};
+const isWatch = !process.argv.includes('--run');
 
 // biome-ignore lint/style/noDefaultExport: Required by vitest
 export default defineConfig({
   ...viteConfig,
   test: {
     include: ['**/*.test.ts?(x)'],
-    setupFiles: './vitest.setup.mts',
+    setupFiles: ['./vitest.setup.mts'],
     globals: true,
     mockReset: true,
     browser: {
       enabled: true,
       headless: true,
       provider: playwright({}),
-      instances: getBrowsers().map((browser) => ({ browser })),
+      instances: resolveBrowsers(isWatch).map((browser) => ({ browser })),
     },
     coverage: {
       enabled: true,

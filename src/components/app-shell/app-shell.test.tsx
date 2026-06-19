@@ -13,7 +13,7 @@ import { AppShell } from './app-shell';
 describe(AppShell, () => {
   const wrapper = ({ children }: PropsWithChildren) => (
     <>
-      <div id="global-throbber" />
+      <div id="document-throbber" />
       {children}
     </>
   );
@@ -41,7 +41,7 @@ describe(AppShell, () => {
       wrapper,
     });
 
-    expect(await screen.findByTestId('Router-Outlet')).not.toBeVisible();
+    expect(await screen.findByTestId('Router-Outlet')).toBeInTheDocument();
   });
 
   it('displays header', async () => {
@@ -70,7 +70,7 @@ describe(AppShell, () => {
     });
 
     expect(
-      await screen.findByRole('progressbar', { name: 'Loading' }),
+      await screen.findByRole('progressbar', { name: 'Loading page' }),
     ).not.toBeVisible();
   });
 
@@ -85,7 +85,7 @@ describe(AppShell, () => {
         wrapper,
       });
 
-      await providers.waitForRouter?.();
+      await providers.router?.waitForReady();
 
       expect(screen.getByRole('navigation')).toBeVisible();
     });
@@ -100,7 +100,7 @@ describe(AppShell, () => {
         wrapper,
       });
 
-      await providers.waitForRouter?.();
+      await providers.router?.waitForReady();
 
       expect(screen.getByRole('navigation')).toHaveAttribute(
         'data-open',
@@ -125,7 +125,7 @@ describe(AppShell, () => {
         wrapper,
       });
 
-      await providers.waitForRouter?.();
+      await providers.router?.waitForReady();
 
       await userEvent.click(screen.getByRole('button', { name: 'Menu' }));
 

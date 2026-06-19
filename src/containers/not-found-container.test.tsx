@@ -30,6 +30,6 @@ describe(NotFoundContainer, () => {
       await screen.findByRole('button', { name: 'Go to start' }),
     );
 
-    expect(providers.router?.latestLocation.pathname).toEqual('/');
+    expect(providers.router?.instance.latestLocation.pathname).toEqual('/');
   });
 });

@@ -33,12 +33,12 @@ export const BurgerMenu = ({
         hiddenFrom="sm"
         opened={opened}
         onClick={toggleOpened}
-        aria-label={i18n.t({ id: 'titles.menu' })}
+        aria-label={i18n.t({ id: 'labels.navigation.menu' })}
       />
 
       {children ?? (
         <Text>
-          <Trans id="titles.app" />
+          <Trans id="labels.app.name" />
         </Text>
       )}
     </Group>

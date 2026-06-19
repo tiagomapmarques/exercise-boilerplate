@@ -70,6 +70,23 @@ describe(LocaleProvider, () => {
     expect(screen.getByTestId('Content')).toBeInTheDocument();
   });
 
+  it('displays fallback while loading', async () => {
+    render(
+      <LocaleProvider fallback={<div data-slot="Fallback" />}>
+        <TestingComponent />
+      </LocaleProvider>,
+      { providers: { i18n: false } },
+    );
+
+    expect(screen.getByTestId('Fallback')).toBeInTheDocument();
+    expect(screen.queryByTestId('Content')).not.toBeInTheDocument();
+
+    await act(() => loader.resolve());
+
+    expect(screen.queryByTestId('Fallback')).not.toBeInTheDocument();
+    expect(screen.getByTestId('Content')).toBeInTheDocument();
+  });
+
   it('does not load messages more than once', async () => {
     const { rerender } = render(
       <LocaleProvider>
