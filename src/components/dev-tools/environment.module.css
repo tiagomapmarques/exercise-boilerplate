@@ -1,5 +1,7 @@
-.Environment {
+/* Class doubled to raise specificity over the dev-tools panel styles. */
+.Environment.Environment {
   container-type: inline-size;
+  height: auto;
   max-height: var(--tsd-main-panel-height);
   overflow-y: auto;
 

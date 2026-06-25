@@ -1,3 +1,4 @@
-div.NavigationProgress {
+/* Class doubled to raise specificity over the Mantine nprogress styles. */
+.NavigationProgress.NavigationProgress {
   transition-delay: 100ms;
 }

@@ -24,6 +24,7 @@ src/
   main.tsx      App entry point
   main.css      Global styles
 e2e/            End-to-end specs
+bin/            Node executables for tooling, checks, and CI
 ```
 
 ## Module design
@@ -58,6 +59,11 @@ Keep comments to a single sentence — the name and a short description should b
 enough to fully understand it. Documentation describes what code does, not where
 it is used. End JSDoc blocks and multi-line `//` runs with a full stop;
 single-line `//` comments stay unpunctuated.
+
+Do not write inline comments that restate behaviour a test covers - the test is
+the specification (see Testing), so a duplicate comment only invites
+contradiction and drift. Reserve inline comments for rationale no test captures
+- a non-obvious "why", a workaround, or an external reference.
 
 Markdown documentation files and multi-line code comments use a maximum line
 length of 80 characters. Fill lines to the limit - break at the latest word
@@ -357,6 +363,10 @@ Coverage is enforced at 100% for `src/**`, with the exception of: `routes/`,
 `locales/`, `testing/`, `components/dev-tools/`, generated files, and
 `main.tsx`. All new code must be fully covered or added to the exclusion list
 with justification.
+
+Code excluded from coverage - the list above, plus tooling outside `src/` such
+as `bin/` - is not unit-tested and should not be, as it is generated, wiring,
+or tooling code rather than application logic.
 
 ## Compatibility
 

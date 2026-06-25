@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useLingui } from '@lingui/react';
 import {
   createTheme,
@@ -26,13 +26,24 @@ const AppContent = () => {
   const router = useRouter();
   const { i18n } = useLingui();
   const { start, complete } = useProgressBar();
+  const navigationStarted = useRef(false);
 
   useEffect(() => {
     const unsubscribeOnBeforeNavigate = router.subscribe(
       'onBeforeNavigate',
-      start,
+      ({ hrefChanged }) => {
+        if (hrefChanged) {
+          navigationStarted.current = true;
+          start();
+        }
+      },
     );
-    const unsubscribeOnResolved = router.subscribe('onResolved', complete);
+    const unsubscribeOnResolved = router.subscribe('onResolved', () => {
+      if (navigationStarted.current) {
+        navigationStarted.current = false;
+        complete();
+      }
+    });
 
     return () => {
       unsubscribeOnBeforeNavigate();

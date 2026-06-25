@@ -9,6 +9,7 @@ import {
   highlightSemver,
   parseSemver,
   removePatch,
+  stripRangePrefix,
 } from './common/semver.mjs';
 
 const execPromise = promisify(execCallback);
@@ -64,9 +65,6 @@ const fetchAlpineRelease = async () => {
   );
 };
 
-const stripRangeRegex = /^[~^>=<]*/u;
-const stripRangePrefix = (version) =>
-  version.trim().replace(stripRangeRegex, '');
 const parseEnginesRange = (range) =>
   range
     .split('||')

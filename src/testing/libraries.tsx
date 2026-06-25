@@ -26,12 +26,12 @@ import {
 } from '@testing-library/react';
 import { userEvent as baseUserEvent } from 'vitest/browser';
 
+import type {
+  ProgressBarActions,
+  ProgressBarStore,
+} from '@/providers/progress-bar';
 import { fallbackLocale, type Locale } from '@/providers/locale/constants';
-import {
-  type ProgressBarActions,
-  ProgressBarContext,
-  type ProgressBarStore,
-} from '@/providers/progress-bar/context';
+import { ProgressBarContext } from '@/providers/progress-bar/context';
 
 import { messages } from './utilities';
 

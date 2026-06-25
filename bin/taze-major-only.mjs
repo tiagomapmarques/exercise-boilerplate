@@ -1,28 +1,29 @@
 #!/usr/bin/env node
-import { execSync } from 'node:child_process';
+import { CheckPackages } from 'taze';
 
-import { log } from './common/logs.mjs';
+import { info, log } from './common/logs.mjs';
+import {
+  highlightSemver,
+  parseSemver,
+  stripRangePrefix,
+} from './common/semver.mjs';
 
-const passthroughArgs = process.argv.slice(2).join(' ');
-const tazeMinorCommand = `pnpm taze minor ${passthroughArgs}`;
+const { packages } = await CheckPackages({ mode: 'major', write: false });
 
-/** Extracts package names from taze's indented summary rows. */
-const extractPackageNames = (command) => {
-  const output = execSync(command).toString();
-  return output
-    .split('\n')
-    .filter((line) => line.startsWith('   ') && line.trim() !== '')
-    .map((line) => line.trim().split(' ')[0])
-    .filter((name, index, array) => array.indexOf(name) === index);
-};
+const majorUpdates = packages
+  .flatMap(({ resolved }) => resolved)
+  .filter(({ diff }) => diff === 'major');
 
-const excludeList = extractPackageNames(tazeMinorCommand);
-const excludeArg = excludeList.length > 0 ? `--exclude ${excludeList}` : '';
-
-const result = execSync(`pnpm taze major ${excludeArg} ${passthroughArgs}`)
-  .toString()
-  .trim();
-
-const resultIsMultiLine = result.split('\n').length > 1;
-
-log(resultIsMultiLine ? result : 'No major dependency updates found');
+if (majorUpdates.length === 0) {
+  log('No major dependency updates found');
+} else {
+  for (const { name, currentVersion, targetVersion } of majorUpdates) {
+    const current = stripRangePrefix(currentVersion);
+    const target = stripRangePrefix(targetVersion);
+    const highlight = highlightSemver(
+      parseSemver(target),
+      parseSemver(current),
+    );
+    info(`Update ${name} to ${highlight} (current: ${current})`);
+  }
+}

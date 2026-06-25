@@ -1,13 +1,12 @@
 import { type PropsWithChildren, useEffect, useState } from 'react';
 import { createNprogress } from '@mantine/nprogress';
 
-import {
-  type ProgressBarActions,
-  type ProgressBarCleanup,
-  ProgressBarContext,
-  type ProgressBarContextValue,
-  type ProgressBarStore,
-} from './context';
+import { ProgressBarContext, type ProgressBarContextValue } from './context';
+import type {
+  ProgressBarActions,
+  ProgressBarCleanup,
+  ProgressBarStore,
+} from './types';
 
 /** Props for the `ProgressBarProvider` component. */
 export type ProgressBarProviderProps = PropsWithChildren<

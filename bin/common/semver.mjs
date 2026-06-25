@@ -1,5 +1,12 @@
 import { blueFg, redFg, yellowFg } from './logs.mjs';
 
+const stripRangeRegex = /^[~^>=<]*/u;
+
+/** Strips surrounding whitespace and any leading range operator (`^`, `~`, `>`, `<`, `=`) from a version. */
+export const stripRangePrefix = (version) => {
+  return (version ?? '').trim().replace(stripRangeRegex, '');
+};
+
 /** Parses a semver string, capturing any trailing `-prerelease`/`+build` info. */
 export const parseSemver = (semver) => {
   const semverParsed = semver ?? '';
@@ -53,16 +60,20 @@ export const compareSemver = (left, right) => {
 export const highlightSemver = (latest, current) => {
   const { major, minor, patch, patchInfo } = latest;
 
-  if (latest.major > current.major) {
+  if (major > current.major) {
     return `${redFg(major)}.${minor}.${patch}${patchInfo}`;
   }
-  if (latest.minor > current.minor) {
-    return `${major}.${yellowFg(minor)}.${patch}${patchInfo}`;
+  if (minor > current.minor) {
+    // A 0.x release is unstable, so flag a minor change as severely as a major one.
+    const color = major === 0 ? redFg : yellowFg;
+    return `${major}.${color(minor)}.${patch}${patchInfo}`;
   }
-  if (latest.patch > current.patch) {
-    return `${major}.${minor}.${blueFg(patch)}${patchInfo}`;
+  if (patch > current.patch) {
+    // A 0.x release is unstable, so flag a patch change as severely as a minor one.
+    const color = major === 0 ? yellowFg : blueFg;
+    return `${major}.${minor}.${color(patch)}${patchInfo}`;
   }
-  if (latest.patchInfo !== current.patchInfo) {
+  if (patchInfo !== current.patchInfo) {
     return `${major}.${minor}.${patch}${blueFg(patchInfo)}`;
   }
   return `${major}.${minor}.${patch}${patchInfo}`;
