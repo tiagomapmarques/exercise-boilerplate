@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.5.0/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.5.1/schema.json",
   "files": {
     "ignoreUnknown": false,
     "includes": [
@@ -9,7 +9,6 @@
       "!**/node_modules",
       "!**/node-compile-cache",
       "!**/.pnpm-store",
-      "!**/licenses.*json",
       "!**/.tanstack",
       "!**/*.gen.ts",
       "!**/.tmp",

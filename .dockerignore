@@ -8,7 +8,6 @@ Thumbs.db
 node_modules
 node-compile-cache
 .pnpm-store
-licenses.*json
 .tanstack
 *.gen.ts
 

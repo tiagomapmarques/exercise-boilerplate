@@ -1,0 +1,2859 @@
+
+summary:
+  componentCount: 673
+  licenses:
+    - (MIT OR CC0-1.0)
+    - 0BSD
+    - Apache-2.0
+    - Apache-2.0 AND MIT
+    - BSD-2-Clause
+    - BSD-3-Clause
+    - BlueOak-1.0.0
+    - CC-BY-4.0
+    - ISC
+    - MIT
+    - MIT OR Apache-2.0
+    - MPL-2.0
+    - Unlicense
+  productionComponentCount: 479
+  productionLicenses:
+    - (MIT OR CC0-1.0)
+    - 0BSD
+    - Apache-2.0
+    - Apache-2.0 AND MIT
+    - BSD-2-Clause
+    - BSD-3-Clause
+    - BlueOak-1.0.0
+    - CC-BY-4.0
+    - ISC
+    - MIT
+    - MPL-2.0
+    - Unlicense
+
+components:
+  - name: "@antfu/ni"
+    version: 30.2.0
+    license: MIT
+    scope: dev
+  - name: "@babel/code-frame"
+    version: 7.29.7
+    license: MIT
+    scope: prod
+  - name: "@babel/compat-data"
+    version: 7.29.7
+    license: MIT
+    scope: prod
+  - name: "@babel/core"
+    version: 7.29.7
+    license: MIT
+    scope: prod
+  - name: "@babel/generator"
+    version: 7.29.7
+    license: MIT
+    scope: prod
+  - name: "@babel/helper-annotate-as-pure"
+    version: 7.29.7
+    license: MIT
+    scope: prod
+  - name: "@babel/helper-compilation-targets"
+    version: 7.29.7
+    license: MIT
+    scope: prod
+  - name: "@babel/helper-create-class-features-plugin"
+    version: 7.29.7
+    license: MIT
+    scope: prod
+  - name: "@babel/helper-create-regexp-features-plugin"
+    version: 7.29.7
+    license: MIT
+    scope: prod
+  - name: "@babel/helper-define-polyfill-provider"
+    version: 0.6.8
+    license: MIT
+    scope: prod
+  - name: "@babel/helper-globals"
+    version: 7.29.7
+    license: MIT
+    scope: prod
+  - name: "@babel/helper-member-expression-to-functions"
+    version: 7.29.7
+    license: MIT
+    scope: prod
+  - name: "@babel/helper-module-imports"
+    version: 7.29.7
+    license: MIT
+    scope: prod
+  - name: "@babel/helper-module-transforms"
+    version: 7.29.7
+    license: MIT
+    scope: prod
+  - name: "@babel/helper-optimise-call-expression"
+    version: 7.29.7
+    license: MIT
+    scope: prod
+  - name: "@babel/helper-plugin-utils"
+    version: 7.29.7
+    license: MIT
+    scope: prod
+  - name: "@babel/helper-remap-async-to-generator"
+    version: 7.29.7
+    license: MIT
+    scope: prod
+  - name: "@babel/helper-replace-supers"
+    version: 7.29.7
+    license: MIT
+    scope: prod
+  - name: "@babel/helper-skip-transparent-expression-wrappers"
+    version: 7.29.7
+    license: MIT
+    scope: prod
+  - name: "@babel/helper-string-parser"
+    version: 7.29.7
+    license: MIT
+    scope: prod
+  - name: "@babel/helper-validator-identifier"
+    version: 7.29.7
+    license: MIT
+    scope: prod
+  - name: "@babel/helper-validator-option"
+    version: 7.29.7
+    license: MIT
+    scope: prod
+  - name: "@babel/helper-wrap-function"
+    version: 7.29.7
+    license: MIT
+    scope: prod
+  - name: "@babel/helpers"
+    version: 7.29.7
+    license: MIT
+    scope: prod
+  - name: "@babel/parser"
+    version: 7.29.7
+    license: MIT
+    scope: prod
+  - name: "@babel/plugin-bugfix-firefox-class-in-computed-class-key"
+    version: 7.29.7
+    license: MIT
+    scope: prod
+  - name: "@babel/plugin-bugfix-safari-class-field-initializer-scope"
+    version: 7.29.7
+    license: MIT
+    scope: prod
+  - name: "@babel/plugin-bugfix-safari-id-destructuring-collision-in-function-expre\
+      ssion"
+    version: 7.29.7
+    license: MIT
+    scope: prod
+  - name: "@babel/plugin-bugfix-safari-rest-destructuring-rhs-array"
+    version: 7.29.7
+    license: MIT
+    scope: prod
+  - name: "@babel/plugin-bugfix-v8-spread-parameters-in-optional-chaining"
+    version: 7.29.7
+    license: MIT
+    scope: prod
+  - name: "@babel/plugin-bugfix-v8-static-class-fields-redefine-readonly"
+    version: 7.29.7
+    license: MIT
+    scope: prod
+  - name: "@babel/plugin-proposal-private-property-in-object"
+    version: 7.21.0-placeholder-for-preset-env.2
+    license: MIT
+    scope: prod
+  - name: "@babel/plugin-syntax-import-assertions"
+    version: 7.29.7
+    license: MIT
+    scope: prod
+  - name: "@babel/plugin-syntax-import-attributes"
+    version: 7.29.7
+    license: MIT
+    scope: prod
+  - name: "@babel/plugin-syntax-unicode-sets-regex"
+    version: 7.18.6
+    license: MIT
+    scope: prod
+  - name: "@babel/plugin-transform-arrow-functions"
+    version: 7.29.7
+    license: MIT
+    scope: prod
+  - name: "@babel/plugin-transform-async-generator-functions"
+    version: 7.29.7
+    license: MIT
+    scope: prod
+  - name: "@babel/plugin-transform-async-to-generator"
+    version: 7.29.7
+    license: MIT
+    scope: prod
+  - name: "@babel/plugin-transform-block-scoped-functions"
+    version: 7.29.7
+    license: MIT
+    scope: prod
+  - name: "@babel/plugin-transform-block-scoping"
+    version: 7.29.7
+    license: MIT
+    scope: prod
+  - name: "@babel/plugin-transform-class-properties"
+    version: 7.29.7
+    license: MIT
+    scope: prod
+  - name: "@babel/plugin-transform-class-static-block"
+    version: 7.29.7
+    license: MIT
+    scope: prod
+  - name: "@babel/plugin-transform-classes"
+    version: 7.29.7
+    license: MIT
+    scope: prod
+  - name: "@babel/plugin-transform-computed-properties"
+    version: 7.29.7
+    license: MIT
+    scope: prod
+  - name: "@babel/plugin-transform-destructuring"
+    version: 7.29.7
+    license: MIT
+    scope: prod
+  - name: "@babel/plugin-transform-dotall-regex"
+    version: 7.29.7
+    license: MIT
+    scope: prod
+  - name: "@babel/plugin-transform-duplicate-keys"
+    version: 7.29.7
+    license: MIT
+    scope: prod
+  - name: "@babel/plugin-transform-duplicate-named-capturing-groups-regex"
+    version: 7.29.7
+    license: MIT
+    scope: prod
+  - name: "@babel/plugin-transform-dynamic-import"
+    version: 7.29.7
+    license: MIT
+    scope: prod
+  - name: "@babel/plugin-transform-explicit-resource-management"
+    version: 7.29.7
+    license: MIT
+    scope: prod
+  - name: "@babel/plugin-transform-exponentiation-operator"
+    version: 7.29.7
+    license: MIT
+    scope: prod
+  - name: "@babel/plugin-transform-export-namespace-from"
+    version: 7.29.7
+    license: MIT
+    scope: prod
+  - name: "@babel/plugin-transform-for-of"
+    version: 7.29.7
+    license: MIT
+    scope: prod
+  - name: "@babel/plugin-transform-function-name"
+    version: 7.29.7
+    license: MIT
+    scope: prod
+  - name: "@babel/plugin-transform-json-strings"
+    version: 7.29.7
+    license: MIT
+    scope: prod
+  - name: "@babel/plugin-transform-literals"
+    version: 7.29.7
+    license: MIT
+    scope: prod
+  - name: "@babel/plugin-transform-logical-assignment-operators"
+    version: 7.29.7
+    license: MIT
+    scope: prod
+  - name: "@babel/plugin-transform-member-expression-literals"
+    version: 7.29.7
+    license: MIT
+    scope: prod
+  - name: "@babel/plugin-transform-modules-amd"
+    version: 7.29.7
+    license: MIT
+    scope: prod
+  - name: "@babel/plugin-transform-modules-commonjs"
+    version: 7.29.7
+    license: MIT
+    scope: prod
+  - name: "@babel/plugin-transform-modules-systemjs"
+    version: 7.29.7
+    license: MIT
+    scope: prod
+  - name: "@babel/plugin-transform-modules-umd"
+    version: 7.29.7
+    license: MIT
+    scope: prod
+  - name: "@babel/plugin-transform-named-capturing-groups-regex"
+    version: 7.29.7
+    license: MIT
+    scope: prod
+  - name: "@babel/plugin-transform-new-target"
+    version: 7.29.7
+    license: MIT
+    scope: prod
+  - name: "@babel/plugin-transform-nullish-coalescing-operator"
+    version: 7.29.7
+    license: MIT
+    scope: prod
+  - name: "@babel/plugin-transform-numeric-separator"
+    version: 7.29.7
+    license: MIT
+    scope: prod
+  - name: "@babel/plugin-transform-object-rest-spread"
+    version: 7.29.7
+    license: MIT
+    scope: prod
+  - name: "@babel/plugin-transform-object-super"
+    version: 7.29.7
+    license: MIT
+    scope: prod
+  - name: "@babel/plugin-transform-optional-catch-binding"
+    version: 7.29.7
+    license: MIT
+    scope: prod
+  - name: "@babel/plugin-transform-optional-chaining"
+    version: 7.29.7
+    license: MIT
+    scope: prod
+  - name: "@babel/plugin-transform-parameters"
+    version: 7.29.7
+    license: MIT
+    scope: prod
+  - name: "@babel/plugin-transform-private-methods"
+    version: 7.29.7
+    license: MIT
+    scope: prod
+  - name: "@babel/plugin-transform-private-property-in-object"
+    version: 7.29.7
+    license: MIT
+    scope: prod
+  - name: "@babel/plugin-transform-property-literals"
+    version: 7.29.7
+    license: MIT
+    scope: prod
+  - name: "@babel/plugin-transform-regenerator"
+    version: 7.29.7
+    license: MIT
+    scope: prod
+  - name: "@babel/plugin-transform-regexp-modifiers"
+    version: 7.29.7
+    license: MIT
+    scope: prod
+  - name: "@babel/plugin-transform-reserved-words"
+    version: 7.29.7
+    license: MIT
+    scope: prod
+  - name: "@babel/plugin-transform-shorthand-properties"
+    version: 7.29.7
+    license: MIT
+    scope: prod
+  - name: "@babel/plugin-transform-spread"
+    version: 7.29.7
+    license: MIT
+    scope: prod
+  - name: "@babel/plugin-transform-sticky-regex"
+    version: 7.29.7
+    license: MIT
+    scope: prod
+  - name: "@babel/plugin-transform-template-literals"
+    version: 7.29.7
+    license: MIT
+    scope: prod
+  - name: "@babel/plugin-transform-typeof-symbol"
+    version: 7.29.7
+    license: MIT
+    scope: prod
+  - name: "@babel/plugin-transform-unicode-escapes"
+    version: 7.29.7
+    license: MIT
+    scope: prod
+  - name: "@babel/plugin-transform-unicode-property-regex"
+    version: 7.29.7
+    license: MIT
+    scope: prod
+  - name: "@babel/plugin-transform-unicode-regex"
+    version: 7.29.7
+    license: MIT
+    scope: prod
+  - name: "@babel/plugin-transform-unicode-sets-regex"
+    version: 7.29.7
+    license: MIT
+    scope: prod
+  - name: "@babel/preset-env"
+    version: 7.29.7
+    license: MIT
+    scope: prod
+  - name: "@babel/preset-modules"
+    version: 0.1.6-no-external-plugins
+    license: MIT
+    scope: prod
+  - name: "@babel/runtime"
+    version: 7.29.7
+    license: MIT
+    scope: dev
+  - name: "@babel/template"
+    version: 7.29.7
+    license: MIT
+    scope: prod
+  - name: "@babel/traverse"
+    version: 7.29.7
+    license: MIT
+    scope: prod
+  - name: "@babel/types"
+    version: 7.29.7
+    license: MIT
+    scope: prod
+  - name: "@biomejs/biome"
+    version: 2.5.1
+    license: MIT OR Apache-2.0
+    scope: dev
+  - name: "@blazediff/core"
+    version: 1.9.1
+    license: MIT
+    scope: dev
+  - name: "@colors/colors"
+    version: 1.5.0
+    license: MIT
+    scope: prod
+  - name: "@fastify/accept-negotiator"
+    version: 2.0.1
+    license: MIT
+    scope: prod
+  - name: "@fastify/ajv-compiler"
+    version: 4.0.5
+    license: MIT
+    scope: prod
+  - name: "@fastify/compress"
+    version: 9.0.0
+    license: MIT
+    scope: prod
+  - name: "@fastify/error"
+    version: 4.2.0
+    license: MIT
+    scope: prod
+  - name: "@fastify/fast-json-stringify-compiler"
+    version: 5.0.3
+    license: MIT
+    scope: prod
+  - name: "@fastify/forwarded"
+    version: 3.0.1
+    license: MIT
+    scope: prod
+  - name: "@fastify/helmet"
+    version: 13.0.2
+    license: MIT
+    scope: prod
+  - name: "@fastify/merge-json-schemas"
+    version: 0.2.1
+    license: MIT
+    scope: prod
+  - name: "@fastify/proxy-addr"
+    version: 5.1.0
+    license: MIT
+    scope: prod
+  - name: "@fastify/send"
+    version: 4.1.0
+    license: MIT
+    scope: prod
+  - name: "@fastify/static"
+    version: 9.1.3
+    license: MIT
+    scope: prod
+  - name: "@floating-ui/core"
+    version: 1.7.5
+    license: MIT
+    scope: prod
+  - name: "@floating-ui/dom"
+    version: 1.7.6
+    license: MIT
+    scope: prod
+  - name: "@floating-ui/react"
+    version: 0.27.19
+    license: MIT
+    scope: prod
+  - name: "@floating-ui/react-dom"
+    version: 2.1.8
+    license: MIT
+    scope: prod
+  - name: "@floating-ui/utils"
+    version: 0.2.11
+    license: MIT
+    scope: prod
+  - name: "@henrygd/queue"
+    version: 1.2.0
+    license: MIT
+    scope: dev
+  - name: "@istanbuljs/schema"
+    version: 0.1.6
+    license: MIT
+    scope: dev
+  - name: "@jest/schemas"
+    version: 29.6.3
+    license: MIT
+    scope: prod
+  - name: "@jest/types"
+    version: 29.6.3
+    license: MIT
+    scope: prod
+  - name: "@jridgewell/gen-mapping"
+    version: 0.3.13
+    license: MIT
+    scope: prod
+  - name: "@jridgewell/remapping"
+    version: 2.3.5
+    license: MIT
+    scope: prod
+  - name: "@jridgewell/resolve-uri"
+    version: 3.1.2
+    license: MIT
+    scope: prod
+  - name: "@jridgewell/source-map"
+    version: 0.3.11
+    license: MIT
+    scope: prod
+  - name: "@jridgewell/sourcemap-codec"
+    version: 1.5.5
+    license: MIT
+    scope: prod
+  - name: "@jridgewell/trace-mapping"
+    version: 0.3.31
+    license: MIT
+    scope: prod
+  - name: "@lingui/babel-plugin-extract-messages"
+    version: 6.4.0
+    license: MIT
+    scope: prod
+  - name: "@lingui/babel-plugin-lingui-macro"
+    version: 6.4.0
+    license: MIT
+    scope: prod
+  - name: "@lingui/cli"
+    version: 6.4.0
+    license: MIT
+    scope: prod
+  - name: "@lingui/conf"
+    version: 6.4.0
+    license: MIT
+    scope: prod
+  - name: "@lingui/core"
+    version: 6.4.0
+    license: MIT
+    scope: prod
+  - name: "@lingui/detect-locale"
+    version: 6.4.0
+    license: MIT
+    scope: prod
+  - name: "@lingui/format-po"
+    version: 6.4.0
+    license: MIT
+    scope: prod
+  - name: "@lingui/message-utils"
+    version: 6.4.0
+    license: MIT
+    scope: prod
+  - name: "@lingui/react"
+    version: 6.4.0
+    license: MIT
+    scope: prod
+  - name: "@lingui/swc-plugin"
+    version: 6.5.0
+    license: MIT
+    scope: prod
+  - name: "@lingui/vite-plugin"
+    version: 6.4.0
+    license: MIT
+    scope: prod
+  - name: "@lukeed/ms"
+    version: 2.0.2
+    license: MIT
+    scope: prod
+  - name: "@mantine/core"
+    version: 9.4.0
+    license: MIT
+    scope: prod
+  - name: "@mantine/hooks"
+    version: 9.4.0
+    license: MIT
+    scope: prod
+  - name: "@mantine/nprogress"
+    version: 9.4.0
+    license: MIT
+    scope: prod
+  - name: "@mantine/store"
+    version: 9.4.0
+    license: MIT
+    scope: prod
+  - name: "@messageformat/date-skeleton"
+    version: 1.1.0
+    license: MIT
+    scope: prod
+  - name: "@messageformat/parser"
+    version: 5.1.1
+    license: MIT
+    scope: prod
+  - name: "@oxc-project/types"
+    version: 0.120.0
+    license: MIT
+    scope: dev
+  - name: "@oxc-project/types"
+    version: 0.137.0
+    license: MIT
+    scope: prod
+  - name: "@pinojs/redact"
+    version: 0.4.0
+    license: MIT
+    scope: prod
+  - name: "@polka/url"
+    version: 1.0.0-next.29
+    license: MIT
+    scope: dev
+  - name: "@quansync/fs"
+    version: 1.0.0
+    license: MIT
+    scope: dev
+  - name: "@rolldown/pluginutils"
+    version: 1.0.1
+    license: MIT
+    scope: prod
+  - name: "@sinclair/typebox"
+    version: 0.27.10
+    license: MIT
+    scope: prod
+  - name: "@solid-primitives/event-listener"
+    version: 2.4.5
+    license: MIT
+    scope: dev
+  - name: "@solid-primitives/keyboard"
+    version: 1.3.5
+    license: MIT
+    scope: dev
+  - name: "@solid-primitives/resize-observer"
+    version: 2.1.5
+    license: MIT
+    scope: dev
+  - name: "@solid-primitives/rootless"
+    version: 1.5.3
+    license: MIT
+    scope: dev
+  - name: "@solid-primitives/static-store"
+    version: 0.1.3
+    license: MIT
+    scope: dev
+  - name: "@solid-primitives/utils"
+    version: 6.4.0
+    license: MIT
+    scope: dev
+  - name: "@standard-schema/spec"
+    version: 1.1.0
+    license: MIT
+    scope: dev
+  - name: "@swc/core"
+    version: 1.15.43
+    license: Apache-2.0
+    scope: prod
+  - name: "@swc/counter"
+    version: 0.1.3
+    license: Apache-2.0
+    scope: prod
+  - name: "@swc/types"
+    version: 0.1.27
+    license: Apache-2.0
+    scope: prod
+  - name: "@tanstack/devtools"
+    version: 0.12.5
+    license: MIT
+    scope: dev
+  - name: "@tanstack/devtools-client"
+    version: 0.0.8
+    license: MIT
+    scope: dev
+  - name: "@tanstack/devtools-event-bus"
+    version: 0.4.2
+    license: MIT
+    scope: dev
+  - name: "@tanstack/devtools-event-client"
+    version: 0.5.0
+    license: MIT
+    scope: dev
+  - name: "@tanstack/devtools-ui"
+    version: 0.6.0
+    license: MIT
+    scope: dev
+  - name: "@tanstack/devtools-vite"
+    version: 0.8.1
+    license: MIT
+    scope: dev
+  - name: "@tanstack/history"
+    version: 1.162.0
+    license: MIT
+    scope: prod
+  - name: "@tanstack/react-devtools"
+    version: 0.10.8
+    license: MIT
+    scope: dev
+  - name: "@tanstack/react-router"
+    version: 1.170.16
+    license: MIT
+    scope: prod
+  - name: "@tanstack/react-router-devtools"
+    version: 1.167.0
+    license: MIT
+    scope: dev
+  - name: "@tanstack/react-store"
+    version: 0.9.3
+    license: MIT
+    scope: prod
+  - name: "@tanstack/router-cli"
+    version: 1.167.17
+    license: MIT
+    scope: dev
+  - name: "@tanstack/router-core"
+    version: 1.171.13
+    license: MIT
+    scope: prod
+  - name: "@tanstack/router-devtools-core"
+    version: 1.168.0
+    license: MIT
+    scope: dev
+  - name: "@tanstack/router-generator"
+    version: 1.167.17
+    license: MIT
+    scope: prod
+  - name: "@tanstack/router-plugin"
+    version: 1.168.18
+    license: MIT
+    scope: prod
+  - name: "@tanstack/router-utils"
+    version: 1.162.2
+    license: MIT
+    scope: prod
+  - name: "@tanstack/store"
+    version: 0.9.3
+    license: MIT
+    scope: prod
+  - name: "@tanstack/virtual-file-routes"
+    version: 1.162.0
+    license: MIT
+    scope: prod
+  - name: "@testing-library/dom"
+    version: 10.4.1
+    license: MIT
+    scope: dev
+  - name: "@testing-library/react"
+    version: 16.3.2
+    license: MIT
+    scope: dev
+  - name: "@types/aria-query"
+    version: 5.0.4
+    license: MIT
+    scope: dev
+  - name: "@types/chai"
+    version: 5.2.3
+    license: MIT
+    scope: dev
+  - name: "@types/deep-eql"
+    version: 4.0.2
+    license: MIT
+    scope: dev
+  - name: "@types/estree"
+    version: 1.0.9
+    license: MIT
+    scope: dev
+  - name: "@types/istanbul-lib-coverage"
+    version: 2.0.6
+    license: MIT
+    scope: prod
+  - name: "@types/istanbul-lib-report"
+    version: 3.0.3
+    license: MIT
+    scope: prod
+  - name: "@types/istanbul-reports"
+    version: 3.0.4
+    license: MIT
+    scope: prod
+  - name: "@types/node"
+    version: 26.0.1
+    license: MIT
+    scope: prod
+  - name: "@types/react"
+    version: 19.2.17
+    license: MIT
+    scope: prod
+  - name: "@types/react-dom"
+    version: 19.2.3
+    license: MIT
+    scope: dev
+  - name: "@types/yargs"
+    version: 17.0.35
+    license: MIT
+    scope: prod
+  - name: "@types/yargs-parser"
+    version: 21.0.3
+    license: MIT
+    scope: prod
+  - name: "@vitejs/plugin-legacy"
+    version: 8.1.0
+    license: MIT
+    scope: prod
+  - name: "@vitejs/plugin-react-swc"
+    version: 4.3.1
+    license: MIT
+    scope: prod
+  - name: "@vitest/browser"
+    version: 4.1.9
+    license: MIT
+    scope: dev
+  - name: "@vitest/browser-playwright"
+    version: 4.1.9
+    license: MIT
+    scope: dev
+  - name: "@vitest/coverage-istanbul"
+    version: 4.1.9
+    license: MIT
+    scope: dev
+  - name: "@vitest/expect"
+    version: 4.1.9
+    license: MIT
+    scope: dev
+  - name: "@vitest/mocker"
+    version: 4.1.9
+    license: MIT
+    scope: dev
+  - name: "@vitest/pretty-format"
+    version: 4.1.9
+    license: MIT
+    scope: dev
+  - name: "@vitest/runner"
+    version: 4.1.9
+    license: MIT
+    scope: dev
+  - name: "@vitest/snapshot"
+    version: 4.1.9
+    license: MIT
+    scope: dev
+  - name: "@vitest/spy"
+    version: 4.1.9
+    license: MIT
+    scope: dev
+  - name: "@vitest/utils"
+    version: 4.1.9
+    license: MIT
+    scope: dev
+  - name: abort-controller
+    version: 3.0.0
+    license: MIT
+    scope: prod
+  - name: abstract-logging
+    version: 2.0.1
+    license: MIT
+    scope: prod
+  - name: acorn
+    version: 8.17.0
+    license: MIT
+    scope: prod
+  - name: ajv
+    version: 8.20.0
+    license: MIT
+    scope: prod
+  - name: ajv-formats
+    version: 3.0.1
+    license: MIT
+    scope: prod
+  - name: ansi-regex
+    version: 5.0.1
+    license: MIT
+    scope: prod
+  - name: ansi-regex
+    version: 6.2.2
+    license: MIT
+    scope: prod
+  - name: ansi-styles
+    version: 4.3.0
+    license: MIT
+    scope: prod
+  - name: ansi-styles
+    version: 5.2.0
+    license: MIT
+    scope: prod
+  - name: ansi-styles
+    version: 6.2.3
+    license: MIT
+    scope: dev
+  - name: ansis
+    version: 4.3.1
+    license: ISC
+    scope: prod
+  - name: anymatch
+    version: 3.1.3
+    license: ISC
+    scope: prod
+  - name: aria-query
+    version: 5.3.0
+    license: Apache-2.0
+    scope: dev
+  - name: assertion-error
+    version: 2.0.1
+    license: MIT
+    scope: dev
+  - name: atomic-sleep
+    version: 1.0.0
+    license: MIT
+    scope: prod
+  - name: avvio
+    version: 9.2.0
+    license: MIT
+    scope: prod
+  - name: babel-dead-code-elimination
+    version: 1.0.12
+    license: MIT
+    scope: prod
+  - name: babel-plugin-polyfill-corejs2
+    version: 0.4.17
+    license: MIT
+    scope: prod
+  - name: babel-plugin-polyfill-corejs3
+    version: 0.14.2
+    license: MIT
+    scope: prod
+  - name: babel-plugin-polyfill-regenerator
+    version: 0.6.8
+    license: MIT
+    scope: prod
+  - name: balanced-match
+    version: 4.0.4
+    license: MIT
+    scope: prod
+  - name: base64-js
+    version: 1.5.1
+    license: MIT
+    scope: prod
+  - name: baseline-browser-mapping
+    version: 2.10.40
+    license: Apache-2.0
+    scope: prod
+  - name: binary-extensions
+    version: 2.3.0
+    license: MIT
+    scope: prod
+  - name: brace-expansion
+    version: 5.0.6
+    license: MIT
+    scope: prod
+  - name: braces
+    version: 3.0.3
+    license: MIT
+    scope: prod
+  - name: browserslist
+    version: 4.28.4
+    license: MIT
+    scope: prod
+  - name: browserslist-to-esbuild
+    version: 2.1.1
+    license: MIT
+    scope: prod
+  - name: buffer
+    version: 6.0.3
+    license: MIT
+    scope: prod
+  - name: buffer-from
+    version: 1.1.2
+    license: MIT
+    scope: prod
+  - name: cac
+    version: 7.0.0
+    license: MIT
+    scope: dev
+  - name: camelcase
+    version: 6.3.0
+    license: MIT
+    scope: prod
+  - name: camelcase-css
+    version: 2.0.1
+    license: MIT
+    scope: prod
+  - name: caniuse-lite
+    version: 1.0.30001799
+    license: CC-BY-4.0
+    scope: prod
+  - name: chai
+    version: 6.2.2
+    license: MIT
+    scope: dev
+  - name: chalk
+    version: 4.1.2
+    license: MIT
+    scope: prod
+  - name: chalk
+    version: 5.6.2
+    license: MIT
+    scope: prod
+  - name: chokidar
+    version: 3.6.0
+    license: MIT
+    scope: prod
+  - name: chokidar
+    version: 5.0.0
+    license: MIT
+    scope: prod
+  - name: cli-cursor
+    version: 5.0.0
+    license: MIT
+    scope: prod
+  - name: cli-spinners
+    version: 3.4.0
+    license: MIT
+    scope: prod
+  - name: cli-table3
+    version: 0.6.5
+    license: MIT
+    scope: prod
+  - name: cliui
+    version: 8.0.1
+    license: ISC
+    scope: dev
+  - name: cliui
+    version: 9.0.1
+    license: ISC
+    scope: dev
+  - name: clsx
+    version: 2.1.1
+    license: MIT
+    scope: prod
+  - name: color-convert
+    version: 2.0.1
+    license: MIT
+    scope: prod
+  - name: color-name
+    version: 1.1.4
+    license: MIT
+    scope: prod
+  - name: commander
+    version: 10.0.1
+    license: MIT
+    scope: prod
+  - name: commander
+    version: 14.0.3
+    license: MIT
+    scope: prod
+  - name: commander
+    version: 2.20.3
+    license: MIT
+    scope: prod
+  - name: content-disposition
+    version: 1.1.0
+    license: MIT
+    scope: prod
+  - name: convert-source-map
+    version: 2.0.0
+    license: MIT
+    scope: prod
+  - name: cookie
+    version: 1.1.1
+    license: MIT
+    scope: prod
+  - name: cookie-es
+    version: 3.1.1
+    license: MIT
+    scope: prod
+  - name: core-js
+    version: 3.49.0
+    license: MIT
+    scope: prod
+  - name: core-js-compat
+    version: 3.49.0
+    license: MIT
+    scope: prod
+  - name: core-util-is
+    version: 1.0.3
+    license: MIT
+    scope: prod
+  - name: country-flag-icons
+    version: 1.6.19
+    license: MIT
+    scope: prod
+  - name: cssesc
+    version: 3.0.0
+    license: MIT
+    scope: prod
+  - name: csstype
+    version: 3.2.3
+    license: MIT
+    scope: prod
+  - name: dayjs
+    version: 1.11.21
+    license: MIT
+    scope: dev
+  - name: debug
+    version: 4.4.3
+    license: MIT
+    scope: prod
+  - name: defu
+    version: 6.1.7
+    license: MIT
+    scope: dev
+  - name: depd
+    version: 2.0.0
+    license: MIT
+    scope: prod
+  - name: dequal
+    version: 2.0.3
+    license: MIT
+    scope: prod
+  - name: destr
+    version: 2.0.5
+    license: MIT
+    scope: dev
+  - name: detect-libc
+    version: 2.1.2
+    license: Apache-2.0
+    scope: prod
+  - name: detect-node-es
+    version: 1.1.0
+    license: MIT
+    scope: prod
+  - name: diff
+    version: 8.0.4
+    license: BSD-3-Clause
+    scope: prod
+  - name: dom-accessibility-api
+    version: 0.5.16
+    license: MIT
+    scope: dev
+  - name: dpdm
+    version: 4.2.0
+    license: MIT
+    scope: dev
+  - name: duplexify
+    version: 3.7.1
+    license: MIT
+    scope: prod
+  - name: electron-to-chromium
+    version: 1.5.380
+    license: ISC
+    scope: prod
+  - name: emoji-regex
+    version: 10.6.0
+    license: MIT
+    scope: dev
+  - name: emoji-regex
+    version: 8.0.0
+    license: MIT
+    scope: prod
+  - name: end-of-stream
+    version: 1.4.5
+    license: MIT
+    scope: prod
+  - name: es-errors
+    version: 1.3.0
+    license: MIT
+    scope: prod
+  - name: es-module-lexer
+    version: 2.1.0
+    license: MIT
+    scope: dev
+  - name: esbuild
+    version: 0.25.12
+    license: MIT
+    scope: prod
+  - name: escalade
+    version: 3.2.0
+    license: MIT
+    scope: prod
+  - name: escape-html
+    version: 1.0.3
+    license: MIT
+    scope: prod
+  - name: estree-walker
+    version: 3.0.3
+    license: MIT
+    scope: dev
+  - name: esutils
+    version: 2.0.3
+    license: BSD-2-Clause
+    scope: prod
+  - name: event-target-shim
+    version: 5.0.1
+    license: MIT
+    scope: prod
+  - name: events
+    version: 3.3.0
+    license: MIT
+    scope: prod
+  - name: expect-type
+    version: 1.4.0
+    license: Apache-2.0
+    scope: dev
+  - name: fast-decode-uri-component
+    version: 1.0.1
+    license: MIT
+    scope: prod
+  - name: fast-deep-equal
+    version: 3.1.3
+    license: MIT
+    scope: prod
+  - name: fast-json-stringify
+    version: 6.4.0
+    license: MIT
+    scope: prod
+  - name: fast-querystring
+    version: 1.1.2
+    license: MIT
+    scope: prod
+  - name: fast-uri
+    version: 3.1.2
+    license: BSD-3-Clause
+    scope: prod
+  - name: fastify
+    version: 5.8.5
+    license: MIT
+    scope: prod
+  - name: fastify-plugin
+    version: 5.1.0
+    license: MIT
+    scope: prod
+  - name: fastq
+    version: 1.20.1
+    license: ISC
+    scope: prod
+  - name: fd-package-json
+    version: 2.0.0
+    license: MIT
+    scope: dev
+  - name: fdir
+    version: 6.5.0
+    license: MIT
+    scope: prod
+  - name: fill-range
+    version: 7.1.1
+    license: MIT
+    scope: prod
+  - name: find-my-way
+    version: 9.6.0
+    license: MIT
+    scope: prod
+  - name: formatly
+    version: 0.3.0
+    license: MIT
+    scope: dev
+  - name: fs-extra
+    version: 11.3.5
+    license: MIT
+    scope: dev
+  - name: function-bind
+    version: 1.1.2
+    license: MIT
+    scope: prod
+  - name: fzf
+    version: 0.5.2
+    license: BSD-3-Clause
+    scope: dev
+  - name: gensync
+    version: 1.0.0-beta.2
+    license: MIT
+    scope: prod
+  - name: get-caller-file
+    version: 2.0.5
+    license: ISC
+    scope: dev
+  - name: get-east-asian-width
+    version: 1.6.0
+    license: MIT
+    scope: prod
+  - name: get-nonce
+    version: 1.0.1
+    license: MIT
+    scope: prod
+  - name: get-tsconfig
+    version: 4.14.0
+    license: MIT
+    scope: dev
+  - name: glob
+    version: 13.0.6
+    license: BlueOak-1.0.0
+    scope: prod
+  - name: glob-parent
+    version: 5.1.2
+    license: ISC
+    scope: prod
+  - name: goober
+    version: 2.1.19
+    license: MIT
+    scope: dev
+  - name: graceful-fs
+    version: 4.2.11
+    license: ISC
+    scope: dev
+  - name: has-flag
+    version: 4.0.0
+    license: MIT
+    scope: prod
+  - name: hasown
+    version: 2.0.4
+    license: MIT
+    scope: prod
+  - name: helmet
+    version: 8.2.0
+    license: MIT
+    scope: prod
+  - name: html-escaper
+    version: 2.0.2
+    license: MIT
+    scope: dev
+  - name: http-errors
+    version: 2.0.1
+    license: MIT
+    scope: prod
+  - name: ieee754
+    version: 1.2.1
+    license: BSD-3-Clause
+    scope: prod
+  - name: inherits
+    version: 2.0.4
+    license: ISC
+    scope: prod
+  - name: ipaddr.js
+    version: 2.4.0
+    license: MIT
+    scope: prod
+  - name: is-binary-path
+    version: 2.1.0
+    license: MIT
+    scope: prod
+  - name: is-core-module
+    version: 2.16.2
+    license: MIT
+    scope: prod
+  - name: is-extglob
+    version: 2.1.1
+    license: MIT
+    scope: prod
+  - name: is-fullwidth-code-point
+    version: 3.0.0
+    license: MIT
+    scope: prod
+  - name: is-glob
+    version: 4.0.3
+    license: MIT
+    scope: prod
+  - name: is-interactive
+    version: 2.0.0
+    license: MIT
+    scope: prod
+  - name: is-number
+    version: 7.0.0
+    license: MIT
+    scope: prod
+  - name: is-unicode-supported
+    version: 2.1.0
+    license: MIT
+    scope: prod
+  - name: isarray
+    version: 1.0.0
+    license: MIT
+    scope: prod
+  - name: isbot
+    version: 5.1.44
+    license: Unlicense
+    scope: prod
+  - name: istanbul-lib-coverage
+    version: 3.2.2
+    license: BSD-3-Clause
+    scope: dev
+  - name: istanbul-lib-report
+    version: 3.0.1
+    license: BSD-3-Clause
+    scope: dev
+  - name: istanbul-reports
+    version: 3.2.0
+    license: BSD-3-Clause
+    scope: dev
+  - name: jest-get-type
+    version: 29.6.3
+    license: MIT
+    scope: prod
+  - name: jest-validate
+    version: 29.7.0
+    license: MIT
+    scope: prod
+  - name: jiti
+    version: 2.7.0
+    license: MIT
+    scope: prod
+  - name: js-sha256
+    version: 0.10.1
+    license: MIT
+    scope: prod
+  - name: js-tokens
+    version: 4.0.0
+    license: MIT
+    scope: prod
+  - name: jsesc
+    version: 3.1.0
+    license: MIT
+    scope: prod
+  - name: json-schema-ref-resolver
+    version: 3.0.0
+    license: MIT
+    scope: prod
+  - name: json-schema-traverse
+    version: 1.0.0
+    license: MIT
+    scope: prod
+  - name: json5
+    version: 2.2.3
+    license: MIT
+    scope: prod
+  - name: jsonfile
+    version: 6.2.1
+    license: MIT
+    scope: dev
+  - name: knip
+    version: 6.22.0
+    license: ISC
+    scope: dev
+  - name: launch-editor
+    version: 2.14.1
+    license: MIT
+    scope: dev
+  - name: leven
+    version: 3.1.0
+    license: MIT
+    scope: prod
+  - name: light-my-request
+    version: 6.6.0
+    license: BSD-3-Clause
+    scope: prod
+  - name: lightningcss
+    version: 1.32.0
+    license: MPL-2.0
+    scope: prod
+  - name: lilconfig
+    version: 3.1.3
+    license: MIT
+    scope: prod
+  - name: lodash.debounce
+    version: 4.0.8
+    license: MIT
+    scope: prod
+  - name: log-symbols
+    version: 7.0.1
+    license: MIT
+    scope: prod
+  - name: lru-cache
+    version: 11.5.1
+    license: BlueOak-1.0.0
+    scope: prod
+  - name: lru-cache
+    version: 5.1.1
+    license: ISC
+    scope: prod
+  - name: lucide-react
+    version: 1.21.0
+    license: ISC
+    scope: prod
+  - name: lz-string
+    version: 1.5.0
+    license: MIT
+    scope: dev
+  - name: magic-string
+    version: 0.30.21
+    license: MIT
+    scope: prod
+  - name: magicast
+    version: 0.5.3
+    license: MIT
+    scope: dev
+  - name: make-dir
+    version: 4.0.0
+    license: MIT
+    scope: dev
+  - name: meow
+    version: 13.2.0
+    license: MIT
+    scope: prod
+  - name: micromatch
+    version: 4.0.8
+    license: MIT
+    scope: prod
+  - name: mime
+    version: 3.0.0
+    license: MIT
+    scope: prod
+  - name: mime-db
+    version: 1.54.0
+    license: MIT
+    scope: prod
+  - name: mimic-function
+    version: 5.0.1
+    license: MIT
+    scope: prod
+  - name: minimatch
+    version: 10.2.5
+    license: BlueOak-1.0.0
+    scope: prod
+  - name: minipass
+    version: 7.1.3
+    license: BlueOak-1.0.0
+    scope: prod
+  - name: moo
+    version: 0.5.3
+    license: BSD-3-Clause
+    scope: prod
+  - name: mrmime
+    version: 2.0.1
+    license: MIT
+    scope: dev
+  - name: ms
+    version: 2.1.3
+    license: MIT
+    scope: prod
+  - name: nanoid
+    version: 3.3.15
+    license: MIT
+    scope: prod
+  - name: node-fetch-native
+    version: 1.6.7
+    license: MIT
+    scope: dev
+  - name: node-releases
+    version: 2.0.50
+    license: MIT
+    scope: prod
+  - name: normalize-path
+    version: 3.0.0
+    license: MIT
+    scope: prod
+  - name: obug
+    version: 2.1.3
+    license: MIT
+    scope: dev
+  - name: ofetch
+    version: 1.5.1
+    license: MIT
+    scope: dev
+  - name: on-exit-leak-free
+    version: 2.1.2
+    license: MIT
+    scope: prod
+  - name: once
+    version: 1.4.0
+    license: ISC
+    scope: prod
+  - name: onetime
+    version: 7.0.0
+    license: MIT
+    scope: prod
+  - name: ora
+    version: 9.4.1
+    license: MIT
+    scope: prod
+  - name: oxc-parser
+    version: 0.120.0
+    license: MIT
+    scope: dev
+  - name: oxc-parser
+    version: 0.137.0
+    license: MIT
+    scope: dev
+  - name: oxc-resolver
+    version: 11.21.3
+    license: MIT
+    scope: dev
+  - name: p-map
+    version: 7.0.4
+    license: MIT
+    scope: prod
+  - name: package-manager-detector
+    version: 1.6.0
+    license: MIT
+    scope: dev
+  - name: path-parse
+    version: 1.0.7
+    license: MIT
+    scope: prod
+  - name: path-scurry
+    version: 2.0.2
+    license: BlueOak-1.0.0
+    scope: prod
+  - name: pathe
+    version: 2.0.3
+    license: MIT
+    scope: prod
+  - name: peek-stream
+    version: 1.1.3
+    license: MIT
+    scope: prod
+  - name: picocolors
+    version: 1.1.1
+    license: ISC
+    scope: prod
+  - name: picomatch
+    version: 2.3.2
+    license: MIT
+    scope: prod
+  - name: picomatch
+    version: 4.0.4
+    license: MIT
+    scope: prod
+  - name: pino
+    version: 10.3.1
+    license: MIT
+    scope: prod
+  - name: pino-abstract-transport
+    version: 3.0.0
+    license: MIT
+    scope: prod
+  - name: pino-std-serializers
+    version: 7.1.0
+    license: MIT
+    scope: prod
+  - name: playwright
+    version: 1.61.1
+    license: Apache-2.0
+    scope: dev
+  - name: playwright-core
+    version: 1.61.1
+    license: Apache-2.0
+    scope: dev
+  - name: pngjs
+    version: 7.0.0
+    license: MIT
+    scope: dev
+  - name: pnpm-workspace-yaml
+    version: 1.6.1
+    license: MIT
+    scope: dev
+  - name: pofile-ts
+    version: 4.0.3
+    license: MIT
+    scope: prod
+  - name: postcss
+    version: 8.5.15
+    license: MIT
+    scope: prod
+  - name: postcss-js
+    version: 4.1.0
+    license: MIT
+    scope: prod
+  - name: postcss-mixins
+    version: 12.1.2
+    license: MIT
+    scope: prod
+  - name: postcss-nested
+    version: 7.0.2
+    license: MIT
+    scope: prod
+  - name: postcss-preset-mantine
+    version: 1.18.0
+    license: MIT
+    scope: prod
+  - name: postcss-selector-parser
+    version: 7.1.4
+    license: MIT
+    scope: prod
+  - name: postcss-simple-vars
+    version: 7.0.1
+    license: MIT
+    scope: prod
+  - name: prettier
+    version: 3.9.0
+    license: MIT
+    scope: prod
+  - name: pretty-format
+    version: 27.5.1
+    license: MIT
+    scope: dev
+  - name: pretty-format
+    version: 29.7.0
+    license: MIT
+    scope: prod
+  - name: process
+    version: 0.11.10
+    license: MIT
+    scope: prod
+  - name: process-nextick-args
+    version: 2.0.1
+    license: MIT
+    scope: prod
+  - name: process-warning
+    version: 4.0.1
+    license: MIT
+    scope: prod
+  - name: process-warning
+    version: 5.0.0
+    license: MIT
+    scope: prod
+  - name: pseudolocale
+    version: 2.2.0
+    license: MIT
+    scope: prod
+  - name: quansync
+    version: 1.0.0
+    license: MIT
+    scope: dev
+  - name: quick-format-unescaped
+    version: 4.0.4
+    license: MIT
+    scope: prod
+  - name: react
+    version: 19.2.7
+    license: MIT
+    scope: prod
+  - name: react-dom
+    version: 19.2.7
+    license: MIT
+    scope: prod
+  - name: react-is
+    version: 17.0.2
+    license: MIT
+    scope: dev
+  - name: react-is
+    version: 18.3.1
+    license: MIT
+    scope: prod
+  - name: react-number-format
+    version: 5.4.5
+    license: MIT
+    scope: prod
+  - name: react-remove-scroll
+    version: 2.7.2
+    license: MIT
+    scope: prod
+  - name: react-remove-scroll-bar
+    version: 2.3.8
+    license: MIT
+    scope: prod
+  - name: react-style-singleton
+    version: 2.2.3
+    license: MIT
+    scope: prod
+  - name: readable-stream
+    version: 2.3.8
+    license: MIT
+    scope: prod
+  - name: readable-stream
+    version: 4.7.0
+    license: MIT
+    scope: prod
+  - name: readdirp
+    version: 3.6.0
+    license: MIT
+    scope: prod
+  - name: readdirp
+    version: 5.0.0
+    license: MIT
+    scope: prod
+  - name: real-require
+    version: 0.2.0
+    license: MIT
+    scope: prod
+  - name: real-require
+    version: 1.0.0
+    license: MIT
+    scope: prod
+  - name: regenerate
+    version: 1.4.2
+    license: MIT
+    scope: prod
+  - name: regenerate-unicode-properties
+    version: 10.2.2
+    license: MIT
+    scope: prod
+  - name: regenerator-runtime
+    version: 0.14.1
+    license: MIT
+    scope: prod
+  - name: regexpu-core
+    version: 6.4.0
+    license: MIT
+    scope: prod
+  - name: regjsgen
+    version: 0.8.0
+    license: MIT
+    scope: prod
+  - name: regjsparser
+    version: 0.13.2
+    license: BSD-2-Clause
+    scope: prod
+  - name: require-directory
+    version: 2.1.1
+    license: MIT
+    scope: dev
+  - name: require-from-string
+    version: 2.0.2
+    license: MIT
+    scope: prod
+  - name: resolve
+    version: 1.22.12
+    license: MIT
+    scope: prod
+  - name: resolve-pkg-maps
+    version: 1.0.0
+    license: MIT
+    scope: dev
+  - name: restore-cursor
+    version: 5.1.0
+    license: MIT
+    scope: prod
+  - name: ret
+    version: 0.5.0
+    license: MIT
+    scope: prod
+  - name: reusify
+    version: 1.1.0
+    license: MIT
+    scope: prod
+  - name: rfdc
+    version: 1.4.1
+    license: MIT
+    scope: prod
+  - name: rolldown
+    version: 1.1.3
+    license: MIT
+    scope: prod
+  - name: safe-buffer
+    version: 5.1.2
+    license: MIT
+    scope: prod
+  - name: safe-buffer
+    version: 5.2.1
+    license: MIT
+    scope: prod
+  - name: safe-regex2
+    version: 5.1.1
+    license: MIT
+    scope: prod
+  - name: safe-stable-stringify
+    version: 2.5.0
+    license: MIT
+    scope: prod
+  - name: scheduler
+    version: 0.27.0
+    license: MIT
+    scope: prod
+  - name: secure-json-parse
+    version: 4.1.0
+    license: BSD-3-Clause
+    scope: prod
+  - name: semver
+    version: 6.3.1
+    license: ISC
+    scope: prod
+  - name: semver
+    version: 7.8.5
+    license: ISC
+    scope: prod
+  - name: seroval
+    version: 1.5.4
+    license: MIT
+    scope: prod
+  - name: seroval-plugins
+    version: 1.5.4
+    license: MIT
+    scope: prod
+  - name: set-cookie-parser
+    version: 2.7.2
+    license: MIT
+    scope: prod
+  - name: setprototypeof
+    version: 1.2.0
+    license: ISC
+    scope: prod
+  - name: shell-quote
+    version: 1.9.0
+    license: MIT
+    scope: dev
+  - name: siginfo
+    version: 2.0.0
+    license: ISC
+    scope: dev
+  - name: signal-exit
+    version: 4.1.0
+    license: ISC
+    scope: prod
+  - name: sirv
+    version: 3.0.2
+    license: MIT
+    scope: dev
+  - name: smol-toml
+    version: 1.7.0
+    license: BSD-3-Clause
+    scope: dev
+  - name: solid-js
+    version: 1.9.13
+    license: MIT
+    scope: dev
+  - name: sonic-boom
+    version: 4.2.1
+    license: MIT
+    scope: prod
+  - name: source-map
+    version: 0.6.1
+    license: BSD-3-Clause
+    scope: prod
+  - name: source-map
+    version: 0.7.6
+    license: BSD-3-Clause
+    scope: prod
+  - name: source-map-js
+    version: 1.2.1
+    license: BSD-3-Clause
+    scope: prod
+  - name: source-map-support
+    version: 0.5.21
+    license: MIT
+    scope: prod
+  - name: split2
+    version: 4.2.0
+    license: ISC
+    scope: prod
+  - name: stackback
+    version: 0.0.2
+    license: MIT
+    scope: dev
+  - name: statuses
+    version: 2.0.2
+    license: MIT
+    scope: prod
+  - name: std-env
+    version: 4.1.0
+    license: MIT
+    scope: dev
+  - name: stdin-discarder
+    version: 0.3.2
+    license: MIT
+    scope: prod
+  - name: stream-shift
+    version: 1.0.3
+    license: MIT
+    scope: prod
+  - name: string-width
+    version: 4.2.3
+    license: MIT
+    scope: prod
+  - name: string-width
+    version: 7.2.0
+    license: MIT
+    scope: dev
+  - name: string-width
+    version: 8.2.1
+    license: MIT
+    scope: prod
+  - name: string_decoder
+    version: 1.1.1
+    license: MIT
+    scope: prod
+  - name: string_decoder
+    version: 1.3.0
+    license: MIT
+    scope: prod
+  - name: strip-ansi
+    version: 6.0.1
+    license: MIT
+    scope: prod
+  - name: strip-ansi
+    version: 7.2.0
+    license: MIT
+    scope: prod
+  - name: strip-json-comments
+    version: 5.0.3
+    license: MIT
+    scope: dev
+  - name: sugarss
+    version: 5.0.1
+    license: MIT
+    scope: prod
+  - name: supports-color
+    version: 7.2.0
+    license: MIT
+    scope: prod
+  - name: supports-preserve-symlinks-flag
+    version: 1.0.0
+    license: MIT
+    scope: prod
+  - name: systemjs
+    version: 6.15.1
+    license: MIT
+    scope: prod
+  - name: tabbable
+    version: 6.5.0
+    license: MIT
+    scope: prod
+  - name: tagged-tag
+    version: 1.0.0
+    license: MIT
+    scope: prod
+  - name: taze
+    version: 19.14.1
+    license: MIT
+    scope: dev
+  - name: terser
+    version: 5.48.0
+    license: BSD-2-Clause
+    scope: prod
+  - name: thread-stream
+    version: 4.2.0
+    license: MIT
+    scope: prod
+  - name: through2
+    version: 2.0.5
+    license: MIT
+    scope: prod
+  - name: tinybench
+    version: 2.9.0
+    license: MIT
+    scope: dev
+  - name: tinyexec
+    version: 1.2.4
+    license: MIT
+    scope: dev
+  - name: tinyglobby
+    version: 0.2.17
+    license: MIT
+    scope: prod
+  - name: tinypool
+    version: 2.1.0
+    license: MIT
+    scope: prod
+  - name: tinyrainbow
+    version: 3.1.0
+    license: MIT
+    scope: dev
+  - name: to-regex-range
+    version: 5.0.1
+    license: MIT
+    scope: prod
+  - name: toad-cache
+    version: 3.7.1
+    license: MIT
+    scope: prod
+  - name: toidentifier
+    version: 1.0.1
+    license: MIT
+    scope: prod
+  - name: totalist
+    version: 3.0.1
+    license: MIT
+    scope: dev
+  - name: tslib
+    version: 2.8.1
+    license: 0BSD
+    scope: prod
+  - name: type-fest
+    version: 5.7.0
+    license: (MIT OR CC0-1.0)
+    scope: prod
+  - name: typescript
+    version: 5.9.3
+    license: Apache-2.0
+    scope: dev
+  - name: typescript
+    version: 6.0.3
+    license: Apache-2.0
+    scope: dev
+  - name: ufo
+    version: 1.6.4
+    license: MIT
+    scope: dev
+  - name: unbash
+    version: 4.0.1
+    license: ISC
+    scope: dev
+  - name: unconfig
+    version: 7.5.0
+    license: MIT
+    scope: dev
+  - name: unconfig-core
+    version: 7.5.0
+    license: MIT
+    scope: dev
+  - name: undici-types
+    version: 8.3.0
+    license: MIT
+    scope: prod
+  - name: unicode-canonical-property-names-ecmascript
+    version: 2.0.1
+    license: MIT
+    scope: prod
+  - name: unicode-match-property-ecmascript
+    version: 2.0.0
+    license: MIT
+    scope: prod
+  - name: unicode-match-property-value-ecmascript
+    version: 2.2.1
+    license: MIT
+    scope: prod
+  - name: unicode-property-aliases-ecmascript
+    version: 2.2.0
+    license: MIT
+    scope: prod
+  - name: universalify
+    version: 2.0.1
+    license: MIT
+    scope: dev
+  - name: unplugin
+    version: 3.2.0
+    license: MIT
+    scope: prod
+  - name: update-browserslist-db
+    version: 1.2.3
+    license: MIT
+    scope: prod
+  - name: use-callback-ref
+    version: 1.3.3
+    license: MIT
+    scope: prod
+  - name: use-sidecar
+    version: 1.1.3
+    license: MIT
+    scope: prod
+  - name: use-sync-external-store
+    version: 1.6.0
+    license: MIT
+    scope: prod
+  - name: util-deprecate
+    version: 1.0.2
+    license: MIT
+    scope: prod
+  - name: vite
+    version: 8.1.0
+    license: MIT
+    scope: prod
+  - name: vite-plugin-static-copy
+    version: 4.1.1
+    license: MIT
+    scope: prod
+  - name: vitest
+    version: 4.1.9
+    license: MIT
+    scope: dev
+  - name: walk-up-path
+    version: 4.0.0
+    license: ISC
+    scope: dev
+  - name: webpack-virtual-modules
+    version: 0.6.2
+    license: MIT
+    scope: prod
+  - name: why-is-node-running
+    version: 2.3.0
+    license: MIT
+    scope: dev
+  - name: wrap-ansi
+    version: 7.0.0
+    license: MIT
+    scope: dev
+  - name: wrap-ansi
+    version: 9.0.2
+    license: MIT
+    scope: dev
+  - name: wrappy
+    version: 1.0.2
+    license: ISC
+    scope: prod
+  - name: ws
+    version: 8.21.0
+    license: MIT
+    scope: dev
+  - name: xtend
+    version: 4.0.2
+    license: MIT
+    scope: prod
+  - name: y18n
+    version: 5.0.8
+    license: ISC
+    scope: dev
+  - name: yallist
+    version: 3.1.1
+    license: ISC
+    scope: prod
+  - name: yaml
+    version: 2.9.0
+    license: ISC
+    scope: prod
+  - name: yargs
+    version: 17.7.3
+    license: MIT
+    scope: dev
+  - name: yargs
+    version: 18.0.0
+    license: MIT
+    scope: dev
+  - name: yargs-parser
+    version: 21.1.1
+    license: ISC
+    scope: dev
+  - name: yargs-parser
+    version: 22.0.0
+    license: ISC
+    scope: dev
+  - name: yoctocolors
+    version: 2.1.2
+    license: MIT
+    scope: prod
+  - name: zod
+    version: 4.4.3
+    license: MIT
+    scope: prod
+  - name: "@biomejs/cli-darwin-arm64"
+    version: 2.5.1
+    license: MIT OR Apache-2.0
+    scope: dev
+    platform: true
+  - name: "@biomejs/cli-darwin-x64"
+    version: 2.5.1
+    license: MIT OR Apache-2.0
+    scope: dev
+    platform: true
+  - name: "@biomejs/cli-linux-arm64"
+    version: 2.5.1
+    license: MIT OR Apache-2.0
+    scope: dev
+    platform: true
+  - name: "@biomejs/cli-linux-arm64-musl"
+    version: 2.5.1
+    license: MIT OR Apache-2.0
+    scope: dev
+    platform: true
+  - name: "@biomejs/cli-linux-x64"
+    version: 2.5.1
+    license: MIT OR Apache-2.0
+    scope: dev
+    platform: true
+  - name: "@biomejs/cli-linux-x64-musl"
+    version: 2.5.1
+    license: MIT OR Apache-2.0
+    scope: dev
+    platform: true
+  - name: "@biomejs/cli-win32-arm64"
+    version: 2.5.1
+    license: MIT OR Apache-2.0
+    scope: dev
+    platform: true
+  - name: "@biomejs/cli-win32-x64"
+    version: 2.5.1
+    license: MIT OR Apache-2.0
+    scope: dev
+    platform: true
+  - name: "@esbuild/aix-ppc64"
+    version: 0.25.12
+    license: MIT
+    scope: prod
+    platform: true
+  - name: "@esbuild/android-arm"
+    version: 0.25.12
+    license: MIT
+    scope: prod
+    platform: true
+  - name: "@esbuild/android-arm64"
+    version: 0.25.12
+    license: MIT
+    scope: prod
+    platform: true
+  - name: "@esbuild/android-x64"
+    version: 0.25.12
+    license: MIT
+    scope: prod
+    platform: true
+  - name: "@esbuild/darwin-arm64"
+    version: 0.25.12
+    license: MIT
+    scope: prod
+    platform: true
+  - name: "@esbuild/darwin-x64"
+    version: 0.25.12
+    license: MIT
+    scope: prod
+    platform: true
+  - name: "@esbuild/freebsd-arm64"
+    version: 0.25.12
+    license: MIT
+    scope: prod
+    platform: true
+  - name: "@esbuild/freebsd-x64"
+    version: 0.25.12
+    license: MIT
+    scope: prod
+    platform: true
+  - name: "@esbuild/linux-arm"
+    version: 0.25.12
+    license: MIT
+    scope: prod
+    platform: true
+  - name: "@esbuild/linux-arm64"
+    version: 0.25.12
+    license: MIT
+    scope: prod
+    platform: true
+  - name: "@esbuild/linux-ia32"
+    version: 0.25.12
+    license: MIT
+    scope: prod
+    platform: true
+  - name: "@esbuild/linux-loong64"
+    version: 0.25.12
+    license: MIT
+    scope: prod
+    platform: true
+  - name: "@esbuild/linux-mips64el"
+    version: 0.25.12
+    license: MIT
+    scope: prod
+    platform: true
+  - name: "@esbuild/linux-ppc64"
+    version: 0.25.12
+    license: MIT
+    scope: prod
+    platform: true
+  - name: "@esbuild/linux-riscv64"
+    version: 0.25.12
+    license: MIT
+    scope: prod
+    platform: true
+  - name: "@esbuild/linux-s390x"
+    version: 0.25.12
+    license: MIT
+    scope: prod
+    platform: true
+  - name: "@esbuild/linux-x64"
+    version: 0.25.12
+    license: MIT
+    scope: prod
+    platform: true
+  - name: "@esbuild/netbsd-arm64"
+    version: 0.25.12
+    license: MIT
+    scope: prod
+    platform: true
+  - name: "@esbuild/netbsd-x64"
+    version: 0.25.12
+    license: MIT
+    scope: prod
+    platform: true
+  - name: "@esbuild/openbsd-arm64"
+    version: 0.25.12
+    license: MIT
+    scope: prod
+    platform: true
+  - name: "@esbuild/openbsd-x64"
+    version: 0.25.12
+    license: MIT
+    scope: prod
+    platform: true
+  - name: "@esbuild/openharmony-arm64"
+    version: 0.25.12
+    license: MIT
+    scope: prod
+    platform: true
+  - name: "@esbuild/sunos-x64"
+    version: 0.25.12
+    license: MIT
+    scope: prod
+    platform: true
+  - name: "@esbuild/win32-arm64"
+    version: 0.25.12
+    license: MIT
+    scope: prod
+    platform: true
+  - name: "@esbuild/win32-ia32"
+    version: 0.25.12
+    license: MIT
+    scope: prod
+    platform: true
+  - name: "@esbuild/win32-x64"
+    version: 0.25.12
+    license: MIT
+    scope: prod
+    platform: true
+  - name: "@oxc-parser/binding-android-arm-eabi"
+    version: 0.120.0
+    license: MIT
+    scope: dev
+    platform: true
+  - name: "@oxc-parser/binding-android-arm-eabi"
+    version: 0.137.0
+    license: MIT
+    scope: dev
+    platform: true
+  - name: "@oxc-parser/binding-android-arm64"
+    version: 0.120.0
+    license: MIT
+    scope: dev
+    platform: true
+  - name: "@oxc-parser/binding-android-arm64"
+    version: 0.137.0
+    license: MIT
+    scope: dev
+    platform: true
+  - name: "@oxc-parser/binding-darwin-arm64"
+    version: 0.120.0
+    license: MIT
+    scope: dev
+    platform: true
+  - name: "@oxc-parser/binding-darwin-arm64"
+    version: 0.137.0
+    license: MIT
+    scope: dev
+    platform: true
+  - name: "@oxc-parser/binding-darwin-x64"
+    version: 0.120.0
+    license: MIT
+    scope: dev
+    platform: true
+  - name: "@oxc-parser/binding-darwin-x64"
+    version: 0.137.0
+    license: MIT
+    scope: dev
+    platform: true
+  - name: "@oxc-parser/binding-freebsd-x64"
+    version: 0.120.0
+    license: MIT
+    scope: dev
+    platform: true
+  - name: "@oxc-parser/binding-freebsd-x64"
+    version: 0.137.0
+    license: MIT
+    scope: dev
+    platform: true
+  - name: "@oxc-parser/binding-linux-arm-gnueabihf"
+    version: 0.120.0
+    license: MIT
+    scope: dev
+    platform: true
+  - name: "@oxc-parser/binding-linux-arm-gnueabihf"
+    version: 0.137.0
+    license: MIT
+    scope: dev
+    platform: true
+  - name: "@oxc-parser/binding-linux-arm-musleabihf"
+    version: 0.120.0
+    license: MIT
+    scope: dev
+    platform: true
+  - name: "@oxc-parser/binding-linux-arm-musleabihf"
+    version: 0.137.0
+    license: MIT
+    scope: dev
+    platform: true
+  - name: "@oxc-parser/binding-linux-arm64-gnu"
+    version: 0.120.0
+    license: MIT
+    scope: dev
+    platform: true
+  - name: "@oxc-parser/binding-linux-arm64-gnu"
+    version: 0.137.0
+    license: MIT
+    scope: dev
+    platform: true
+  - name: "@oxc-parser/binding-linux-arm64-musl"
+    version: 0.120.0
+    license: MIT
+    scope: dev
+    platform: true
+  - name: "@oxc-parser/binding-linux-arm64-musl"
+    version: 0.137.0
+    license: MIT
+    scope: dev
+    platform: true
+  - name: "@oxc-parser/binding-linux-ppc64-gnu"
+    version: 0.120.0
+    license: MIT
+    scope: dev
+    platform: true
+  - name: "@oxc-parser/binding-linux-ppc64-gnu"
+    version: 0.137.0
+    license: MIT
+    scope: dev
+    platform: true
+  - name: "@oxc-parser/binding-linux-riscv64-gnu"
+    version: 0.120.0
+    license: MIT
+    scope: dev
+    platform: true
+  - name: "@oxc-parser/binding-linux-riscv64-gnu"
+    version: 0.137.0
+    license: MIT
+    scope: dev
+    platform: true
+  - name: "@oxc-parser/binding-linux-riscv64-musl"
+    version: 0.120.0
+    license: MIT
+    scope: dev
+    platform: true
+  - name: "@oxc-parser/binding-linux-riscv64-musl"
+    version: 0.137.0
+    license: MIT
+    scope: dev
+    platform: true
+  - name: "@oxc-parser/binding-linux-s390x-gnu"
+    version: 0.120.0
+    license: MIT
+    scope: dev
+    platform: true
+  - name: "@oxc-parser/binding-linux-s390x-gnu"
+    version: 0.137.0
+    license: MIT
+    scope: dev
+    platform: true
+  - name: "@oxc-parser/binding-linux-x64-gnu"
+    version: 0.120.0
+    license: MIT
+    scope: dev
+    platform: true
+  - name: "@oxc-parser/binding-linux-x64-gnu"
+    version: 0.137.0
+    license: MIT
+    scope: dev
+    platform: true
+  - name: "@oxc-parser/binding-linux-x64-musl"
+    version: 0.120.0
+    license: MIT
+    scope: dev
+    platform: true
+  - name: "@oxc-parser/binding-linux-x64-musl"
+    version: 0.137.0
+    license: MIT
+    scope: dev
+    platform: true
+  - name: "@oxc-parser/binding-openharmony-arm64"
+    version: 0.120.0
+    license: MIT
+    scope: dev
+    platform: true
+  - name: "@oxc-parser/binding-openharmony-arm64"
+    version: 0.137.0
+    license: MIT
+    scope: dev
+    platform: true
+  - name: "@oxc-parser/binding-wasm32-wasi"
+    version: 0.120.0
+    license: MIT
+    scope: dev
+    platform: true
+  - name: "@oxc-parser/binding-wasm32-wasi"
+    version: 0.137.0
+    license: MIT
+    scope: dev
+    platform: true
+  - name: "@oxc-parser/binding-win32-arm64-msvc"
+    version: 0.120.0
+    license: MIT
+    scope: dev
+    platform: true
+  - name: "@oxc-parser/binding-win32-arm64-msvc"
+    version: 0.137.0
+    license: MIT
+    scope: dev
+    platform: true
+  - name: "@oxc-parser/binding-win32-ia32-msvc"
+    version: 0.120.0
+    license: MIT
+    scope: dev
+    platform: true
+  - name: "@oxc-parser/binding-win32-ia32-msvc"
+    version: 0.137.0
+    license: MIT
+    scope: dev
+    platform: true
+  - name: "@oxc-parser/binding-win32-x64-msvc"
+    version: 0.120.0
+    license: MIT
+    scope: dev
+    platform: true
+  - name: "@oxc-parser/binding-win32-x64-msvc"
+    version: 0.137.0
+    license: MIT
+    scope: dev
+    platform: true
+  - name: "@oxc-resolver/binding-android-arm-eabi"
+    version: 11.21.3
+    license: MIT
+    scope: dev
+    platform: true
+  - name: "@oxc-resolver/binding-android-arm64"
+    version: 11.21.3
+    license: MIT
+    scope: dev
+    platform: true
+  - name: "@oxc-resolver/binding-darwin-arm64"
+    version: 11.21.3
+    license: MIT
+    scope: dev
+    platform: true
+  - name: "@oxc-resolver/binding-darwin-x64"
+    version: 11.21.3
+    license: MIT
+    scope: dev
+    platform: true
+  - name: "@oxc-resolver/binding-freebsd-x64"
+    version: 11.21.3
+    license: MIT
+    scope: dev
+    platform: true
+  - name: "@oxc-resolver/binding-linux-arm-gnueabihf"
+    version: 11.21.3
+    license: MIT
+    scope: dev
+    platform: true
+  - name: "@oxc-resolver/binding-linux-arm-musleabihf"
+    version: 11.21.3
+    license: MIT
+    scope: dev
+    platform: true
+  - name: "@oxc-resolver/binding-linux-arm64-gnu"
+    version: 11.21.3
+    license: MIT
+    scope: dev
+    platform: true
+  - name: "@oxc-resolver/binding-linux-arm64-musl"
+    version: 11.21.3
+    license: MIT
+    scope: dev
+    platform: true
+  - name: "@oxc-resolver/binding-linux-ppc64-gnu"
+    version: 11.21.3
+    license: MIT
+    scope: dev
+    platform: true
+  - name: "@oxc-resolver/binding-linux-riscv64-gnu"
+    version: 11.21.3
+    license: MIT
+    scope: dev
+    platform: true
+  - name: "@oxc-resolver/binding-linux-riscv64-musl"
+    version: 11.21.3
+    license: MIT
+    scope: dev
+    platform: true
+  - name: "@oxc-resolver/binding-linux-s390x-gnu"
+    version: 11.21.3
+    license: MIT
+    scope: dev
+    platform: true
+  - name: "@oxc-resolver/binding-linux-x64-gnu"
+    version: 11.21.3
+    license: MIT
+    scope: dev
+    platform: true
+  - name: "@oxc-resolver/binding-linux-x64-musl"
+    version: 11.21.3
+    license: MIT
+    scope: dev
+    platform: true
+  - name: "@oxc-resolver/binding-openharmony-arm64"
+    version: 11.21.3
+    license: MIT
+    scope: dev
+    platform: true
+  - name: "@oxc-resolver/binding-wasm32-wasi"
+    version: 11.21.3
+    license: MIT
+    scope: dev
+    platform: true
+  - name: "@oxc-resolver/binding-win32-arm64-msvc"
+    version: 11.21.3
+    license: MIT
+    scope: dev
+    platform: true
+  - name: "@oxc-resolver/binding-win32-x64-msvc"
+    version: 11.21.3
+    license: MIT
+    scope: dev
+    platform: true
+  - name: "@rolldown/binding-android-arm64"
+    version: 1.1.3
+    license: MIT
+    scope: prod
+    platform: true
+  - name: "@rolldown/binding-darwin-arm64"
+    version: 1.1.3
+    license: MIT
+    scope: prod
+    platform: true
+  - name: "@rolldown/binding-darwin-x64"
+    version: 1.1.3
+    license: MIT
+    scope: prod
+    platform: true
+  - name: "@rolldown/binding-freebsd-x64"
+    version: 1.1.3
+    license: MIT
+    scope: prod
+    platform: true
+  - name: "@rolldown/binding-linux-arm-gnueabihf"
+    version: 1.1.3
+    license: MIT
+    scope: prod
+    platform: true
+  - name: "@rolldown/binding-linux-arm64-gnu"
+    version: 1.1.3
+    license: MIT
+    scope: prod
+    platform: true
+  - name: "@rolldown/binding-linux-arm64-musl"
+    version: 1.1.3
+    license: MIT
+    scope: prod
+    platform: true
+  - name: "@rolldown/binding-linux-ppc64-gnu"
+    version: 1.1.3
+    license: MIT
+    scope: prod
+    platform: true
+  - name: "@rolldown/binding-linux-s390x-gnu"
+    version: 1.1.3
+    license: MIT
+    scope: prod
+    platform: true
+  - name: "@rolldown/binding-linux-x64-gnu"
+    version: 1.1.3
+    license: MIT
+    scope: prod
+    platform: true
+  - name: "@rolldown/binding-linux-x64-musl"
+    version: 1.1.3
+    license: MIT
+    scope: prod
+    platform: true
+  - name: "@rolldown/binding-openharmony-arm64"
+    version: 1.1.3
+    license: MIT
+    scope: prod
+    platform: true
+  - name: "@rolldown/binding-wasm32-wasi"
+    version: 1.1.3
+    license: MIT
+    scope: prod
+    platform: true
+  - name: "@rolldown/binding-win32-arm64-msvc"
+    version: 1.1.3
+    license: MIT
+    scope: prod
+    platform: true
+  - name: "@rolldown/binding-win32-x64-msvc"
+    version: 1.1.3
+    license: MIT
+    scope: prod
+    platform: true
+  - name: "@swc/core-darwin-arm64"
+    version: 1.15.43
+    license: Apache-2.0 AND MIT
+    scope: prod
+    platform: true
+  - name: "@swc/core-darwin-x64"
+    version: 1.15.43
+    license: Apache-2.0 AND MIT
+    scope: prod
+    platform: true
+  - name: "@swc/core-linux-arm-gnueabihf"
+    version: 1.15.43
+    license: Apache-2.0
+    scope: prod
+    platform: true
+  - name: "@swc/core-linux-arm64-gnu"
+    version: 1.15.43
+    license: Apache-2.0 AND MIT
+    scope: prod
+    platform: true
+  - name: "@swc/core-linux-arm64-musl"
+    version: 1.15.43
+    license: Apache-2.0 AND MIT
+    scope: prod
+    platform: true
+  - name: "@swc/core-linux-ppc64-gnu"
+    version: 1.15.43
+    license: Apache-2.0 AND MIT
+    scope: prod
+    platform: true
+  - name: "@swc/core-linux-s390x-gnu"
+    version: 1.15.43
+    license: Apache-2.0 AND MIT
+    scope: prod
+    platform: true
+  - name: "@swc/core-linux-x64-gnu"
+    version: 1.15.43
+    license: Apache-2.0 AND MIT
+    scope: prod
+    platform: true
+  - name: "@swc/core-linux-x64-musl"
+    version: 1.15.43
+    license: Apache-2.0 AND MIT
+    scope: prod
+    platform: true
+  - name: "@swc/core-win32-arm64-msvc"
+    version: 1.15.43
+    license: Apache-2.0 AND MIT
+    scope: prod
+    platform: true
+  - name: "@swc/core-win32-ia32-msvc"
+    version: 1.15.43
+    license: Apache-2.0 AND MIT
+    scope: prod
+    platform: true
+  - name: "@swc/core-win32-x64-msvc"
+    version: 1.15.43
+    license: Apache-2.0 AND MIT
+    scope: prod
+    platform: true
+  - name: fsevents
+    version: 2.3.2
+    license: MIT
+    scope: dev
+    platform: true
+  - name: fsevents
+    version: 2.3.3
+    license: MIT
+    scope: prod
+    platform: true
+  - name: lightningcss-android-arm64
+    version: 1.32.0
+    license: MPL-2.0
+    scope: prod
+    platform: true
+  - name: lightningcss-darwin-arm64
+    version: 1.32.0
+    license: MPL-2.0
+    scope: prod
+    platform: true
+  - name: lightningcss-darwin-x64
+    version: 1.32.0
+    license: MPL-2.0
+    scope: prod
+    platform: true
+  - name: lightningcss-freebsd-x64
+    version: 1.32.0
+    license: MPL-2.0
+    scope: prod
+    platform: true
+  - name: lightningcss-linux-arm-gnueabihf
+    version: 1.32.0
+    license: MPL-2.0
+    scope: prod
+    platform: true
+  - name: lightningcss-linux-arm64-gnu
+    version: 1.32.0
+    license: MPL-2.0
+    scope: prod
+    platform: true
+  - name: lightningcss-linux-arm64-musl
+    version: 1.32.0
+    license: MPL-2.0
+    scope: prod
+    platform: true
+  - name: lightningcss-linux-x64-gnu
+    version: 1.32.0
+    license: MPL-2.0
+    scope: prod
+    platform: true
+  - name: lightningcss-linux-x64-musl
+    version: 1.32.0
+    license: MPL-2.0
+    scope: prod
+    platform: true
+  - name: lightningcss-win32-arm64-msvc
+    version: 1.32.0
+    license: MPL-2.0
+    scope: prod
+    platform: true
+  - name: lightningcss-win32-x64-msvc
+    version: 1.32.0
+    license: MPL-2.0
+    scope: prod
+    platform: true
