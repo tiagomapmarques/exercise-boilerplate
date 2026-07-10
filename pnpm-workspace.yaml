@@ -1,5 +1,13 @@
 engineStrict: true
 
+trustPolicy: no-downgrade
+
+# semver@6.3.1 is a legacy transitive dep of Babel that predates npm
+# provenance, so it trips no-downgrade despite being a legitimate,
+# integrity-verified release - exclude just that pinned version.
+trustPolicyExclude:
+  - semver@6.3.1
+
 minimumReleaseAge: 4320 # 3 days
 
 allowBuilds:
@@ -8,3 +16,5 @@ allowBuilds:
   core-js: true
   esbuild: true
   oxc-resolver: true
+
+pnpmfile: pnpm.config.mjs

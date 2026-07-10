@@ -24,7 +24,7 @@ WORKDIR /app
 # Install dependencies
 COPY --from=cache /cache/package.json /app
 COPY ./pnpm-* /app
-RUN pnpm install --ignore-scripts --prod
+RUN pnpm install --frozen-lockfile --ignore-scripts --prod
 
 # Build application
 COPY . /app
@@ -33,7 +33,7 @@ COPY . /app
 # we need to manually re-run the install command to prevent postinstall scripts
 # from being run. This will both let docker cache the `node_modules` folder
 # in the previous RUN command and prevent potentially dangerous code to run.
-RUN pnpm install --ignore-scripts --prod
+RUN pnpm install --frozen-lockfile --ignore-scripts --prod
 RUN pnpm build
 RUN chown -R node:node /app
 

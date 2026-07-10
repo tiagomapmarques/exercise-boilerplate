@@ -1,7 +1,7 @@
 {
   "name": "exercise-boilerplate",
   "description": "Seed project for a modern React app",
-  "version": "0.15.2",
+  "version": "0.15.3",
   "license": "MIT",
   "engines": {
     "node": "^24.18.0 || ^26.4.0",
@@ -13,7 +13,7 @@
     }
   },
   "scripts": {
-    "postinstall": "playwright install --with-deps && pnpm run licenses && tsr generate && ./bin/env-file.mjs",
+    "postinstall": "playwright install --with-deps && tsr generate && ./bin/env-file.mjs",
     "start": "vite",
     "build": "vite build",
     "serve": "node ./server.mjs",
@@ -26,12 +26,11 @@
     "typecheck": "tsc --noEmit",
     "lint": "biome check --write --error-on-warnings",
     "lint:rewrite": "biome migrate --write && ./bin/biome-file.mjs",
-    "licenses": "pnpm licenses ls --prod --json > licenses.prod.json && pnpm licenses ls --json > licenses.json",
     "dependencies": "taze major --interactive --write --install",
     "dependencies:update": "taze minor --write --install && pnpm lint:rewrite && pnpm dependencies:rewrite",
     "dependencies:rewrite": "./bin/rm.mjs ./pnpm-lock.yaml node_modules && pnpm install",
     "check": "pnpm check:project && pnpm check:runtime && pnpm check:other",
-    "check:ci": "pnpm install && pnpm check:project && pnpm check:runtime && ./bin/check-engines.mjs && ./bin/uncommitted-changes.mjs --error-on-warnings",
+    "check:ci": "pnpm install --no-frozen-lockfile && pnpm check:project && pnpm check:runtime && ./bin/check-engines.mjs && ./bin/uncommitted-changes.mjs --error-on-warnings",
     "check:project": "pnpm dedupe --check && knip && dpdm --no-warning --no-tree ./**/*",
     "check:runtime": "pnpm i18n && pnpm lint && pnpm typecheck && pnpm build && pnpm test && pnpm test:e2e",
     "check:other": "./bin/taze-major-only.mjs && ./bin/check-engines.mjs && ./bin/uncommitted-changes.mjs && pnpm audit",
