@@ -4,11 +4,15 @@ import { Fragment, lazy } from 'react';
 export const DevTools =
   import.meta.env.MODE === 'development'
     ? lazy(async () => {
-        const { TanStackDevtools } = await import('@tanstack/react-devtools');
-        const { Environment } = await import('./environment');
-        const { TanStackRouterDevtoolsPanel } = await import(
-          '@tanstack/react-router-devtools'
-        );
+        const [
+          { TanStackDevtools },
+          { Environment },
+          { TanStackRouterDevtoolsPanel },
+        ] = await Promise.all([
+          import('@tanstack/react-devtools'),
+          import('./environment'),
+          import('@tanstack/react-router-devtools'),
+        ]);
 
         return {
           default: () => (

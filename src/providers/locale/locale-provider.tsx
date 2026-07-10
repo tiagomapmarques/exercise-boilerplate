@@ -32,7 +32,14 @@ export const LocaleProvider = ({
   fallback = null,
   children,
 }: LocaleProviderProps) => {
-  const [i18n, setI18n] = useState<I18n | null>(null);
+  const [i18n, setI18n] = useState<I18n | null>(() =>
+    initialLocale
+      ? setupI18n({
+          locale: initialLocale,
+          messages: { [initialLocale]: initialMessages },
+        })
+      : null,
+  );
 
   useEffect(() => {
     if (i18n) {
@@ -40,22 +47,12 @@ export const LocaleProvider = ({
       return;
     }
 
-    const initialI18n = setupI18n(
-      initialLocale && {
-        locale: initialLocale,
-        messages: { [initialLocale]: initialMessages },
-      },
-    );
-
-    if (initialLocale) {
-      setI18n(initialI18n);
-    } else {
-      loadLocale(initialI18n)
-        .then(() => setI18n(initialI18n))
-        // biome-ignore lint/suspicious/noConsole: Useful error at runtime
-        .catch(console.error);
-    }
-  }, [i18n, initialLocale, initialMessages]);
+    const initialI18n = setupI18n();
+    loadLocale(initialI18n)
+      .then(() => setI18n(initialI18n))
+      // biome-ignore lint/suspicious/noConsole: Useful error at runtime
+      .catch(console.error);
+  }, [i18n]);
 
   return i18n ? <I18nProvider i18n={i18n}>{children}</I18nProvider> : fallback;
 };
