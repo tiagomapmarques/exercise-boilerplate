@@ -9,8 +9,24 @@ describe(CountryFlag, () => {
 
     expect(screen.getByRole('img')).toBeVisible();
 
-    expect(screen.getByRole('img').getAttribute('src')).toMatch(
-      new RegExp(`/${localeMetadata[locale].code}\\.svg$`, 'u'),
+    expect(screen.getByRole('img')).toHaveAttribute(
+      'src',
+      `${import.meta.env.BASE_URL}flags/${localeMetadata[locale].code}.svg`,
     );
+  });
+
+  describe('the app is served under a base path', () => {
+    beforeEach(() => {
+      vi.stubEnv('BASE_URL', '/base-path/');
+    });
+
+    it('loads the flag from under the base path', () => {
+      render(<CountryFlag locale="de-DE" />);
+
+      expect(screen.getByRole('img')).toHaveAttribute(
+        'src',
+        '/base-path/flags/DE.svg',
+      );
+    });
   });
 });

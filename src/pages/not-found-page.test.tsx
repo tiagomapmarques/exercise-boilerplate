@@ -1,10 +1,10 @@
 import { render, screen, userEvent } from '@/testing';
 
-import { NotFoundContainer } from './not-found-container';
+import { NotFoundPage } from './not-found-page';
 
-describe(NotFoundContainer, () => {
+describe(NotFoundPage, () => {
   it('displays a title', async () => {
-    render(<NotFoundContainer />, {
+    render(<NotFoundPage />, {
       providers: { router: true },
     });
 
@@ -14,7 +14,7 @@ describe(NotFoundContainer, () => {
   });
 
   it('displays error text', async () => {
-    render(<NotFoundContainer />, {
+    render(<NotFoundPage />, {
       providers: { router: true },
     });
 
@@ -22,14 +22,16 @@ describe(NotFoundContainer, () => {
   });
 
   it('navigates to start', async () => {
-    const { providers } = render(<NotFoundContainer />, {
+    const { providers } = render(<NotFoundPage />, {
       providers: { router: { initialEntries: ['/unknown'] } },
     });
+
+    expect(providers.router?.instance.latestLocation.pathname).toBe('/unknown');
 
     await userEvent.click(
       await screen.findByRole('button', { name: 'Go to start' }),
     );
 
-    expect(providers.router?.instance.latestLocation.pathname).toEqual('/');
+    expect(providers.router?.instance.latestLocation.pathname).toBe('/');
   });
 });

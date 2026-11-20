@@ -12,7 +12,7 @@ import {
 import classes from './environment.module.css';
 
 export const Environment = () => {
-  const environment = Object.entries({ ...import.meta.env }).sort(
+  const environment = Object.entries({ ...import.meta.env }).toSorted(
     ([left], [right]) => {
       const leftStarts = left.startsWith('VITE_');
       const rightStarts = right.startsWith('VITE_');

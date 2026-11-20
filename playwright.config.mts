@@ -1,18 +1,13 @@
 import process from 'node:process';
-import { defineConfig, devices } from 'playwright/test';
+import { defineConfig } from 'playwright/test';
 
 import {
-  type Browser,
   getRandomBrowser,
+  playwrightBrowsers,
   resolveBrowsers,
   toBrowser,
 } from './browsers.mts';
-
-const playwrightBrowsers: Record<Browser, (typeof devices)[string]> = {
-  chromium: devices['Desktop Chrome'],
-  firefox: devices['Desktop Firefox'],
-  webkit: devices['Desktop Safari'],
-};
+import viteConfig from './vite.config.mts';
 
 // The --ui flag only reaches the main process. The watch state needs to be
 // propagated to the workers and a single browser needs to be pinned otherwise
@@ -25,7 +20,7 @@ if (process.argv.includes('--ui')) {
 const isWatch = Boolean(process.env.PLAYWRIGHT_IS_WATCH);
 const requestedBrowser = toBrowser(process.env.PLAYWRIGHT_BROWSER);
 
-const baseUrl = `http://localhost:${isWatch ? '5173' : '8080'}`;
+const baseUrl = `http://localhost:${isWatch ? '5173' : '8080'}${viteConfig.base}`;
 
 // biome-ignore lint/style/noDefaultExport: Required by playwright
 export default defineConfig({
@@ -33,8 +28,8 @@ export default defineConfig({
   testMatch: ['**/*.spec.ts?(x)'],
   reporter: [['list'], ['html', { open: 'never' }]],
   use: {
-    // biome-ignore lint/style/useNamingConvention: Defined by playwright
     baseURL: baseUrl,
+    testIdAttribute: 'data-slot',
     headless: true,
     trace: 'retain-on-first-failure',
   },

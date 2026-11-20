@@ -2,7 +2,7 @@ import { Trans } from '@lingui/react';
 import { Button, Stack, Text, Title } from '@mantine/core';
 import { useNavigate } from '@tanstack/react-router';
 
-export const NotFoundContainer = () => {
+export const NotFoundPage = () => {
   const navigate = useNavigate();
 
   return (

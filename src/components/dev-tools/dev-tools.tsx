@@ -1,27 +1,14 @@
 import { Fragment, lazy } from 'react';
 
-// Loaded only by the dev server; test and production builds get nothing.
+// Loaded only by the dev server; test and production builds get nothing
 export const DevTools =
   import.meta.env.MODE === 'development'
     ? lazy(async () => {
-        const { TanStackDevtools } = await import('@tanstack/react-devtools');
-        const { Environment } = await import('./environment');
-        const { TanStackRouterDevtoolsPanel } = await import(
-          '@tanstack/react-router-devtools'
-        );
+        const [{ TanStackDevtools }, { plugins }] = await Promise.all([
+          import('@tanstack/react-devtools'),
+          import('./plugins'),
+        ]);
 
-        return {
-          default: () => (
-            <TanStackDevtools
-              plugins={[
-                { name: 'Environment', render: <Environment /> },
-                {
-                  name: 'TanStack Router',
-                  render: <TanStackRouterDevtoolsPanel />,
-                },
-              ]}
-            />
-          ),
-        };
+        return { default: () => <TanStackDevtools plugins={plugins} /> };
       })
     : Fragment;

@@ -3,7 +3,6 @@ import { Trans, useLingui } from '@lingui/react';
 import {
   act,
   ControlledPromise,
-  type Mock,
   mockConsole,
   render,
   screen,
@@ -32,14 +31,16 @@ describe(LocaleProvider, () => {
         data-slot="Content"
         data-locale={i18n.locale}
         data-messages={JSON.stringify(i18n.messages)}
-      />
+      >
+        Mock content
+      </div>
     );
   };
 
   beforeEach(() => {
     loader = new ControlledPromise();
 
-    (loadLocale as Mock<typeof loadLocale>).mockImplementation(async (i18n) => {
+    vi.mocked(loadLocale).mockImplementation(async (i18n) => {
       await loader.wait();
       i18n?.loadAndActivate({
         locale: i18n.locale || 'custom-locale',
@@ -53,11 +54,11 @@ describe(LocaleProvider, () => {
       <LocaleProvider>
         <TestingComponent />
       </LocaleProvider>,
-      { providers: { i18n: false } },
+      { providers: { i18n: false, mantine: false } },
     );
 
     expect(loadLocale).toHaveBeenCalledOnce();
-    const [i18n] = (loadLocale as Mock<typeof loadLocale>).mock.calls[0];
+    const [i18n] = vi.mocked(loadLocale).mock.calls[0];
 
     expect(i18n?.locale).toBe('');
     expect(i18n?.messages).toEqual({});
@@ -67,24 +68,24 @@ describe(LocaleProvider, () => {
 
     expect(i18n?.locale).toBe('custom-locale');
     expect(i18n?.messages).toEqual({ 'mock-key': 'Mock Value' });
-    expect(screen.getByTestId('Content')).toBeInTheDocument();
+    expect(screen.getByTestId('Content')).toBeVisible();
   });
 
   it('displays fallback while loading', async () => {
     render(
-      <LocaleProvider fallback={<div data-slot="Fallback" />}>
+      <LocaleProvider fallback={<div data-slot="Fallback">Mock fallback</div>}>
         <TestingComponent />
       </LocaleProvider>,
-      { providers: { i18n: false } },
+      { providers: { i18n: false, mantine: false } },
     );
 
-    expect(screen.getByTestId('Fallback')).toBeInTheDocument();
+    expect(screen.getByTestId('Fallback')).toBeVisible();
     expect(screen.queryByTestId('Content')).not.toBeInTheDocument();
 
     await act(() => loader.resolve());
 
     expect(screen.queryByTestId('Fallback')).not.toBeInTheDocument();
-    expect(screen.getByTestId('Content')).toBeInTheDocument();
+    expect(screen.getByTestId('Content')).toBeVisible();
   });
 
   it('does not load messages more than once', async () => {
@@ -92,14 +93,18 @@ describe(LocaleProvider, () => {
       <LocaleProvider>
         <TestingComponent />
       </LocaleProvider>,
-      { providers: { i18n: false } },
+      { providers: { i18n: false, mantine: false } },
     );
 
     await act(() => loader.resolve());
 
     expect(loadLocale).toHaveBeenCalledOnce();
 
-    rerender();
+    rerender(
+      <LocaleProvider>
+        <TestingComponent />
+      </LocaleProvider>,
+    );
 
     expect(loadLocale).toHaveBeenCalledOnce();
   });
@@ -111,7 +116,7 @@ describe(LocaleProvider, () => {
       <LocaleProvider initialLocale="de-DE" initialMessages={messages}>
         <TestingComponent />
       </LocaleProvider>,
-      { providers: { i18n: false } },
+      { providers: { i18n: false, mantine: false } },
     );
 
     expect(loadLocale).not.toHaveBeenCalled();
@@ -133,7 +138,7 @@ describe(LocaleProvider, () => {
       <LocaleProvider initialLocale="de-DE" initialMessages={messages}>
         <TestingComponent />
       </LocaleProvider>,
-      { providers: { i18n: false } },
+      { providers: { i18n: false, mantine: false } },
     );
 
     expect(loadLocale).not.toHaveBeenCalled();
@@ -162,8 +167,10 @@ describe(LocaleProvider, () => {
       <LocaleProvider>
         <Consumer />
       </LocaleProvider>,
-      { providers: { i18n: false } },
+      { providers: { i18n: false, mantine: false } },
     );
+
+    expect(screen.queryByTestId('Content')).not.toBeInTheDocument();
 
     await act(() => loader.resolve());
 
@@ -204,7 +211,7 @@ describe(LocaleProvider, () => {
           <Consumer id="german" />
         </LocaleProvider>
       </>,
-      { providers: { i18n: false } },
+      { providers: { i18n: false, mantine: false } },
     );
 
     expect(screen.getByTestId('english')).toHaveTextContent('English English');
@@ -214,12 +221,12 @@ describe(LocaleProvider, () => {
     expect(screen.queryByText('mock-key')).not.toBeInTheDocument();
   });
 
-  describe('error while loading', () => {
+  describe('loading the messages fails', () => {
     const consoleError = mockConsole('error');
     const errorObject = new Error('Custom error');
 
     beforeEach(() => {
-      (loadLocale as Mock<typeof loadLocale>).mockImplementation(
+      vi.mocked(loadLocale).mockImplementation(
         () => new Promise((_, reject) => reject(errorObject)),
       );
     });
@@ -229,7 +236,7 @@ describe(LocaleProvider, () => {
         <LocaleProvider>
           <TestingComponent />
         </LocaleProvider>,
-        { providers: { i18n: false } },
+        { providers: { i18n: false, mantine: false } },
       );
 
       await waitFor(() => {

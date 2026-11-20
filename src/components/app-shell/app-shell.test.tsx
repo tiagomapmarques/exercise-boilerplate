@@ -9,8 +9,7 @@ import {
   redirect,
 } from '@tanstack/react-router';
 
-import { act, type Mock, render, screen, userEvent } from '@/testing';
-import type { ProgressBarActions } from '@/providers/progress-bar';
+import { act, render, resizeViewport, screen, userEvent } from '@/testing';
 
 import { AppShell } from './app-shell';
 
@@ -18,17 +17,7 @@ vi.mock('@mantine/nprogress', async (importActual) => {
   const original = await importActual<typeof import('@mantine/nprogress')>();
   return {
     ...original,
-    createNprogress: vi.fn(() => {
-      const [store, actions] = original.createNprogress();
-      return [
-        store,
-        {
-          ...actions,
-          start: vi.fn(actions.start),
-          complete: vi.fn(actions.complete),
-        },
-      ];
-    }),
+    createNprogress: vi.fn(original.createNprogress),
   };
 });
 
@@ -40,6 +29,18 @@ describe(AppShell, () => {
     </>
   );
 
+  beforeEach(() => {
+    const [store, actions] = createNprogress();
+    vi.mocked(createNprogress).mockReturnValue([
+      store,
+      {
+        ...actions,
+        start: vi.fn(actions.start),
+        complete: vi.fn(actions.complete),
+      },
+    ]);
+  });
+
   it('adds router outlet', async () => {
     const rootRoute = createRootRoute({
       staticData: { getTitle: () => '' },
@@ -49,7 +50,7 @@ describe(AppShell, () => {
       indexRoute: createRoute({
         path: '/',
         staticData: { getTitle: () => '' },
-        component: () => <div data-slot="Router-Outlet" />,
+        component: () => <p>Mock route content</p>,
         getParentRoute: () => rootRoute,
       }),
     });
@@ -63,7 +64,7 @@ describe(AppShell, () => {
       wrapper,
     });
 
-    expect(await screen.findByTestId('Router-Outlet')).toBeInTheDocument();
+    expect(await screen.findByText('Mock route content')).toBeVisible();
   });
 
   it('displays header', async () => {
@@ -76,12 +77,12 @@ describe(AppShell, () => {
       wrapper,
     });
 
-    expect(await screen.findByRole('banner')).toHaveTextContent(
+    expect(await screen.findByRole('banner')).toMatchTextContent(
       'Exercise boilerplate',
     );
   });
 
-  it('displays router progress', async () => {
+  it('mounts a hidden progress bar', async () => {
     render(<AppShell />, {
       providers: {
         router: true,
@@ -96,7 +97,91 @@ describe(AppShell, () => {
     ).not.toBeVisible();
   });
 
-  describe('the progress bar', () => {
+  it('displays navigation', async () => {
+    const { providers } = render(<AppShell />, {
+      providers: {
+        router: true,
+        mantine: false,
+        i18n: false,
+      },
+      wrapper,
+    });
+
+    await providers.router?.waitForReady();
+
+    expect(screen.getByRole('navigation')).toBeVisible();
+  });
+
+  it('toggles the menu', async () => {
+    const { providers } = render(<AppShell />, {
+      providers: {
+        router: true,
+        mantine: false,
+        i18n: false,
+      },
+      wrapper,
+    });
+
+    await providers.router?.waitForReady();
+
+    expect(screen.getByRole('button', { name: 'Menu' })).toHaveAttribute(
+      'aria-expanded',
+      'false',
+    );
+
+    await userEvent.click(screen.getByRole('button', { name: 'Menu' }));
+
+    expect(screen.getByRole('button', { name: 'Menu' })).toHaveAttribute(
+      'aria-expanded',
+      'true',
+    );
+  });
+
+  it('closes the menu when the user navigates', async () => {
+    const { providers } = render(<AppShell />, {
+      providers: {
+        router: true,
+        mantine: false,
+        i18n: false,
+      },
+      wrapper,
+    });
+
+    await providers.router?.waitForReady();
+
+    await userEvent.click(screen.getByRole('button', { name: 'Menu' }));
+
+    expect(screen.getByRole('button', { name: 'Menu' })).toHaveAttribute(
+      'aria-expanded',
+      'true',
+    );
+
+    await userEvent.click(screen.getByRole('link', { name: 'About' }));
+
+    expect(screen.getByRole('button', { name: 'Menu' })).toHaveAttribute(
+      'aria-expanded',
+      'false',
+    );
+  });
+
+  it('lays the navbar over the page rather than beside it', async () => {
+    const { providers } = render(<AppShell />, {
+      providers: {
+        router: true,
+        mantine: false,
+        i18n: false,
+      },
+      wrapper,
+    });
+
+    await providers.router?.waitForReady();
+
+    expect(screen.getByRole('navigation').getBoundingClientRect().width).toBe(
+      globalThis.innerWidth,
+    );
+  });
+
+  describe('routing', () => {
     const createTestRouter = ({ redirectAboutToIndex = false } = {}) => {
       const rootRoute = createRootRoute({
         staticData: { getTitle: () => '' },
@@ -125,23 +210,16 @@ describe(AppShell, () => {
       });
     };
 
-    const getNprogressActions = () => {
-      const lastCall = (
-        createNprogress as Mock<typeof createNprogress>
-      ).mock.results.at(-1);
+    const clearProgressBarActions = () => {
+      const [, { start, complete }] = createNprogress();
 
-      if (lastCall?.type !== 'return') {
-        return {} as Partial<ProgressBarActions>;
-      }
-      const [, actions] = lastCall.value;
+      vi.mocked(start).mockClear();
+      vi.mocked(complete).mockClear();
 
-      (actions.start as Mock<ProgressBarActions['start']>).mockClear();
-      (actions.complete as Mock<ProgressBarActions['complete']>).mockClear();
-
-      return actions;
+      return { start, complete };
     };
 
-    it('does not move when a route is only preloaded', async () => {
+    it('does not move the progress bar when a route is only preloaded', async () => {
       const router = createTestRouter();
       const { providers } = render(<AppShell />, {
         providers: {
@@ -153,7 +231,7 @@ describe(AppShell, () => {
       });
 
       await providers.router?.waitForReady();
-      const { start, complete } = getNprogressActions();
+      const { start, complete } = clearProgressBarActions();
 
       await act(() => router.preloadRoute({ to: '/about' }));
 
@@ -161,7 +239,7 @@ describe(AppShell, () => {
       expect(complete).not.toHaveBeenCalled();
     });
 
-    it('starts and completes on a real navigation', async () => {
+    it('starts and completes the progress bar on a real navigation', async () => {
       const router = createTestRouter();
       const { providers } = render(<AppShell />, {
         providers: {
@@ -173,7 +251,10 @@ describe(AppShell, () => {
       });
 
       await providers.router?.waitForReady();
-      const { start, complete } = getNprogressActions();
+      const { start, complete } = clearProgressBarActions();
+
+      expect(start).not.toHaveBeenCalled();
+      expect(complete).not.toHaveBeenCalled();
 
       await act(() => router.navigate({ to: '/about' }));
 
@@ -181,7 +262,7 @@ describe(AppShell, () => {
       expect(complete).toHaveBeenCalledOnce();
     });
 
-    it('does not move when navigating to the current route', async () => {
+    it('does not move the progress bar when navigating to the current route', async () => {
       const router = createTestRouter();
       const { providers } = render(<AppShell />, {
         providers: {
@@ -193,7 +274,7 @@ describe(AppShell, () => {
       });
 
       await providers.router?.waitForReady();
-      const { start, complete } = getNprogressActions();
+      const { start, complete } = clearProgressBarActions();
 
       await act(() => router.navigate({ to: '/' }));
 
@@ -201,7 +282,7 @@ describe(AppShell, () => {
       expect(complete).not.toHaveBeenCalled();
     });
 
-    it('completes when a navigation redirects back to the current route', async () => {
+    it('completes the progress bar when a navigation redirects back to the current route', async () => {
       const router = createTestRouter({ redirectAboutToIndex: true });
       const { providers } = render(<AppShell />, {
         providers: {
@@ -213,7 +294,10 @@ describe(AppShell, () => {
       });
 
       await providers.router?.waitForReady();
-      const { start, complete } = getNprogressActions();
+      const { start, complete } = clearProgressBarActions();
+
+      expect(start).not.toHaveBeenCalled();
+      expect(complete).not.toHaveBeenCalled();
 
       await act(() => router.navigate({ to: '/about' }));
 
@@ -222,23 +306,12 @@ describe(AppShell, () => {
     });
   });
 
-  describe('navigation', () => {
-    it('displays navigation', async () => {
-      const { providers } = render(<AppShell />, {
-        providers: {
-          router: true,
-          mantine: false,
-          i18n: false,
-        },
-        wrapper,
-      });
-
-      await providers.router?.waitForReady();
-
-      expect(screen.getByRole('navigation')).toBeVisible();
+  describe('the viewport is sm or wider', () => {
+    beforeEach(async () => {
+      await resizeViewport('sm');
     });
 
-    it('toggles the menu', async () => {
+    it('sits the navbar beside the page rather than over it', async () => {
       const { providers } = render(<AppShell />, {
         providers: {
           router: true,
@@ -250,44 +323,9 @@ describe(AppShell, () => {
 
       await providers.router?.waitForReady();
 
-      expect(screen.getByRole('navigation')).toHaveAttribute(
-        'data-open',
-        'false',
-      );
-
-      await userEvent.click(screen.getByRole('button', { name: 'Menu' }));
-
-      expect(screen.getByRole('navigation')).toHaveAttribute(
-        'data-open',
-        'true',
-      );
-    });
-
-    it('closes the menu when user navigates', async () => {
-      const { providers } = render(<AppShell />, {
-        providers: {
-          router: true,
-          mantine: false,
-          i18n: false,
-        },
-        wrapper,
-      });
-
-      await providers.router?.waitForReady();
-
-      await userEvent.click(screen.getByRole('button', { name: 'Menu' }));
-
-      expect(screen.getByRole('navigation')).toHaveAttribute(
-        'data-open',
-        'true',
-      );
-
-      await userEvent.click(screen.getByRole('link', { name: 'About' }));
-
-      expect(screen.getByRole('navigation')).toHaveAttribute(
-        'data-open',
-        'false',
-      );
+      expect(
+        screen.getByRole('navigation').getBoundingClientRect().width,
+      ).toBeLessThan(globalThis.innerWidth);
     });
   });
 });

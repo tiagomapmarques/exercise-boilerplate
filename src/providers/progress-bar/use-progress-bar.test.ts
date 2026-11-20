@@ -1,56 +1,40 @@
-import { createNprogress } from '@mantine/nprogress';
-
 import { act, renderHook } from '@/testing';
 
 import { useProgressBar } from './use-progress-bar';
 
 describe(useProgressBar, () => {
-  it('throws an error without an ProgressBarProvider', () => {
+  it('throws an error without a ProgressBarProvider', () => {
     expect(() => renderHook(useProgressBar)).toThrow(
       'useProgressBar hook was used without ProgressBarProvider.',
     );
   });
 
   it('gets actions for the progress bar', () => {
-    const { result } = renderHook(useProgressBar, {
+    const { result, providers } = renderHook(useProgressBar, {
       providers: { progressBar: true },
     });
 
-    expect(result.current.start).toBeTypeOf('function');
-    expect(result.current.complete).toBeTypeOf('function');
+    expect(result.current).toBe(providers.progressBar?.actions);
   });
 
   it('changes the state of the progress bar', () => {
-    const [store, actions] = createNprogress();
-    const initialState = {
-      ...store.getState(),
-      timeouts: expect.any(Array),
-    };
-
-    const { result } = renderHook(useProgressBar, {
-      providers: { progressBar: { store, actions } },
+    const { result, providers } = renderHook(useProgressBar, {
+      providers: { progressBar: true },
     });
+    const store = providers.progressBar?.store;
 
-    expect(store.getState()).toEqual(initialState);
+    expect(store?.getState()).toMatchObject({ mounted: false, progress: 0 });
 
     act(() => {
       result.current.set(20);
     });
 
-    expect(store.getState()).toEqual({
-      ...initialState,
-      mounted: true,
-      progress: 20,
-    });
+    expect(store?.getState()).toMatchObject({ mounted: true, progress: 20 });
 
     act(() => {
       result.current.complete();
     });
 
-    expect(store.getState()).toEqual({
-      ...initialState,
-      mounted: true,
-      progress: 100,
-    });
+    expect(store?.getState()).toMatchObject({ mounted: true, progress: 100 });
   });
 });

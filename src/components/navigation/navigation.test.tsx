@@ -18,7 +18,6 @@ describe(Navigation, () => {
     render(<Navigation />, {
       providers: {
         router: true,
-        mantine: { defaultColorScheme: 'light' },
         progressBar: true,
       },
     });
@@ -26,64 +25,64 @@ describe(Navigation, () => {
     expect(await screen.findByTestId('ColorSchemeIcon')).toBeVisible();
   });
 
-  describe('navigation links', () => {
-    it('displays links', async () => {
-      const { providers } = render(<Navigation />, {
-        providers: {
-          router: { initialEntries: ['/unknown'] },
-          progressBar: true,
-        },
-      });
-
-      expect(await screen.findByRole('link', { name: 'Home' })).toBeVisible();
-      expect(screen.getByRole('link', { name: 'About' })).toBeVisible();
-
-      expect(providers.router?.instance.latestLocation.pathname).toBe(
-        '/unknown',
-      );
+  it('displays links', async () => {
+    const { providers } = render(<Navigation />, {
+      providers: {
+        router: { initialEntries: ['/unknown'] },
+        progressBar: true,
+      },
     });
 
-    it('displays active route', async () => {
-      render(<Navigation />, {
-        providers: {
-          router: { initialEntries: ['/about'] },
-          progressBar: true,
-        },
-      });
+    expect(await screen.findByRole('link', { name: 'Home' })).toBeVisible();
+    expect(screen.getByRole('link', { name: 'About' })).toBeVisible();
 
-      expect(
-        await screen.findByRole('link', { name: 'Home' }),
-      ).not.toHaveAttribute('data-status');
-      expect(screen.getByRole('link', { name: 'About' })).toHaveAttribute(
-        'data-status',
-        'active',
-      );
+    expect(providers.router?.instance.latestLocation.pathname).toBe('/unknown');
+  });
+
+  it('displays active route', async () => {
+    render(<Navigation />, {
+      providers: {
+        router: { initialEntries: ['/about'] },
+        progressBar: true,
+      },
     });
 
-    it('navigates to home page', async () => {
-      const { providers } = render(<Navigation />, {
-        providers: {
-          router: { initialEntries: ['/unknown'] },
-          progressBar: true,
-        },
-      });
+    expect(
+      await screen.findByRole('link', { name: 'Home' }),
+    ).not.toHaveAttribute('data-status');
+    expect(screen.getByRole('link', { name: 'About' })).toHaveAttribute(
+      'data-status',
+      'active',
+    );
+  });
 
-      await userEvent.click(await screen.findByRole('link', { name: 'Home' }));
-
-      expect(providers.router?.instance.latestLocation.pathname).toBe('/');
+  it('navigates to home page', async () => {
+    const { providers } = render(<Navigation />, {
+      providers: {
+        router: { initialEntries: ['/unknown'] },
+        progressBar: true,
+      },
     });
 
-    it('navigates to about page', async () => {
-      const { providers } = render(<Navigation />, {
-        providers: {
-          router: { initialEntries: ['/unknown'] },
-          progressBar: true,
-        },
-      });
+    expect(providers.router?.instance.latestLocation.pathname).toBe('/unknown');
 
-      await userEvent.click(await screen.findByRole('link', { name: 'About' }));
+    await userEvent.click(await screen.findByRole('link', { name: 'Home' }));
 
-      expect(providers.router?.instance.latestLocation.pathname).toBe('/about');
+    expect(providers.router?.instance.latestLocation.pathname).toBe('/');
+  });
+
+  it('navigates to about page', async () => {
+    const { providers } = render(<Navigation />, {
+      providers: {
+        router: { initialEntries: ['/unknown'] },
+        progressBar: true,
+      },
     });
+
+    expect(providers.router?.instance.latestLocation.pathname).toBe('/unknown');
+
+    await userEvent.click(await screen.findByRole('link', { name: 'About' }));
+
+    expect(providers.router?.instance.latestLocation.pathname).toBe('/about');
   });
 });

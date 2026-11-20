@@ -32,6 +32,7 @@ export const BurgerMenu = ({
         size="sm"
         hiddenFrom="sm"
         opened={opened}
+        aria-expanded={opened}
         onClick={toggleOpened}
         aria-label={i18n.t({ id: 'labels.navigation.menu' })}
       />

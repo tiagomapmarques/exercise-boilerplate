@@ -1,10 +1,7 @@
-import { createNprogress } from '@mantine/nprogress';
-
 import {
   act,
   ControlledPromise,
   fireEvent,
-  type Mock,
   render,
   screen,
   userEvent,
@@ -19,24 +16,32 @@ vi.mock('@/providers/locale/use-locale', async (importActual) => {
     await importActual<typeof import('@/providers/locale/use-locale')>();
   return {
     ...original,
-    useLocale: vi.fn(() => {
-      const result = original.useLocale();
-      return [result[0], vi.fn(result[1]), vi.fn(result[2])];
-    }),
+    useLocale: vi.fn(original.useLocale),
   };
 });
 
-const useLocaleRefs = {
-  get setLocale() {
-    return (useLocale as Mock<typeof useLocale>).mock.results.at(-1)?.value[1];
-  },
-  get preloadLocale() {
-    return (useLocale as Mock<typeof useLocale>).mock.results.at(-1)?.value[2];
-  },
-};
-
 describe(LocalePicker, () => {
-  it('displays dropdown menu', () => {
+  const useLocaleRefs = {
+    get setLocale() {
+      return vi.mocked(useLocale).mock.results.at(-1)?.value[1];
+    },
+    get preloadLocale() {
+      return vi.mocked(useLocale).mock.results.at(-1)?.value[2];
+    },
+  };
+
+  beforeEach(async () => {
+    const original = await vi.importActual<
+      typeof import('@/providers/locale/use-locale')
+    >('@/providers/locale/use-locale');
+
+    vi.mocked(useLocale).mockImplementation(() => {
+      const [locale, setLocale, preloadLocale] = original.useLocale();
+      return [locale, vi.fn(setLocale), vi.fn(preloadLocale)];
+    });
+  });
+
+  it('displays the default locale on the trigger', () => {
     render(<LocalePicker />, {
       providers: { progressBar: true },
     });
@@ -46,7 +51,7 @@ describe(LocalePicker, () => {
     ).toBeVisible();
   });
 
-  it('displays selected locale in dropdown menu', () => {
+  it('displays a selected locale on the trigger', () => {
     render(<LocalePicker />, {
       providers: {
         i18n: { locale: 'de-DE' },
@@ -77,8 +82,7 @@ describe(LocalePicker, () => {
       screen.getByRole('button', { name: 'Great Britain English (GB)' }),
     );
 
-    // NOTE: Using `findByRole` due to webkit failing the assertion otherwise
-    expect(await screen.findByRole('menu')).toBeVisible();
+    expect(screen.getByRole('menu')).toBeVisible();
     expect(screen.getByTestId('ChevronIcon')).toHaveAttribute(
       'data-icon',
       'up',
@@ -91,15 +95,11 @@ describe(LocalePicker, () => {
     }
   });
 
-  it('changes locale and triggers progress bar', async () => {
-    const [store, actions] = createNprogress();
-    const start = vi.fn(actions.start);
-    const complete = vi.fn(actions.complete);
-
+  it('updates the trigger to the locale picked', async () => {
     render(<LocalePicker />, {
       providers: {
         i18n: { locale: 'de-DE' },
-        progressBar: { store, actions: { ...actions, start, complete } },
+        progressBar: true,
       },
     });
 
@@ -107,8 +107,35 @@ describe(LocalePicker, () => {
       screen.getByRole('button', { name: 'Deutschland Deutsch (DE)' }),
     );
 
-    // NOTE: Using `findByRole` due to webkit failing the assertion otherwise
-    expect(await screen.findByRole('menu')).toBeVisible();
+    expect(screen.getByRole('menu')).toBeVisible();
+    expect(
+      screen.queryByRole('button', { name: 'Great Britain English (GB)' }),
+    ).not.toBeInTheDocument();
+
+    await userEvent.click(
+      screen.getByRole('menuitem', { name: 'Great Britain English (GB)' }),
+    );
+
+    expect(
+      screen.getByRole('button', { name: 'Great Britain English (GB)' }),
+    ).toBeVisible();
+  });
+
+  it('starts and completes the progress bar while changing locale', async () => {
+    const { providers } = render(<LocalePicker />, {
+      providers: {
+        i18n: { locale: 'de-DE' },
+        progressBar: true,
+      },
+    });
+    const start = providers.progressBar?.actions?.start;
+    const complete = providers.progressBar?.actions?.complete;
+
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Deutschland Deutsch (DE)' }),
+    );
+
+    expect(screen.getByRole('menu')).toBeVisible();
 
     expect(start).not.toHaveBeenCalled();
     expect(complete).not.toHaveBeenCalled();
@@ -118,11 +145,6 @@ describe(LocalePicker, () => {
     );
 
     expect(start).toHaveBeenCalledOnce();
-
-    // NOTE: Using `findByRole` due to webkit failing the assertion otherwise
-    expect(
-      await screen.findByRole('button', { name: 'Great Britain English (GB)' }),
-    ).toBeVisible();
 
     await waitFor(() => {
       expect(complete).toHaveBeenCalledOnce();
@@ -136,12 +158,15 @@ describe(LocalePicker, () => {
       providers: { progressBar: true },
     });
 
+    expect(
+      screen.getByRole('button', { name: 'Great Britain English (GB)' }),
+    ).toBeEnabled();
+
     await userEvent.click(
       screen.getByRole('button', { name: 'Great Britain English (GB)' }),
     );
 
-    // NOTE: Using `findByRole` due to webkit failing the assertion otherwise.
-    expect(await screen.findByRole('menu')).toBeVisible();
+    expect(screen.getByRole('menu')).toBeVisible();
 
     useLocaleRefs.setLocale.mockImplementation(() => promise.wait());
 
@@ -157,7 +182,7 @@ describe(LocalePicker, () => {
 
     expect(
       screen.getByRole('button', { name: 'Great Britain English (GB)' }),
-    ).not.toBeDisabled();
+    ).toBeEnabled();
   });
 
   it('preloads locale on hover', async () => {
@@ -169,8 +194,7 @@ describe(LocalePicker, () => {
       screen.getByRole('button', { name: 'Great Britain English (GB)' }),
     );
 
-    // NOTE: Using `findByRole` due to webkit failing the assertion otherwise
-    expect(await screen.findByRole('menu')).toBeVisible();
+    expect(screen.getByRole('menu')).toBeVisible();
 
     expect(useLocaleRefs.preloadLocale).not.toHaveBeenCalled();
 
@@ -192,8 +216,7 @@ describe(LocalePicker, () => {
       screen.getByRole('button', { name: 'Great Britain English (GB)' }),
     );
 
-    // NOTE: Using `findByRole` due to webkit failing the assertion otherwise
-    expect(await screen.findByRole('menu')).toBeVisible();
+    expect(screen.getByRole('menu')).toBeVisible();
 
     expect(useLocaleRefs.preloadLocale).not.toHaveBeenCalled();
 

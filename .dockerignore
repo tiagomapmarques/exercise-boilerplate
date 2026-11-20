@@ -10,15 +10,15 @@ node-compile-cache
 .pnpm-store
 licenses.*json
 .tanstack
-*.gen.ts
+*.gen.*
 
 # Build + Reports
 .tmp
+*.tsbuildinfo
 dist
 coverage
 reports
-__screenshots__
-.vitest-attachments
+.vitest
 playwright-report
 test-results
 

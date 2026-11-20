@@ -22,7 +22,7 @@
       sizes="16x16"
       href="/favicons/favicon-16x16.png"
     >
-    <link rel="manifest" href="/favicons/site.webmanifest">
+    <link rel="manifest" href="/site.webmanifest">
     <style>
     @keyframes spin {
       100% {
@@ -35,8 +35,8 @@
     }
 
     #document-throbber {
-      width: 100%;
-      height: 100%;
+      inline-size: 100%;
+      block-size: 100%;
       position: absolute;
       display: grid;
       align-content: center;
@@ -48,11 +48,12 @@
     #document-throbber::after {
       content: "";
       box-sizing: border-box;
-      width: 3rem;
-      height: 3rem;
+      inline-size: 3rem;
+      block-size: 3rem;
       border-radius: 100%;
-      border: 0.4rem solid hsl(32, 100%, 50%);
-      border-top-color: transparent;
+      /* --mantine-color-orange-6 */
+      border: 0.4rem solid hsl(27.3, 98.3%, 53.5%);
+      border-block-start-color: transparent;
       animation: spin 0.7s infinite linear;
     }
 

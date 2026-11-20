@@ -1,8 +1,6 @@
 {
   "compilerOptions": {
     /* Compilation and types check */
-    "tsBuildInfoFile": ".tmp/tsconfig.tsbuildinfo",
-    "target": "esnext",
     "lib": ["ESNext", "DOM", "DOM.Iterable"],
     "module": "ESNext",
     "esModuleInterop": true,
@@ -13,7 +11,8 @@
 
     /* Imports */
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "~/*": ["./e2e/*"]
     },
 
     /* Bundler mode */
@@ -30,5 +29,5 @@
     /* Compatibility */
     "useDefineForClassFields": true
   },
-  "include": ["./src", "./*.mjs", "./*.ts", "./*.mts"]
+  "include": ["./src", "./*.ts", "./*.mts", "./e2e"]
 }

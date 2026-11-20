@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.5.0/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.5.15/schema.json",
   "files": {
     "ignoreUnknown": false,
     "includes": [
@@ -11,13 +11,13 @@
       "!**/.pnpm-store",
       "!**/licenses.*json",
       "!**/.tanstack",
-      "!**/*.gen.ts",
+      "!**/*.gen.*",
       "!**/.tmp",
+      "!**/*.tsbuildinfo",
       "!**/dist",
       "!**/coverage",
       "!**/reports",
-      "!**/__screenshots__",
-      "!**/.vitest-attachments",
+      "!**/.vitest",
       "!**/playwright-report",
       "!**/test-results",
       "!**/.idea",
@@ -128,7 +128,13 @@
         "noDoneCallback": "warn",
         "noEnum": "warn",
         "noExcessiveClassesPerFile": "warn",
-        "noExcessiveLinesPerFile": "warn",
+        "noExcessiveLinesPerFile": {
+          "level": "warn",
+          "options": {
+            "maxLines": 600,
+            "skipBlankLines": true
+          }
+        },
         "noExportedImports": "warn",
         "noHexColors": "warn",
         "noImplicitBoolean": "off",
@@ -169,6 +175,9 @@
               },
               {
                 "group": ["../**"]
+              },
+              {
+                "group": ["~/**"]
               }
             ]
           }
@@ -229,7 +238,12 @@
         "useGroupedAccessorPairs": "warn",
         "useInputName": "warn",
         "useLoneExecutableDefinition": "warn",
-        "useNamingConvention": "warn",
+        "useNamingConvention": {
+          "level": "warn",
+          "options": {
+            "strictCase": false
+          }
+        },
         "useNodeAssertStrict": "warn",
         "useNodejsImportProtocol": "warn",
         "useNumberNamespace": "warn",
@@ -284,6 +298,7 @@
       },
       "nursery": {
         "noBaseToString": "warn",
+        "noBunModules": "warn",
         "noComponentHookFactories": "error",
         "noConditionalExpect": "warn",
         "noDuplicateFieldDefinitionNames": "warn",
@@ -291,14 +306,22 @@
         "noEmptyObjectKeys": "warn",
         "noExcessiveNestedCallbacks": "warn",
         "noExcessiveSelectorClasses": "warn",
+        "noExtendNative": "warn",
         "noFloatingPromises": "warn",
         "noIdenticalTestTitle": "warn",
         "noInlineStyles": "warn",
+        "noInvalidFileInputAccept": "error",
+        "noInvalidPropertyInitValue": "warn",
+        "noJsRestrictedProperties": "warn",
         "noJsxLeakedDollar": "warn",
         "noJsxNamespace": "warn",
         "noLoopFunc": "warn",
+        "noMeaninglessVoidOperator": "warn",
         "noMisleadingReturnType": "warn",
         "noMisusedPromises": "warn",
+        "noNegationInEqualityCheck": "warn",
+        "noNonScalableViewport": "error",
+        "noObsoleteTags": "warn",
         "noPlaywrightElementHandle": "warn",
         "noPlaywrightEval": "warn",
         "noPlaywrightForceOption": "warn",
@@ -309,19 +332,29 @@
         "noPlaywrightWaitForNavigation": "warn",
         "noPlaywrightWaitForSelector": "warn",
         "noPlaywrightWaitForTimeout": "warn",
+        "noReactObjectTypeAsDefaultProp": "error",
         "noReactStringRefs": "warn",
         "noRestrictedDependencies": "warn",
+        "noReturnInFinally": "warn",
+        "noSelfImport": "error",
+        "noThisOutsideOfClass": "warn",
         "noTopLevelLiterals": "warn",
         "noUndeclaredClasses": "warn",
+        "noUndeclaredCustomProperties": "off",
+        "noUnmodifiedLoopCondition": "warn",
         "noUnnecessaryTemplateExpression": "warn",
         "noUnsafePlusOperands": "warn",
+        "noUnsafeTypeAssertion": "error",
         "noUntrustedLicenses": "warn",
         "noUnusedClasses": "off",
         "noUselessTypeConversion": "warn",
         "useArraySome": "warn",
         "useAwaitThenable": "warn",
         "useBaseline": "warn",
+        "useBetterDomTraversing": "warn",
+        "useConsistentFunctionStyle": "warn",
         "useConsistentTestIt": "warn",
+        "useControlLabel": "error",
         "useDisposables": "warn",
         "useDomNodeTextContent": "warn",
         "useDomQuerySelector": "warn",
@@ -332,31 +365,39 @@
         "useIframeSandbox": "warn",
         "useImportsFirst": "warn",
         "useIncludes": "warn",
+        "useLayeredStyles": "off",
+        "useLogicalProperties": "warn",
         "useNamedCaptureGroup": "warn",
+        "useNamedLayer": "warn",
         "useNullishCoalescing": "warn",
         "usePlaywrightValidDescribeCallback": "warn",
+        "usePromiseRejectErrors": "warn",
         "useReactAsyncServerFunction": "warn",
+        "useReactCompiler": "warn",
         "useReactFunctionComponentDefinition": {
           "level": "warn",
           "options": {
             "namedComponents": "arrowFunction"
           }
         },
+        "useReactNamingConvention": "warn",
         "useReduceTypeParameter": "warn",
         "useRegexpExec": "warn",
         "useRegexpTest": "warn",
         "useSortedClasses": "warn",
+        "useStrictBooleanExpressions": "off",
         "useStringStartsEndsWith": "warn",
         "useTestHooksInOrder": "warn",
         "useTestHooksOnTop": "warn",
         "useThisInClassMethods": "warn",
         "useUnicodeRegex": "warn",
+        "useValidTestTitle": "off",
         "useVarsOnTop": "warn"
       }
     }
   },
   "javascript": {
-    "globals": ["vi"],
+    "globals": ["vi", "expectTypeOf"],
     "formatter": {
       "quoteStyle": "single"
     }
@@ -392,15 +433,16 @@
               "@/testing",
               "@/testing/*",
               "@/providers/*",
-              "@/containers/*",
+              "@/pages/*",
               "@/components/*",
               "@/services/*",
               "@/utilities/*",
               "@/locales/*",
+              "~/*",
               ":ALIAS:",
               ":BLANK_LINE:",
-              ":PATH:",
-              "*.css"
+              [":PATH:", "!**/*.css"],
+              "**/*.css"
             ]
           }
         }
@@ -409,7 +451,7 @@
   },
   "overrides": [
     {
-      "includes": ["bin/**/*", "**/*.config.*"],
+      "includes": ["bin/**/*", "**/*.config.*", "server.mjs"],
       "linter": {
         "rules": {
           "correctness": {
@@ -432,7 +474,7 @@
       }
     },
     {
-      "includes": ["**/*.test.*", "src/testing/**/*"],
+      "includes": ["src/testing/**/*", "**/*.test.*"],
       "linter": {
         "rules": {
           "complexity": {
@@ -445,8 +487,37 @@
             "useTopLevelRegex": "off"
           },
           "style": {
+            "noExcessiveClassesPerFile": "off",
             "noJsxLiterals": "off",
-            "noMagicNumbers": "off"
+            "noMagicNumbers": "off",
+            "noRestrictedImports": {
+              "level": "error",
+              "options": {
+                "paths": {
+                  "node:console": {},
+                  "console": {},
+                  "@lingui/core": {
+                    "allowImportNames": [
+                      "I18n",
+                      "MessageDescriptor",
+                      "Messages",
+                      "setupI18n"
+                    ]
+                  },
+                  "@testing-library/react": {},
+                  "vitest": {},
+                  "vitest/browser": {}
+                },
+                "patterns": [
+                  {
+                    "group": ["../**"]
+                  },
+                  {
+                    "group": ["~/**"]
+                  }
+                ]
+              }
+            }
           },
           "nursery": {
             "noComponentHookFactories": "off",
@@ -456,17 +527,46 @@
       }
     },
     {
-      "includes": ["**/*.spec.*"],
+      "includes": ["e2e/**/*"],
       "linter": {
         "rules": {
           "style": {
-            "noMagicNumbers": "off"
+            "noMagicNumbers": "off",
+            "noRestrictedImports": {
+              "level": "error",
+              "options": {
+                "paths": {
+                  "node:console": {},
+                  "console": {},
+                  "@lingui/core": {
+                    "allowImportNames": [
+                      "I18n",
+                      "MessageDescriptor",
+                      "Messages",
+                      "setupI18n"
+                    ]
+                  },
+                  "@testing-library/react": {},
+                  "vitest": {},
+                  "vitest/browser": {}
+                },
+                "patterns": [
+                  {
+                    "group": ["@/**"]
+                  },
+                  {
+                    "group": ["../**"]
+                  }
+                ]
+              }
+            }
           },
           "nursery": {
             "useConsistentTestIt": {
               "level": "error",
               "options": {
-                "function": "test"
+                "function": "test",
+                "withinDescribe": "test"
               }
             }
           }

@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { use } from 'react';
 import { NavigationProgress } from '@mantine/nprogress';
 
 import { ProgressBarContext } from './context';
@@ -11,7 +11,7 @@ export type ProgressBarProps = {
 };
 
 export const ProgressBar = ({ label }: ProgressBarProps) => {
-  const value = useContext(ProgressBarContext);
+  const value = use(ProgressBarContext);
 
   if (!value?.store) {
     throw new Error(

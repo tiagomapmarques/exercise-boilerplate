@@ -10,8 +10,11 @@ try {
   process.exit(1);
 }
 
+const projectRoot = `${import.meta.dirname}/..`;
 const errorOnWarnings = process.argv.includes('--error-on-warnings');
-const output = execSync('git status --porcelain').toString().trim();
+const output = execSync('git status --porcelain -- .', { cwd: projectRoot })
+  .toString()
+  .trim();
 
 if (!output) {
   log('No uncommitted changes found');

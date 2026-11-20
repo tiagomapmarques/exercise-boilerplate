@@ -1,39 +1,20 @@
-/** biome-ignore-all lint/style/noRestrictedImports: Sub-module imports intentional — allows individual modules to be mocked in tests without importing the full barrel */
+/** biome-ignore-all lint/style/noRestrictedImports: Sub-module imports intentional */
+import type { ReactNode } from 'react';
 import {
-  type ComponentProps,
-  Fragment,
-  type PropsWithChildren,
-  type ReactNode,
-  useEffect,
-} from 'react';
-import { setupI18n } from '@lingui/core';
-import { I18nProvider, type I18nProviderProps } from '@lingui/react';
-import { MantineProvider, type MantineProviderProps } from '@mantine/core';
-import { createNprogress } from '@mantine/nprogress';
-import {
-  createMemoryHistory,
-  createRootRoute,
-  createRouter,
-  RouterProvider,
-  type StaticDataRouteOption,
-} from '@tanstack/react-router';
-import {
-  act,
   render as baseRender,
   renderHook as baseRenderHook,
   type RenderHookOptions,
   type RenderOptions,
 } from '@testing-library/react';
+import type { UserEventTabOptions } from 'vitest/browser';
 import { userEvent as baseUserEvent } from 'vitest/browser';
 
-import type {
-  ProgressBarActions,
-  ProgressBarStore,
-} from '@/providers/progress-bar';
-import { fallbackLocale, type Locale } from '@/providers/locale/constants';
-import { ProgressBarContext } from '@/providers/progress-bar/context';
-
-import { messages } from './utilities';
+import { act } from './act';
+import {
+  type CreateWrapperProps,
+  createWrapper,
+  type Providers,
+} from './render-providers';
 
 export * from '@testing-library/react';
 // @ts-expect-error Ignoring as the overriding of the exports is intended
@@ -41,206 +22,26 @@ export * from 'vitest';
 export type { PrettyDOMOptions } from 'vitest/browser';
 export * from 'vitest/browser';
 
+export { act } from './act';
+
 /** `userEvent` from `vitest/browser` with every method wrapped in `act` to flush React state updates before assertions. */
 export const userEvent: typeof baseUserEvent = new Proxy(baseUserEvent, {
-  get(target, prop, receiver) {
-    const value: unknown = Reflect.get(target, prop, receiver);
+  get(target, property, receiver) {
+    if (property === 'tab') {
+      // `tab()` can land focus nowhere in Firefox under Playwright. See
+      // https://github.com/microsoft/playwright/issues/32269 for more info.
+      return ({ shift = false }: UserEventTabOptions = {}) =>
+        // biome-ignore lint/security/noSecrets: False positive
+        act(() => target.keyboard(shift ? '{Shift>}{Tab}{/Shift}' : '{Tab}'));
+    }
+    const value: unknown = Reflect.get(target, property, receiver);
     if (typeof value !== 'function') {
       return value;
     }
-    return (...args: unknown[]) =>
-      act(() =>
-        (value as (...methodArgs: unknown[]) => unknown).call(target, ...args),
-      );
+    return (...parameters: unknown[]) =>
+      act(() => value.call(target, ...parameters));
   },
 });
-
-type RouterHistoryProps = Partial<
-  Parameters<typeof createMemoryHistory>[0] & StaticDataRouteOption
->;
-type RouterProviderProps = Partial<
-  Omit<
-    ComponentProps<typeof RouterProvider>,
-    'defaultComponent' | 'routeTree' | 'history'
-  >
->;
-
-const createRouterRenderProvider = (
-  props: RouterHistoryProps | RouterProviderProps | boolean | undefined,
-) => {
-  if (!props) {
-    return { provider: Fragment, result: undefined };
-  }
-
-  const {
-    initialEntries = ['/'],
-    initialIndex,
-    getTitle = () => '',
-    router: customRouter,
-    ...parsedProps
-  }: RouterHistoryProps & RouterProviderProps = typeof props === 'object'
-    ? props
-    : {};
-
-  const router =
-    customRouter ||
-    createRouter({
-      routeTree: createRootRoute({ staticData: { getTitle } }),
-      history: createMemoryHistory({ initialEntries, initialIndex }),
-      defaultNotFoundComponent: () => <p>Not Found</p>,
-    });
-
-  /** Function to wait for the router to finish loading the current route. */
-  const waitForReady = async () => {
-    await act(() => router.latestLoadPromise);
-  };
-
-  const RouterRenderProvider = ({ children }: PropsWithChildren) => {
-    return (
-      <RouterProvider
-        router={router}
-        defaultComponent={() => children}
-        {...parsedProps}
-      />
-    );
-  };
-
-  return {
-    provider: RouterRenderProvider,
-    result: { router: { instance: router, waitForReady } },
-  };
-};
-
-type MantineProps = Omit<MantineProviderProps, 'children'>;
-
-const createMantineRenderProvider = (
-  props: MantineProps | boolean | undefined,
-) => {
-  if (!props) {
-    return { provider: Fragment, result: undefined };
-  }
-
-  const parsedProps = typeof props === 'object' ? props : {};
-
-  const MantineRenderProvider = ({ children }: PropsWithChildren) => {
-    return <MantineProvider {...parsedProps}>{children}</MantineProvider>;
-  };
-
-  return { provider: MantineRenderProvider, result: {} };
-};
-
-type I18nProps = Partial<Omit<I18nProviderProps, 'children'>> & {
-  locale?: Locale;
-};
-
-const createI18nRenderProvider = (props: I18nProps | boolean | undefined) => {
-  if (!props) {
-    return { provider: Fragment, result: undefined };
-  }
-
-  const {
-    locale = fallbackLocale,
-    i18n: customI18n,
-    ...parsedProps
-  } = typeof props === 'object' ? props : {};
-
-  const i18n = customI18n || setupI18n({ locale, messages });
-
-  const I18nRenderProvider = ({ children }: PropsWithChildren) => {
-    return (
-      <I18nProvider i18n={i18n} {...parsedProps}>
-        {children}
-      </I18nProvider>
-    );
-  };
-
-  return { provider: I18nRenderProvider, result: { i18n } };
-};
-
-type ProgressBarProps = {
-  store?: ProgressBarStore;
-  actions?: Partial<ProgressBarActions>;
-};
-
-const createProgressBarRenderProvider = (
-  props: ProgressBarProps | boolean | undefined,
-) => {
-  if (!props) {
-    return { provider: Fragment, result: undefined };
-  }
-
-  const [nProgressStore, nProgressActions] = createNprogress();
-  const originalCleanup = nProgressActions.cleanup;
-
-  const { store = nProgressStore, actions: customActions } =
-    typeof props === 'object' ? props : {};
-
-  const { cleanup, ...actions } = { ...nProgressActions, ...customActions };
-  const value = { store, actions, cleanup };
-
-  const ProgressBarRenderProvider = ({ children }: PropsWithChildren) => {
-    useEffect(() => {
-      return () => originalCleanup();
-    }, []);
-
-    return (
-      <ProgressBarContext.Provider value={value}>
-        {children}
-      </ProgressBarContext.Provider>
-    );
-  };
-
-  return {
-    provider: ProgressBarRenderProvider,
-    result: { progressBar: value },
-  };
-};
-
-type Providers = {
-  router?: Parameters<typeof createRouterRenderProvider>[0];
-  mantine?: Parameters<typeof createMantineRenderProvider>[0];
-  i18n?: Parameters<typeof createI18nRenderProvider>[0];
-  progressBar?: Parameters<typeof createProgressBarRenderProvider>[0];
-};
-
-type CreateWrapperProps = {
-  wrapper?: RenderOptions['wrapper'];
-  providers?: Providers;
-};
-
-const createWrapper = ({
-  wrapper: Wrapper = Fragment,
-  providers = {},
-}: CreateWrapperProps) => {
-  const RouterRender = createRouterRenderProvider(providers.router);
-  const MantineRender = createMantineRenderProvider(providers.mantine);
-  const I18nRender = createI18nRenderProvider(providers.i18n);
-  const ProgressBarRender = createProgressBarRenderProvider(
-    providers.progressBar,
-  );
-
-  return {
-    wrapper: ({ children }: PropsWithChildren) => (
-      <Wrapper>
-        <RouterRender.provider>
-          <MantineRender.provider>
-            <I18nRender.provider>
-              <ProgressBarRender.provider>
-                {children}
-              </ProgressBarRender.provider>
-            </I18nRender.provider>
-          </MantineRender.provider>
-        </RouterRender.provider>
-      </Wrapper>
-    ),
-    result: {
-      ...(RouterRender.result ?? {}),
-      ...(MantineRender.result ?? {}),
-      ...(I18nRender.result ?? {}),
-      ...(ProgressBarRender.result ?? {}),
-    },
-  };
-};
 
 const defaultRenderProviders: Providers = {
   i18n: true,
@@ -261,14 +62,9 @@ export const render = (
     providers: { ...defaultRenderProviders, ...providers },
   });
 
-  const { rerender: originalRerender, ...renderResult } = baseRender(ui, {
-    ...options,
-    wrapper,
-  });
+  const renderResult = baseRender(ui, { ...options, wrapper });
 
-  const rerender = (updatedUi = ui) => originalRerender(updatedUi);
-
-  return { ...renderResult, rerender, providers: result };
+  return { ...renderResult, providers: result };
 };
 
 /**
@@ -291,4 +87,11 @@ export const renderHook = <HookReturn, HookProps>(
   const renderResult = baseRenderHook(hook, { ...options, wrapper });
 
   return { ...renderResult, providers: result };
+};
+
+/** Waits `timeout` milliseconds inside `act`, so any state update in that time is flushed. */
+export const waitForTimeout = async (timeout: number) => {
+  await act(async () => {
+    await new Promise((resolve) => setTimeout(resolve, timeout));
+  });
 };

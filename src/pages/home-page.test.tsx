@@ -1,16 +1,16 @@
 import { render, screen } from '@/testing';
 
-import { HomeContainer } from './home-container';
+import { HomePage } from './home-page';
 
-describe(HomeContainer, () => {
+describe(HomePage, () => {
   it('displays a title', () => {
-    render(<HomeContainer />);
+    render(<HomePage />);
 
     expect(screen.getByRole('heading', { name: 'Home' })).toBeVisible();
   });
 
   it('displays content', () => {
-    render(<HomeContainer />);
+    render(<HomePage />);
 
     expect(screen.getByText('Place your UI here')).toBeVisible();
   });

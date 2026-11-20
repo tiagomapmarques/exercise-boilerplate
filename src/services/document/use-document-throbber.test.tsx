@@ -15,7 +15,7 @@ describe(useDocumentThrobber, () => {
     );
   });
 
-  describe('with div#document-throbber', () => {
+  describe('the document throbber exists', () => {
     const wrapper = ({ children }: PropsWithChildren) => (
       <>
         <div
@@ -38,11 +38,11 @@ describe(useDocumentThrobber, () => {
 
       const documentThrobber = screen.getByTestId('DocumentThrobber');
 
-      expect(documentThrobber).toHaveAttribute('class', '');
+      expect(documentThrobber).not.toHaveClass('active');
 
       unmount();
 
-      expect(documentThrobber).toHaveAttribute('class', 'active');
+      expect(documentThrobber).toHaveClass('active');
     });
   });
 });

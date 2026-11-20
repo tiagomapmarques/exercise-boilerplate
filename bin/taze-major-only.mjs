@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 import { CheckPackages } from 'taze';
 
+// biome-ignore lint/style/noRestrictedImports: Using taze programmatically does not read the config file automatically
+import tazeConfig from '../taze.config.mts';
 import { info, log } from './common/logs.mjs';
 import {
   highlightSemver,
@@ -8,7 +10,11 @@ import {
   stripRangePrefix,
 } from './common/semver.mjs';
 
-const { packages } = await CheckPackages({ mode: 'major', write: false });
+const { packages } = await CheckPackages({
+  ...tazeConfig,
+  mode: 'major',
+  write: false,
+});
 
 const majorUpdates = packages
   .flatMap(({ resolved }) => resolved)

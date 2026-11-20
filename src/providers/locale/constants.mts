@@ -11,15 +11,15 @@ export const localeMetadata = {
 export type Locale = keyof typeof localeMetadata;
 
 /** List of supported locales. */
-export const locales = Object.keys(localeMetadata) as Locale[];
+export const locales = Object.keys(localeMetadata).filter(
+  (key: string): key is Locale => key in localeMetadata,
+);
 
 /** Supported country. */
 export type Country = (typeof localeMetadata)[Locale]['code'];
 
 /** List of supported countries. */
-export const countries = Object.values(localeMetadata).map(
-  ({ code }) => code,
-) as Country[];
+export const countries = Object.values(localeMetadata).map(({ code }) => code);
 
 /** Maps Languages to their default Locales. */
 export const languageMap = {
@@ -34,7 +34,9 @@ export const languageMap = {
 export type Language = keyof typeof languageMap;
 
 /** List of supported languages. */
-export const languages = Object.keys(languageMap) as Language[];
+export const languages = Object.keys(languageMap).filter(
+  (key: string): key is Language => key in languageMap,
+);
 
 /** Fallback locale for the app. */
 export const fallbackLocale = 'en-GB' satisfies Locale;

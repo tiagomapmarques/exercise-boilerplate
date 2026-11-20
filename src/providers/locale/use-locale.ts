@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import { useLingui } from '@lingui/react';
 
-import type { Locale } from './constants';
+import type { Locale } from './constants.mts';
 import { fetchAndActivateLocale } from './utilities';
 
 /** Gets and sets the locale of a `LocaleProvider`. */
@@ -19,5 +19,6 @@ export const useLocale = () => {
     await fetchAndActivateLocale(locale);
   }, []);
 
+  // biome-ignore lint/nursery/noUnsafeTypeAssertion: `i18n.locale` is only ever activated with a `Locale`
   return [i18n.locale as Locale, setLocale, preloadLocale] as const;
 };

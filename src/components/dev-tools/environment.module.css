@@ -1,8 +1,8 @@
-/* Class doubled to raise specificity over the dev-tools panel styles. */
-.Environment.Environment {
+/* Element named to raise specificity over the dev-tools panel styles. */
+div.Environment {
   container-type: inline-size;
-  height: auto;
-  max-height: var(--tsd-main-panel-height);
+  block-size: auto;
+  max-block-size: var(--tsd-main-panel-height);
   overflow-y: auto;
 
   .title {
@@ -10,20 +10,18 @@
   }
 
   .grid {
-    padding-top: var(--mantine-spacing-md);
+    padding-block-start: var(--mantine-spacing-md);
 
-    /* --mantine-breakpoint-xs */
-    @container (min-width: 36rem) {
+    @mixin container-larger-than $mantine-breakpoint-xs {
       --sg-cols: 2;
     }
 
-    /* --mantine-breakpoint-md */
-    @container (min-width: 62rem) {
+    @mixin container-larger-than $mantine-breakpoint-md {
+      /* biome-ignore lint/suspicious/noDuplicateCustomProperties: False positive */
       --sg-cols: 3;
     }
 
-    /* --mantine-breakpoint-xl */
-    @container (min-width: 88rem) {
+    @mixin container-larger-than $mantine-breakpoint-xl {
       --sg-cols: 4;
     }
   }

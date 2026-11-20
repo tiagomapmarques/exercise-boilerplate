@@ -7,15 +7,12 @@ import {
 import { type I18n, type Messages, setupI18n } from '@lingui/core';
 import { I18nProvider } from '@lingui/react';
 
-import type { Locale } from './constants';
+import type { Locale } from './constants.mts';
 import { loadLocale } from './utilities';
 
 /** Props for the `LocaleProvider` component. */
 export type LocaleProviderProps = PropsWithChildren<
-  {
-    /** Rendered while the locale is loading. */
-    fallback?: ReactNode;
-  } & (
+  (
     | {
         /** Pre-loaded locale - skips auto-detection. */
         initialLocale: Locale;
@@ -23,7 +20,10 @@ export type LocaleProviderProps = PropsWithChildren<
         initialMessages: Messages;
       }
     | { initialLocale?: never; initialMessages?: never }
-  )
+  ) & {
+    /** Rendered while the locale is loading. */
+    fallback?: ReactNode;
+  }
 >;
 
 export const LocaleProvider = ({
@@ -32,30 +32,26 @@ export const LocaleProvider = ({
   fallback = null,
   children,
 }: LocaleProviderProps) => {
-  const [i18n, setI18n] = useState<I18n | null>(null);
+  const [i18n, setI18n] = useState<I18n | null>(() => {
+    return initialLocale
+      ? setupI18n({
+          locale: initialLocale,
+          messages: { [initialLocale]: initialMessages },
+        })
+      : null;
+  });
 
   useEffect(() => {
     if (i18n) {
-      // Single-init: prop changes after mount are ignored on purpose.
       return;
     }
 
-    const initialI18n = setupI18n(
-      initialLocale && {
-        locale: initialLocale,
-        messages: { [initialLocale]: initialMessages },
-      },
-    );
-
-    if (initialLocale) {
-      setI18n(initialI18n);
-    } else {
-      loadLocale(initialI18n)
-        .then(() => setI18n(initialI18n))
-        // biome-ignore lint/suspicious/noConsole: Useful error at runtime
-        .catch(console.error);
-    }
-  }, [i18n, initialLocale, initialMessages]);
+    const initialI18n = setupI18n();
+    loadLocale(initialI18n)
+      .then(() => setI18n(initialI18n))
+      // biome-ignore lint/suspicious/noConsole: Useful error at runtime
+      .catch(console.error);
+  }, [i18n]);
 
   return i18n ? <I18nProvider i18n={i18n}>{children}</I18nProvider> : fallback;
 };

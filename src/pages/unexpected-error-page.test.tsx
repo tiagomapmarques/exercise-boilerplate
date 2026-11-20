@@ -1,10 +1,10 @@
 import { act, render, screen, userEvent } from '@/testing';
 
-import { UnexpectedErrorContainer } from './unexpected-error-container';
+import { UnexpectedErrorPage } from './unexpected-error-page';
 
-describe(UnexpectedErrorContainer, () => {
+describe(UnexpectedErrorPage, () => {
   it('displays a title', async () => {
-    render(<UnexpectedErrorContainer />, {
+    render(<UnexpectedErrorPage />, {
       providers: { router: true },
     });
 
@@ -14,7 +14,7 @@ describe(UnexpectedErrorContainer, () => {
   });
 
   it('displays error text', async () => {
-    render(<UnexpectedErrorContainer />, {
+    render(<UnexpectedErrorPage />, {
       providers: { router: true },
     });
 
@@ -24,9 +24,13 @@ describe(UnexpectedErrorContainer, () => {
   });
 
   it('goes back to the previous page', async () => {
-    const { providers } = render(<UnexpectedErrorContainer />, {
+    const { providers } = render(<UnexpectedErrorPage />, {
       providers: { router: { initialEntries: ['/initial-route'] } },
     });
+
+    expect(providers.router?.instance.latestLocation.pathname).toBe(
+      '/initial-route',
+    );
 
     act(() => providers.router?.instance.history.push('/'));
 

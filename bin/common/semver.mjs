@@ -1,4 +1,4 @@
-import { blueFg, redFg, yellowFg } from './logs.mjs';
+import { blueForeground, redForeground, yellowForeground } from './logs.mjs';
 
 const stripRangeRegex = /^[~^>=<]*/u;
 
@@ -61,20 +61,20 @@ export const highlightSemver = (latest, current) => {
   const { major, minor, patch, patchInfo } = latest;
 
   if (major > current.major) {
-    return `${redFg(major)}.${minor}.${patch}${patchInfo}`;
+    return `${redForeground(major)}.${minor}.${patch}${patchInfo}`;
   }
   if (minor > current.minor) {
-    // A 0.x release is unstable, so flag a minor change as severely as a major one.
-    const color = major === 0 ? redFg : yellowFg;
+    // A 0.x release is unstable, so flag a minor change as severely as a major one
+    const color = major === 0 ? redForeground : yellowForeground;
     return `${major}.${color(minor)}.${patch}${patchInfo}`;
   }
   if (patch > current.patch) {
-    // A 0.x release is unstable, so flag a patch change as severely as a minor one.
-    const color = major === 0 ? yellowFg : blueFg;
+    // A 0.x release is unstable, so flag a patch change as severely as a minor one
+    const color = major === 0 ? yellowForeground : blueForeground;
     return `${major}.${minor}.${color(patch)}${patchInfo}`;
   }
   if (patchInfo !== current.patchInfo) {
-    return `${major}.${minor}.${patch}${blueFg(patchInfo)}`;
+    return `${major}.${minor}.${patch}${blueForeground(patchInfo)}`;
   }
   return `${major}.${minor}.${patch}${patchInfo}`;
 };

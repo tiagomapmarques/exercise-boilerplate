@@ -1,7 +1,7 @@
 import { Router } from '@tanstack/react-router';
 
-import { NotFoundContainer } from '@/containers/not-found-container';
-import { UnexpectedErrorContainer } from '@/containers/unexpected-error-container';
+import { NotFoundPage } from '@/pages/not-found-page';
+import { UnexpectedErrorPage } from '@/pages/unexpected-error-page';
 
 import { router } from './router';
 
@@ -10,15 +10,19 @@ describe('router', () => {
     expect(router).toBeInstanceOf(Router);
   });
 
+  it('serves routes under the base path', () => {
+    expect(router.options.basepath).toBe(import.meta.env.BASE_URL);
+  });
+
   it('preloads on intent', () => {
     expect(router.options.defaultPreload).toBe('intent');
   });
 
-  it('renders NotFoundContainer for unknown routes', () => {
-    expect(router.options.defaultNotFoundComponent).toBe(NotFoundContainer);
+  it('displays NotFoundPage for unknown routes', () => {
+    expect(router.options.defaultNotFoundComponent).toBe(NotFoundPage);
   });
 
-  it('renders UnexpectedErrorContainer for unexpected errors', () => {
-    expect(router.options.defaultErrorComponent).toBe(UnexpectedErrorContainer);
+  it('displays UnexpectedErrorPage for unexpected errors', () => {
+    expect(router.options.defaultErrorComponent).toBe(UnexpectedErrorPage);
   });
 });

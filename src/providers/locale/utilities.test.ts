@@ -1,8 +1,6 @@
 import { setupI18n } from '@lingui/core';
 import { detect, fromNavigator } from '@lingui/detect-locale';
 
-import type { Mock } from '@/testing';
-
 import { loadLocale } from './utilities';
 
 vi.mock('@lingui/detect-locale', async (importActual) => {
@@ -16,7 +14,7 @@ vi.mock('@lingui/detect-locale', async (importActual) => {
 
 describe(loadLocale, () => {
   beforeEach(() => {
-    (detect as Mock<typeof detect>).mockImplementation((value) => value);
+    vi.mocked(detect).mockImplementation((value) => value);
   });
 
   it.each`
@@ -48,7 +46,7 @@ describe(loadLocale, () => {
   `(
     'guesses $expected locale from $browser and $loaded',
     async ({ loaded, browser, expected }) => {
-      (fromNavigator as Mock<typeof fromNavigator>).mockReturnValue(browser);
+      vi.mocked(fromNavigator).mockReturnValue(browser);
 
       const i18n = setupI18n(
         loaded && {

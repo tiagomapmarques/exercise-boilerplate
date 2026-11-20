@@ -1,4 +1,4 @@
-/* Class doubled to raise specificity over the Mantine nprogress styles. */
-.NavigationProgress.NavigationProgress {
+/* Element named to raise specificity over the Mantine nprogress styles. */
+div.NavigationProgress {
   transition-delay: 100ms;
 }

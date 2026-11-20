@@ -26,21 +26,22 @@ const AppContent = () => {
   const router = useRouter();
   const { i18n } = useLingui();
   const { start, complete } = useProgressBar();
-  const navigationStarted = useRef(false);
+  const navigationStartedRef = useRef(false);
 
   useEffect(() => {
     const unsubscribeOnBeforeNavigate = router.subscribe(
       'onBeforeNavigate',
       ({ hrefChanged }) => {
         if (hrefChanged) {
-          navigationStarted.current = true;
+          navigationStartedRef.current = true;
           start();
         }
       },
     );
     const unsubscribeOnResolved = router.subscribe('onResolved', () => {
-      if (navigationStarted.current) {
-        navigationStarted.current = false;
+      // biome-ignore lint/suspicious/noUnnecessaryConditions: False positive
+      if (navigationStartedRef.current) {
+        navigationStartedRef.current = false;
         complete();
       }
     });
@@ -87,9 +88,9 @@ export const AppShell = () => {
         <ProgressBarProvider>
           <MantineAppShell
             padding="md"
-            header={{ height: '3em' }}
+            header={{ height: '3rem' }}
             navbar={{
-              width: '16em',
+              width: '16rem',
               breakpoint: 'sm',
               collapsed: { mobile: !opened },
             }}
@@ -98,7 +99,7 @@ export const AppShell = () => {
               <BurgerMenu opened={opened} setOpened={setOpened} />
             </MantineAppShell.Header>
 
-            <MantineAppShell.Navbar p="md" data-open={opened}>
+            <MantineAppShell.Navbar p="md">
               <Navigation />
             </MantineAppShell.Navbar>
 

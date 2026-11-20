@@ -1,16 +1,16 @@
 import { Trans } from '@lingui/react';
 import { Stack, Title } from '@mantine/core';
 
-import { About } from '@/components/about';
+import { ExampleContent } from '@/components/example-content';
 
-export const AboutContainer = () => {
+export const HomePage = () => {
   return (
     <Stack>
       <Title>
-        <Trans id="pages.about.title" />
+        <Trans id="pages.home.title" />
       </Title>
 
-      <About />
+      <ExampleContent />
     </Stack>
   );
 };

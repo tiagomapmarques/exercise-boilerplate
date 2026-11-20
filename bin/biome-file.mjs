@@ -28,9 +28,9 @@ const ruleCacheFile = `${ruleCacheDirectory}/${biomeVersion}.json`;
 const biomeConfig = JSON.parse(readFileSync(biomeConfigFile).toString());
 const schema = JSON.parse(readFileSync(schemaFile).toString());
 
-const allDomains = schema.$defs.RuleDomain.oneOf
-  .map((entry) => ({ name: entry.const, description: entry.description }))
-  .sort((left, right) => left.name.localeCompare(right.name));
+const allDomains = Object.keys(schema.$defs.RuleDomains.properties)
+  .map((name) => ({ name }))
+  .toSorted((left, right) => left.name.localeCompare(right.name));
 
 const selectedDomains = Object.entries(biomeConfig.linter?.domains ?? {})
   .filter(([name, value]) => {
@@ -51,7 +51,7 @@ const nonSectionKeys = ['recommended', 'preset'];
 // the rest of the generated file easier to diff.
 const sectionKeys = Object.keys(schema.$defs.Rules.properties)
   .filter((key) => !nonSectionKeys.includes(key) && key !== 'nursery')
-  .sort()
+  .toSorted((left, right) => left.localeCompare(right))
   .concat('nursery');
 
 const defaultSeverityRegex = /Default severity:\s*(?<severity>\w+)/u;
@@ -77,7 +77,7 @@ const explainRule = async (rule) => {
     ...(domainBlockRegex.exec(stdout)?.groups.body ?? '').matchAll(
       domainNameRegex,
     ),
-  ].map((match) => match.groups.domain);
+  ].map(({ groups }) => groups.domain);
 
   return { defaultSeverity, globallyRecommended, domains };
 };
@@ -133,7 +133,7 @@ const biomeRules = await loadBiomeRules();
 info(
   `Disabled domains:\n${allDomains
     .filter(({ name }) => !selectedDomains.includes(name))
-    .map(({ name, description }) => `  ${name}: ${description}`)
+    .map(({ name }) => `  ${name}`)
     .join('\n')}`,
 );
 
@@ -234,12 +234,13 @@ const buildNewRules = (previousRules) => {
   const cleanRules = buildCleanRules();
   const customSettings = extractCustomSettings(previousRules);
 
-  const sortRules = (rules) =>
-    Object.fromEntries(
-      Object.entries(rules).sort(([leftKey], [rightKey]) =>
+  const sortRules = (rules) => {
+    return Object.fromEntries(
+      Object.entries(rules).toSorted(([leftKey], [rightKey]) =>
         leftKey.localeCompare(rightKey),
       ),
     );
+  };
 
   return Object.fromEntries(
     sectionKeys.map((section) => [

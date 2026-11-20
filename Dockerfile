@@ -1,6 +1,7 @@
-ARG NODE_VERSION=24.18.0
-ARG PNPM_VERSION=11.9.0
+ARG NODE_VERSION=24.22.3
+ARG PNPM_VERSION=12.21.0
 ARG ALPINE_VERSION=3.24
+ARG VITE_BASE_PATH=/
 
 FROM alpine:${ALPINE_VERSION} AS cache
 
@@ -34,6 +35,9 @@ COPY . /app
 # from being run. This will both let docker cache the `node_modules` folder
 # in the previous RUN command and prevent potentially dangerous code to run.
 RUN pnpm install --ignore-scripts --prod
+
+ARG VITE_BASE_PATH
+ENV VITE_BASE_PATH=${VITE_BASE_PATH}
 RUN pnpm build
 RUN chown -R node:node /app
 

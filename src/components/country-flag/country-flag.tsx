@@ -13,7 +13,7 @@ export const CountryFlag = ({ locale }: CountryFlagProps) => {
     <Image
       height="16"
       radius="sm"
-      src={`/flags/${localeMetadata[locale].code}.svg`}
+      src={`${import.meta.env.BASE_URL}flags/${localeMetadata[locale].code}.svg`}
       alt={localeMetadata[locale].country}
     />
   );

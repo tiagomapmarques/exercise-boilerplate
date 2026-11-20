@@ -1,20 +1,20 @@
 import type { I18n, MessageDescriptor } from '@lingui/core';
 import { createRouter } from '@tanstack/react-router';
 
-import { NotFoundContainer } from '@/containers/not-found-container';
-import { UnexpectedErrorContainer } from '@/containers/unexpected-error-container';
+import { NotFoundPage } from '@/pages/not-found-page';
+import { UnexpectedErrorPage } from '@/pages/unexpected-error-page';
 
 import { routeTree } from './routeTree.gen';
 
 /** Router instance for the app. */
 export const router = createRouter({
   routeTree,
+  basepath: import.meta.env.BASE_URL,
   defaultPreload: 'intent',
-  defaultNotFoundComponent: NotFoundContainer,
-  defaultErrorComponent: UnexpectedErrorContainer,
+  defaultNotFoundComponent: NotFoundPage,
+  defaultErrorComponent: UnexpectedErrorPage,
 });
 
-// Register the router instance for type safety
 declare module '@tanstack/react-router' {
   // biome-ignore lint/style/useConsistentTypeDefinitions: Required by TanStack Router for module augmentation
   interface Register {

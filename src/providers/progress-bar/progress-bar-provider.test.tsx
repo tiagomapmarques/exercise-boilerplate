@@ -1,13 +1,11 @@
-import { useEffect } from 'react';
+import { use, useEffect } from 'react';
 import { createNprogress } from '@mantine/nprogress';
 
-import { type Mock, render, screen } from '@/testing';
+import { act, render, screen } from '@/testing';
 
+import { ProgressBarContext, type ProgressBarContextValue } from './context';
 import { ProgressBar } from './progress-bar';
-import {
-  ProgressBarProvider,
-  type ProgressBarProviderProps,
-} from './progress-bar-provider';
+import { ProgressBarProvider } from './progress-bar-provider';
 import { useProgressBar } from './use-progress-bar';
 
 vi.mock('@mantine/nprogress', async (importActual) => {
@@ -22,7 +20,7 @@ describe(ProgressBarProvider, () => {
   it('displays its children', () => {
     render(
       <ProgressBarProvider>
-        <div data-slot="Content" />
+        <div data-slot="Content">Mock content</div>
       </ProgressBarProvider>,
       {
         providers: {
@@ -32,7 +30,7 @@ describe(ProgressBarProvider, () => {
       },
     );
 
-    expect(screen.getByTestId('Content')).not.toBeVisible();
+    expect(screen.getByTestId('Content')).toBeVisible();
   });
 
   it('does not create nProgress more than once', () => {
@@ -53,9 +51,7 @@ describe(ProgressBarProvider, () => {
   it('cleans up nProgress when unmounting', () => {
     const nProgress = createNprogress();
     nProgress[1].cleanup = vi.fn(nProgress[1].cleanup);
-    (createNprogress as Mock<typeof createNprogress>).mockReturnValue(
-      nProgress,
-    );
+    vi.mocked(createNprogress).mockReturnValue(nProgress);
 
     const { rerender, unmount } = render(<ProgressBarProvider />, {
       providers: {
@@ -77,57 +73,46 @@ describe(ProgressBarProvider, () => {
 
   it('works in tandem with `useProgressBar` and `ProgressBar`', () => {
     const Consumer = () => {
-      const progressBar = useProgressBar();
-      return (
-        <>
-          <ProgressBar label="Mock label" />
-          <div
-            data-slot="Content"
-            data-start={typeof progressBar.start}
-            data-complete={typeof progressBar.complete}
-          />
-        </>
-      );
+      const { set } = useProgressBar();
+
+      useEffect(() => {
+        set(20);
+      }, [set]);
+
+      return null;
     };
 
     render(
       <ProgressBarProvider>
+        <ProgressBar label="Mock label" />
+
         <Consumer />
       </ProgressBarProvider>,
       { providers: { i18n: false } },
     );
 
-    expect(screen.getByTestId('Content').dataset.start).toBe('function');
-    expect(screen.getByTestId('Content').dataset.complete).toBe('function');
     expect(
       screen.getByRole('progressbar', { name: 'Mock label' }),
-    ).not.toBeVisible();
+    ).toHaveAttribute('aria-valuenow', '20');
   });
 
   it('accepts initial store and actions', () => {
-    const Consumer = () => {
-      const progressBar = useProgressBar();
-      return (
-        <div
-          data-slot="Content"
-          data-mock-action={(progressBar as Record<string, unknown>).mockAction}
-        />
-      );
+    const [store, actions] = createNprogress();
+    const initialActions = {
+      ...actions,
+      set: vi.fn(actions.set),
+      cleanup: vi.fn(actions.cleanup),
+    };
+    let context: ProgressBarContextValue | undefined;
+
+    const ContextConsumer = () => {
+      context = use(ProgressBarContext) ?? undefined;
+      return null;
     };
 
-    const customStore = { mockKey: 'mock-value' };
-    const customActions = { mockAction: 'mock-function', cleanup: vi.fn() };
-
     const { unmount } = render(
-      <ProgressBarProvider
-        initialStore={
-          customStore as unknown as Required<ProgressBarProviderProps>['initialStore']
-        }
-        initialActions={
-          customActions as unknown as Required<ProgressBarProviderProps>['initialActions']
-        }
-      >
-        <Consumer />
+      <ProgressBarProvider initialStore={store} initialActions={initialActions}>
+        <ContextConsumer />
       </ProgressBarProvider>,
       {
         providers: {
@@ -137,51 +122,53 @@ describe(ProgressBarProvider, () => {
       },
     );
 
-    expect(screen.getByTestId('Content').dataset.mockAction).toBe(
-      customActions.mockAction,
-    );
+    expect(createNprogress).toHaveBeenCalledOnce();
+    expect(context?.store).toBe(store);
+    expect(initialActions.set).not.toHaveBeenCalled();
 
-    expect(customActions.cleanup).not.toHaveBeenCalled();
+    act(() => {
+      context?.actions.set(20);
+    });
+
+    expect(initialActions.set).toHaveBeenCalledExactlyOnceWith(20);
+    expect(initialActions.cleanup).not.toHaveBeenCalled();
 
     unmount();
 
-    expect(customActions.cleanup).toHaveBeenCalledOnce();
+    expect(initialActions.cleanup).toHaveBeenCalledOnce();
   });
 
   it('can be used multiple times on a single page', () => {
-    const nProgress1 = createNprogress();
-    const nProgress2 = createNprogress();
-    const nProgress3 = createNprogress();
+    const createConsumer = () => {
+      let value: ProgressBarContextValue | undefined;
 
-    const Consumer = ({ state }: { state: number }) => {
-      const { set } = useProgressBar();
-      useEffect(() => {
-        set(state);
-      }, [set, state]);
-      return null;
+      return {
+        consumer: () => {
+          value = use(ProgressBarContext) ?? undefined;
+          return null;
+        },
+        get value() {
+          return value;
+        },
+      };
     };
+
+    const Outer = createConsumer();
+    const Inner = createConsumer();
+    const Sibling = createConsumer();
 
     render(
       <>
-        <ProgressBarProvider
-          initialStore={nProgress1[0]}
-          initialActions={nProgress1[1]}
-        >
-          <Consumer state={10} />
+        <ProgressBarProvider>
+          <Outer.consumer />
 
-          <ProgressBarProvider
-            initialStore={nProgress3[0]}
-            initialActions={nProgress3[1]}
-          >
-            <Consumer state={30} />
+          <ProgressBarProvider>
+            <Inner.consumer />
           </ProgressBarProvider>
         </ProgressBarProvider>
 
-        <ProgressBarProvider
-          initialStore={nProgress2[0]}
-          initialActions={nProgress2[1]}
-        >
-          <Consumer state={20} />
+        <ProgressBarProvider>
+          <Sibling.consumer />
         </ProgressBarProvider>
       </>,
       {
@@ -192,8 +179,17 @@ describe(ProgressBarProvider, () => {
       },
     );
 
-    expect(nProgress1[0].getState().progress).toBe(10);
-    expect(nProgress2[0].getState().progress).toBe(20);
-    expect(nProgress3[0].getState().progress).toBe(30);
+    expect(Outer.value?.store.getState().progress).toBe(0);
+    expect(Inner.value?.store.getState().progress).toBe(0);
+    expect(Sibling.value?.store.getState().progress).toBe(0);
+
+    act(() => {
+      Outer.value?.actions.set(10);
+      Inner.value?.actions.set(30);
+    });
+
+    expect(Outer.value?.store.getState().progress).toBe(10);
+    expect(Inner.value?.store.getState().progress).toBe(30);
+    expect(Sibling.value?.store.getState().progress).toBe(0);
   });
 });

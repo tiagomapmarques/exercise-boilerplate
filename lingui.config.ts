@@ -1,7 +1,7 @@
 import { defineConfig } from '@lingui/cli';
 import { formatter } from '@lingui/format-po';
 
-import { fallbackLocale, locales } from './src/providers/locale/constants';
+import { fallbackLocale, locales } from './src/providers/locale/constants.mts';
 
 // biome-ignore lint/style/noDefaultExport: Required by lingui
 export default defineConfig({

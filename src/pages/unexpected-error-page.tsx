@@ -2,7 +2,7 @@ import { Trans } from '@lingui/react';
 import { Button, Stack, Text, Title } from '@mantine/core';
 import { useRouter } from '@tanstack/react-router';
 
-export const UnexpectedErrorContainer = () => {
+export const UnexpectedErrorPage = () => {
   const router = useRouter();
 
   return (

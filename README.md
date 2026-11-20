@@ -7,8 +7,8 @@ For architectural decisions and coding conventions, see
 
 ## Requirements
 
-- Node 24 (LTS) or 26
-- pnpm 11
+- node ^24.22.3 (LTS) or ^26.13.1
+- pnpm ^12.21.0
 
 ## Quick start
 
@@ -16,6 +16,11 @@ For architectural decisions and coding conventions, see
 
 - pnpm install
 - pnpm start
+
+> [!NOTE]
+> In order to run the e2e tests, Playwright's OS-level browser dependencies must
+> be installed once with `pnpm exec playwright install-deps` (needs sudo) after
+> running `pnpm install`.
 
 ### Production
 
@@ -28,16 +33,34 @@ For architectural decisions and coding conventions, see
 - pnpm docker:build
 - pnpm docker:run
 
+## Configuration
+
+`pnpm install` creates `.env` from `.env.example`; the production flow installs
+with `--ignore-scripts`, so copy it yourself there, or pass the variables in the
+environment.
+
+### `VITE_BASE_PATH`
+
+Becomes Vite's `base` at build time, and so `import.meta.env.BASE_URL`, from
+which the router's basepath and every asset URL are built. A missing trailing
+slash is added. Defaults to `/`.
+
+`pnpm serve` reads it again at startup, from the environment or `.env` only, to
+serve the build under that path - keep it out of mode-specific `.env.*` files,
+or the build and the server disagree. For the Docker image, pass it as a build
+argument: `pnpm docker:build --build-arg VITE_BASE_PATH=/path/`.
+
 ## Stack
 
 - **TypeScript**
 - **React**
+- **Vite**
 - **TanStack Router**
 - **Mantine**
 - **Lingui**
+- **Biome**
 - **Vitest**
 - **Playwright**
-- **Biome**
 - **Docker**
 
 ## Scripts
@@ -63,3 +86,4 @@ For architectural decisions and coding conventions, see
 | `pnpm docker:build` | Build the production Docker image |
 | `pnpm docker:run` | Run the production Docker image on port 8080 |
 | `pnpm docker:ci` | Build CI image, run checks and extract reports |
+| `pnpm run licenses` | Write the dependency license reports (`licenses.json`, `licenses.prod.json`) |

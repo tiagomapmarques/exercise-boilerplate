@@ -1,16 +1,16 @@
 import { render, screen } from '@/testing';
 
-import { AboutContainer } from './about-container';
+import { AboutPage } from './about-page';
 
-describe(AboutContainer, () => {
+describe(AboutPage, () => {
   it('displays a title', () => {
-    render(<AboutContainer />);
+    render(<AboutPage />);
 
     expect(screen.getByRole('heading', { name: 'About' })).toBeVisible();
   });
 
   it('displays content', () => {
-    render(<AboutContainer />);
+    render(<AboutPage />);
 
     expect(screen.getByText('exercise-boilerplate')).toBeVisible();
   });

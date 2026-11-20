@@ -1,8 +1,67 @@
+/** biome-ignore-all lint/style/noRestrictedImports: Sub-module imports intentional */
+import type { Messages } from '@lingui/core';
+import { DEFAULT_THEME, type MantineBreakpoint } from '@mantine/core';
+import { waitFor } from '@testing-library/react';
+import { page } from 'vitest/browser';
+
 import { messages as messagesDeDe } from '@/locales/de-DE.po';
 import { messages as messagesEnGb } from '@/locales/en-GB.po';
 import { messages as messagesEsEs } from '@/locales/es-ES.po';
 import { messages as messagesFrFr } from '@/locales/fr-FR.po';
 import { messages as messagesItIt } from '@/locales/it-IT.po';
+import type { Locale } from '@/providers/locale/constants.mts';
+
+import { act } from './act';
+
+const pixelsPerEm = 16;
+const viewportHeight = 800;
+
+/** Size of the browser viewport a test runs at. */
+export type ViewportDimensions = {
+  /** Width of the viewport in pixels. */
+  width: number;
+  /** Height of the viewport in pixels. */
+  height: number;
+};
+
+/** Viewport to resize to, either a Mantine breakpoint or an explicit size. */
+export type ViewportSize = MantineBreakpoint | ViewportDimensions;
+
+const toViewportDimensions = (size: ViewportSize): ViewportDimensions => {
+  if (typeof size !== 'string') {
+    return size;
+  }
+
+  return {
+    width: Number.parseFloat(DEFAULT_THEME.breakpoints[size]) * pixelsPerEm,
+    height: viewportHeight,
+  };
+};
+
+/** Resizes the viewport and waits until the app has settled into it. */
+export const resizeViewport = async (size: ViewportSize) => {
+  const { width, height } = toViewportDimensions(size);
+
+  if (globalThis.innerWidth === width && globalThis.innerHeight === height) {
+    return;
+  }
+
+  await act(async () => {
+    await page.viewport(width, height);
+
+    // Media query listeners are notified after the viewport itself changes
+    await new Promise<void>((resolve) => {
+      requestAnimationFrame(() => setTimeout(resolve, 0));
+    });
+  });
+
+  await waitFor(() => {
+    expect(globalThis.innerWidth).toBe(width);
+    // Mantine clears this flag from a timer 200ms after a resize, which would
+    // otherwise update state once the test is over.
+    expect(document.querySelector('[data-resizing]')).toBeNull();
+  });
+};
 
 /** All compiled translation messages for every supported locale, keyed by locale code. */
 export const messages = {
@@ -11,7 +70,7 @@ export const messages = {
   'de-DE': messagesDeDe,
   'es-ES': messagesEsEs,
   'it-IT': messagesItIt,
-};
+} satisfies Record<Locale, Messages>;
 
 /** The default `document.title` set by Vitest's browser runner before the app writes its own. */
 export const initialDocumentTitle = document.title;
@@ -21,20 +80,20 @@ export const initialDocumentTitle = document.title;
  * `object` before a test and resets it after.
  */
 export const mockObjectProperty = <
-  T extends object,
-  K extends string & keyof T,
+  Owner extends object,
+  Property extends string & keyof Owner,
 >(
-  object: T,
-  property: K,
+  object: Owner,
+  property: Property,
 ) => {
   const resetValue = object[property];
 
-  let prototype = Object.getPrototypeOf(object) as object | null;
+  let prototype: object | null = Object.getPrototypeOf(object);
   while (prototype) {
     if (Object.getOwnPropertyDescriptor(prototype, property)) {
       break;
     }
-    prototype = Object.getPrototypeOf(prototype) as object | null;
+    prototype = Object.getPrototypeOf(prototype);
   }
   const descriptor = Object.getOwnPropertyDescriptor(prototype, property);
 
@@ -44,16 +103,14 @@ export const mockObjectProperty = <
     );
   }
 
-  const originalGetter = descriptor.get.bind(object) as () => T[K];
-  const originalSetter = descriptor.set.bind(object) as (value: T[K]) => void;
+  const originalGetter: () => Owner[Property] = descriptor.get.bind(object);
+  const originalSetter: (value: Owner[Property]) => void =
+    descriptor.set.bind(object);
 
   const getter = vi.fn(originalGetter);
   const setter = vi.fn(originalSetter);
 
   beforeEach(() => {
-    getter.mockImplementation(originalGetter);
-    setter.mockImplementation(originalSetter);
-
     Object.defineProperty(object, property, {
       get: getter,
       set: setter,
@@ -62,7 +119,7 @@ export const mockObjectProperty = <
   });
 
   afterEach(() => {
-    delete (object as Record<string, unknown>)[property];
+    Reflect.deleteProperty(object, property);
     originalSetter(resetValue);
   });
 
@@ -100,87 +157,46 @@ export const mockConsole = <Type extends 'log' | 'warn' | 'error'>(
   return callbackMock;
 };
 
-/**
- * Promise that you can control when to resolve and/or reject.
- *
- * This is useful when there is the need to stop execution to evaluate the
- * current state of a component or hook. For example on API calls or between
- * component updates.
- */
+/** Promise a test resolves or rejects by hand, to assert on the state in between. */
 export class ControlledPromise {
-  private promise: Promise<void>;
-  private resolveCallback: (() => void) | undefined;
-  private rejectCallback: ((reason?: unknown) => void) | undefined;
+  /** The current promise, replaced each time `reset` creates a new one. */
+  private promise!: Promise<void>;
 
-  private get settled() {
-    return !(this.resolveCallback ?? this.rejectCallback);
-  }
+  /** Resolves the current promise, replaced each time `reset` creates a new one. */
+  private resolveCallback!: () => void;
+
+  /** Rejects the current promise, replaced each time `reset` creates a new one. */
+  private rejectCallback!: (reason?: unknown) => void;
 
   public constructor() {
-    this.promise = Promise.resolve();
-    this.resolveCallback = undefined;
-    this.rejectCallback = undefined;
+    this.reset();
   }
 
-  /** Method to create and await a promise, or return the promise already being awaited. */
+  /** Returns the current promise, which settles once the test resolves or rejects it. */
   public wait() {
-    if (this.settled) {
-      this.promise = new Promise<void>((resolve, reject) => {
-        this.resolveCallback = resolve;
-        this.rejectCallback = reject;
-      })
-        .then(() => {
-          this.resolveCallback = undefined;
-          this.rejectCallback = undefined;
-        })
-        .catch((error) => {
-          this.resolveCallback = undefined;
-          this.rejectCallback = undefined;
-          throw error;
-        });
-    }
-
     return this.promise;
   }
 
-  /** Method to resolve the currently awaited promise. */
+  /** Resolves the promise, whether or not it is awaited yet. */
   public resolve() {
-    if (this.settled) {
-      // biome-ignore lint/suspicious/noConsole: Useful to detect potential test errors
-      console.warn(
-        'A ControlledPromise tried to `resolve` with no previous `wait` call.',
-      );
-    }
-
-    this.resolveCallback?.();
+    this.resolveCallback();
     return this.promise;
   }
 
-  /** Method to reject the currently awaited promise. */
-  public reject(reason: unknown = new Error('Caller gave no reason.')) {
-    if (this.settled) {
-      // biome-ignore lint/suspicious/noConsole: Useful to detect potential test errors
-      console.warn(
-        'A ControlledPromise tried to `reject` with no previous `wait` call.',
-      );
-    }
-
-    this.rejectCallback?.(reason);
-    return this.promise;
+  /** Rejects the promise, whether or not it is awaited yet, resolving with its settled result instead of throwing the reason. */
+  public async reject(
+    reason: unknown = new Error('Caller gave no reason.'),
+  ): Promise<PromiseSettledResult<void>> {
+    this.rejectCallback(reason);
+    const [settled] = await Promise.allSettled([this.promise]);
+    return settled;
   }
 
-  /** Method to reset the promise to its initial state, discarding any pending resolution. */
+  /** Creates a fresh promise, discarding any pending resolution. */
   public reset() {
-    if (!this.settled) {
-      // biome-ignore lint/suspicious/noConsole: Useful to detect potential test errors
-      console.warn(
-        'A ControlledPromise tried to `reset` before being resolved/rejected and will now be rejected.',
-      );
-      this.rejectCallback?.(new Error('`reset` called before settling.'));
-    }
-
-    this.promise = Promise.resolve();
-    this.resolveCallback = undefined;
-    this.rejectCallback = undefined;
+    this.promise = new Promise<void>((resolve, reject) => {
+      this.resolveCallback = resolve;
+      this.rejectCallback = reject;
+    });
   }
 }

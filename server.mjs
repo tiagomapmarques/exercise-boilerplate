@@ -15,9 +15,10 @@ server.register(fastifyCompress, {
   encodings: ['br', 'gzip', 'identity'],
 });
 
-// Serve all static files
+// Serve all static files under the path the app was built for
 server.register(fastifyStatic, {
   root: `${import.meta.dirname}/dist`,
+  prefix: process.env.VITE_BASE_PATH || '/',
 });
 
 // Standard path for liveness/readiness probes
@@ -39,6 +40,7 @@ process.on('SIGINT', shutdown);
 
 // Run the server
 try {
+  // biome-ignore lint/nursery/useAwaitThenable: False positive
   await server.listen({
     host: '0.0.0.0',
     port: 8080,
