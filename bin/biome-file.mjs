@@ -9,7 +9,7 @@ import {
 } from 'node:fs';
 import { promisify } from 'node:util';
 
-import { info, warn } from './common/logs.mjs';
+import { logInfo, logWarning } from './common/logs.mjs';
 import { parallelMap } from './common/parallel.mjs';
 
 const execPromise = promisify(execCallback);
@@ -38,7 +38,7 @@ const selectedDomains = Object.entries(biomeConfig.linter?.domains ?? {})
       return false;
     }
     if (!allDomains.some((domain) => domain.name === name)) {
-      warn(`Unknown domain '${name}' in biome.json - skipping.`);
+      logWarning(`Unknown domain '${name}' in biome.json - skipping.`);
       return false;
     }
     return true;
@@ -66,7 +66,7 @@ const explainRule = async (rule) => {
 
   const defaultSeverity = defaultSeverityRegex.exec(stdout)?.groups.severity;
   if (!validSeverities.includes(defaultSeverity)) {
-    warn(
+    logWarning(
       `Unexpected default severity '${defaultSeverity}' for rule '${rule}' - skipping.`,
     );
     return;
@@ -86,7 +86,7 @@ const getRuleDefinitions = async () => {
   const ruleEntries = sectionKeys.flatMap((section) => {
     const schemaKey = section[0].toUpperCase() + section.slice(1);
     if (!schema.$defs[schemaKey]?.properties) {
-      warn(
+      logWarning(
         `Schema is missing properties for section '${section}' (expected key '${schemaKey}'); the casing convention may have changed.`,
       );
     }
@@ -130,7 +130,7 @@ const loadBiomeRules = async () => {
 
 const biomeRules = await loadBiomeRules();
 
-info(
+logInfo(
   `Disabled domains:\n${allDomains
     .filter(({ name }) => !selectedDomains.includes(name))
     .map(({ name }) => `  ${name}`)
@@ -186,7 +186,9 @@ const buildDomains = () => {
 
 const buildSectionRules = (section) => {
   const rules = {};
-  for (const [rule, definition] of Object.entries(biomeRules[section] ?? {})) {
+  const ruleDefinitions = Object.entries(biomeRules[section] ?? {});
+
+  for (const [rule, definition] of ruleDefinitions) {
     const severity = computeSeverity(definition);
     if (shouldEmitExplicit(section, definition, severity)) {
       rules[rule] = severity;
@@ -205,7 +207,7 @@ const findCustomSetting = (section, rule, setting) => {
   const definition = biomeRules[section]?.[rule];
 
   // Drop overrides for rules no longer in this section, or in non-selected domains
-  if (!(definition && hasSelectedDomain(definition))) {
+  if (!definition || !hasSelectedDomain(definition)) {
     return;
   }
 
@@ -215,7 +217,9 @@ const findCustomSetting = (section, rule, setting) => {
 
 const extractCustomSettings = (previousRules) => {
   const customSettings = {};
-  for (const [section, sectionRules] of Object.entries(previousRules ?? {})) {
+  const previousSections = Object.entries(previousRules ?? {});
+
+  for (const [section, sectionRules] of previousSections) {
     if (sectionRules && typeof sectionRules === 'object') {
       for (const [rule, setting] of Object.entries(sectionRules)) {
         const customSetting = findCustomSetting(section, rule, setting);

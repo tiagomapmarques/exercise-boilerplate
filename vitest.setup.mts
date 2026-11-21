@@ -16,6 +16,7 @@ const internalGlobal: {
   // biome-ignore lint/style/useNamingConvention: Internal Vitest API - `process.argv` is unavailable in the browser environment
   __vitest_worker__?: { config?: { watch?: unknown } };
 } = globalThis;
+// biome-ignore lint/nursery/noDanglingUnderscore: Internal Vitest API - `process.argv` is unavailable in the browser environment
 const internalVitestWatchFlag = internalGlobal.__vitest_worker__?.config?.watch;
 
 if (typeof internalVitestWatchFlag !== 'boolean') {

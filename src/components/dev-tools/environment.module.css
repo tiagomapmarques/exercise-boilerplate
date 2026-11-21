@@ -17,7 +17,6 @@ div.Environment {
     }
 
     @mixin container-larger-than $mantine-breakpoint-md {
-      /* biome-ignore lint/suspicious/noDuplicateCustomProperties: False positive */
       --sg-cols: 3;
     }
 

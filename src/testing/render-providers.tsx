@@ -87,9 +87,6 @@ const createRouterRenderProvider = (
 
   /** Function to wait for the router to finish loading the current route. */
   const waitForReady = async () => {
-    // Stays on the untyped `act`, so the suppression fails as unused once Biome
-    // picks the right overload - `./act` can go then.
-    // biome-ignore lint/nursery/useAwaitThenable: False positive
     await act(async () => latestLoadPromise);
   };
 
@@ -199,6 +196,7 @@ type ProgressBarValue = Omit<ProgressBarContextValue, 'actions'> & {
   actions: MockedObject<ProgressBarActions>;
 };
 
+// biome-ignore lint/nursery/useConsistentBooleanName: Matches the `props` parameter of the other render providers
 const createProgressBarRenderProvider = (props: boolean | undefined) => {
   if (!props) {
     return { provider: Fragment, result: undefined };

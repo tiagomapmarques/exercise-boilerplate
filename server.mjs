@@ -40,7 +40,6 @@ process.on('SIGINT', shutdown);
 
 // Run the server
 try {
-  // biome-ignore lint/nursery/useAwaitThenable: False positive
   await server.listen({
     host: '0.0.0.0',
     port: 8080,

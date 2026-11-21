@@ -3,7 +3,7 @@ engineStrict: true
 minimumReleaseAge: 4320 # 3 days
 
 allowBuilds:
-  '@biomejs/biome': true
+  "@biomejs/biome": true
   core-js: true
   esbuild: true
   oxc-resolver: true

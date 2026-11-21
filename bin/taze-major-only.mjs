@@ -3,7 +3,7 @@ import { CheckPackages } from 'taze';
 
 // biome-ignore lint/style/noRestrictedImports: Using taze programmatically does not read the config file automatically
 import tazeConfig from '../taze.config.mts';
-import { info, log } from './common/logs.mjs';
+import { log, logInfo } from './common/logs.mjs';
 import {
   highlightSemver,
   parseSemver,
@@ -30,6 +30,6 @@ if (majorUpdates.length === 0) {
       parseSemver(target),
       parseSemver(current),
     );
-    info(`Update ${name} to ${highlight} (current: ${current})`);
+    logInfo(`Update ${name} to ${highlight} (current: ${current})`);
   }
 }

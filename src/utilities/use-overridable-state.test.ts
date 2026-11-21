@@ -101,11 +101,11 @@ describe(useOverridableState, () => {
         initialProps: { external: 'a', toState: trackedToState },
       });
 
-      expect(trackedToState).toHaveBeenCalledOnce();
+      expect(trackedToState).toHaveBeenCalledExactlyOnceWith('a');
 
       rerender({ external: 'a', toState: trackedToState });
 
-      expect(trackedToState).toHaveBeenCalledOnce();
+      expect(trackedToState).toHaveBeenCalledExactlyOnceWith('a');
     });
   });
 

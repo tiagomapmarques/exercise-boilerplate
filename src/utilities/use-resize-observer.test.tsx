@@ -64,7 +64,7 @@ describe(useResizeObserver, () => {
 
     unmount();
 
-    expect(disconnect).toHaveBeenCalledOnce();
+    expect(disconnect).toHaveBeenCalledExactlyOnceWith();
   });
 
   it('reports nothing again once disabled', async () => {

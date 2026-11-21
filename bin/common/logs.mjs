@@ -22,17 +22,17 @@ const writeLine = (stream, prefix, args) => {
 };
 
 /** Logs a string to `stderr` with a red `[FAIL]` prefix. */
-export const error = (...args) => {
+export const logError = (...args) => {
   writeLine(process.stderr, `${redBackground('[FAIL]')} `, args);
 };
 
 /** Logs a string to `stderr` with a yellow `[WARN]` prefix. */
-export const warn = (...args) => {
+export const logWarning = (...args) => {
   writeLine(process.stderr, `${yellowBackground('[WARN]')} `, args);
 };
 
 /** Logs a string to `stdout` with a blue `[INFO]` prefix. */
-export const info = (...args) => {
+export const logInfo = (...args) => {
   writeLine(process.stdout, `${blueForeground('[INFO]')} `, args);
 };
 

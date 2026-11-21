@@ -3,7 +3,13 @@ import { exec as execCallback } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 import { promisify } from 'node:util';
 
-import { error, info, log, redBackground, warn } from './common/logs.mjs';
+import {
+  log,
+  logError,
+  logInfo,
+  logWarning,
+  redBackground,
+} from './common/logs.mjs';
 import {
   compareSemver,
   highlightSemver,
@@ -15,8 +21,8 @@ import {
 const execPromise = promisify(execCallback);
 
 const projectRoot = `${import.meta.dirname}/..`;
-const errorOnWarnings = process.argv.includes('--error-on-warnings');
-const offline = process.argv.includes('--offline');
+const shouldErrorOnWarnings = process.argv.includes('--error-on-warnings');
+const isOffline = process.argv.includes('--offline');
 const fetchTimeout = 5000;
 const stableVersionRegex = /^\d+\.\d+\.\d+$/u;
 
@@ -126,12 +132,12 @@ const issues = { info: 0, warn: 0, error: 0 };
 
 const checkForUpdate = ({ name, current, latest, severity }) => {
   if (!current) {
-    error(`\nCould not determine the current version of ${name}.\n`);
+    logError(`\nCould not determine the current version of ${name}.\n`);
     issues.error += 1;
     return;
   }
   if (!latest) {
-    error(`\nCould not determine the latest version of ${name}.\n`);
+    logError(`\nCould not determine the latest version of ${name}.\n`);
     issues.error += 1;
     return;
   }
@@ -145,7 +151,7 @@ const checkForUpdate = ({ name, current, latest, severity }) => {
   }
 
   if (ordering < 0) {
-    error(
+    logError(
       `\nCurrent version of ${name} (${redBackground(current)}) is invalid/unknown.\n`,
     );
     issues.error += 1;
@@ -155,26 +161,26 @@ const checkForUpdate = ({ name, current, latest, severity }) => {
   const highlight = highlightSemver(latestParsed, currentParsed);
   const message = `Update ${name} to ${highlight} (current: ${current})`;
 
-  if (severity === 'error' || (severity === 'warn' && errorOnWarnings)) {
-    error(message);
+  if (severity === 'error' || (severity === 'warn' && shouldErrorOnWarnings)) {
+    logError(message);
     issues.error += 1;
   } else if (severity === 'warn') {
-    warn(message);
+    logWarning(message);
     issues.warn += 1;
   } else {
-    info(message);
+    logInfo(message);
     issues.info += 1;
   }
 };
 
 const checkConsistency = ({ name, current, matches }) => {
   if (!current) {
-    error(`\nCould not determine the current version of ${name}.\n`);
+    logError(`\nCould not determine the current version of ${name}.\n`);
     issues.error += 1;
     return;
   }
   if (current !== matches) {
-    error(
+    logError(
       `\nCurrent version of ${name} is ${redBackground(current)}, expected ${matches}.\n`,
     );
     issues.error += 1;
@@ -182,8 +188,8 @@ const checkConsistency = ({ name, current, matches }) => {
 };
 
 const fetchLatestReleases = async () => {
-  if (offline) {
-    info('Skipping update checks (--offline)');
+  if (isOffline) {
+    logInfo('Skipping update checks (--offline)');
     return null;
   }
 
@@ -195,9 +201,9 @@ const fetchLatestReleases = async () => {
     ]);
 
     return { node, pnpm, alpine };
-  } catch (cause) {
-    warn(
-      `Skipping update checks - the published versions could not be read: ${cause.message}`,
+  } catch (error) {
+    logWarning(
+      `Skipping update checks - the published versions could not be read: ${error.message}`,
     );
     return null;
   }

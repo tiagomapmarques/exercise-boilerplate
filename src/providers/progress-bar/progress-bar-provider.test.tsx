@@ -41,11 +41,11 @@ describe(ProgressBarProvider, () => {
       },
     });
 
-    expect(createNprogress).toHaveBeenCalledOnce();
+    expect(createNprogress).toHaveBeenCalledExactlyOnceWith();
 
     rerender(<ProgressBarProvider />);
 
-    expect(createNprogress).toHaveBeenCalledOnce();
+    expect(createNprogress).toHaveBeenCalledExactlyOnceWith();
   });
 
   it('cleans up nProgress when unmounting', () => {
@@ -68,7 +68,7 @@ describe(ProgressBarProvider, () => {
 
     unmount();
 
-    expect(nProgress[1].cleanup).toHaveBeenCalledOnce();
+    expect(nProgress[1].cleanup).toHaveBeenCalledExactlyOnceWith();
   });
 
   it('works in tandem with `useProgressBar` and `ProgressBar`', () => {
@@ -122,7 +122,7 @@ describe(ProgressBarProvider, () => {
       },
     );
 
-    expect(createNprogress).toHaveBeenCalledOnce();
+    expect(createNprogress).toHaveBeenCalledExactlyOnceWith();
     expect(context?.store).toBe(store);
     expect(initialActions.set).not.toHaveBeenCalled();
 
@@ -135,7 +135,7 @@ describe(ProgressBarProvider, () => {
 
     unmount();
 
-    expect(initialActions.cleanup).toHaveBeenCalledOnce();
+    expect(initialActions.cleanup).toHaveBeenCalledExactlyOnceWith();
   });
 
   it('can be used multiple times on a single page', () => {

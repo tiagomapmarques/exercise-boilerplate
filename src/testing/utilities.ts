@@ -1,7 +1,7 @@
 /** biome-ignore-all lint/style/noRestrictedImports: Sub-module imports intentional */
 import type { Messages } from '@lingui/core';
 import { DEFAULT_THEME, type MantineBreakpoint } from '@mantine/core';
-import { waitFor } from '@testing-library/react';
+import { act, waitFor } from '@testing-library/react';
 import { page } from 'vitest/browser';
 
 import { messages as messagesDeDe } from '@/locales/de-DE.po';
@@ -10,8 +10,6 @@ import { messages as messagesEsEs } from '@/locales/es-ES.po';
 import { messages as messagesFrFr } from '@/locales/fr-FR.po';
 import { messages as messagesItIt } from '@/locales/it-IT.po';
 import type { Locale } from '@/providers/locale/constants.mts';
-
-import { act } from './act';
 
 const pixelsPerEm = 16;
 const viewportHeight = 800;
@@ -97,7 +95,7 @@ export const mockObjectProperty = <
   }
   const descriptor = Object.getOwnPropertyDescriptor(prototype, property);
 
-  if (!(descriptor?.set && descriptor.get)) {
+  if (!descriptor?.set || !descriptor.get) {
     throw new Error(
       `mockObjectProperty: '${property}' must be a read/write accessor on the prototype chain of the given object`,
     );

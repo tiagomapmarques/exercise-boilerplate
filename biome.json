@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.5.15/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.6.8/schema.json",
   "files": {
     "ignoreUnknown": false,
     "includes": [
@@ -55,12 +55,16 @@
             "skipBlankLines": true
           }
         },
+        "noExcessiveNestedCallbacks": "warn",
         "noExcessiveNestedTestSuites": "warn",
+        "noExcessiveSelectorClasses": "warn",
         "noExtraBooleanCast": "warn",
         "noFlatMapIdentity": "warn",
         "noForEach": "warn",
         "noImplicitCoercions": "warn",
+        "noPlaywrightUselessAwait": "warn",
         "noRedundantDefaultExport": "warn",
+        "noUnnecessaryTemplateExpression": "warn",
         "noUselessCatch": "warn",
         "noUselessCatchBinding": "warn",
         "noUselessConstructor": "warn",
@@ -82,11 +86,13 @@
         "noUselessUndefinedInitialization": "warn",
         "noVoid": "warn",
         "useArrayFind": "warn",
+        "useArraySome": "warn",
         "useFlatMap": "warn",
         "useIndexOf": "warn",
         "useLiteralKeys": "warn",
         "useMaxParams": "warn",
-        "useSimplifiedLogicExpression": "warn",
+        "useRegexpTest": "warn",
+        "useSimplifiedLogicExpression": "off",
         "useWhile": "warn"
       },
       "correctness": {
@@ -119,7 +125,8 @@
         "useTopLevelRegex": "warn"
       },
       "security": {
-        "noSecrets": "warn"
+        "noSecrets": "warn",
+        "useIframeSandbox": "error"
       },
       "style": {
         "noCommonJs": "warn",
@@ -140,6 +147,7 @@
         "noImplicitBoolean": "off",
         "noIncrementDecrement": "warn",
         "noInferrableTypes": "warn",
+        "noInlineStyles": "warn",
         "noJsxLiterals": "warn",
         "noMagicNumbers": "warn",
         "noMultiAssign": "warn",
@@ -149,6 +157,9 @@
         "noNestedTernary": "warn",
         "noParameterAssign": "warn",
         "noParameterProperties": "warn",
+        "noPlaywrightElementHandle": "warn",
+        "noPlaywrightEval": "warn",
+        "noPlaywrightWaitForSelector": "warn",
         "noProcessEnv": "warn",
         "noRestrictedGlobals": "warn",
         "noRestrictedImports": {
@@ -187,6 +198,7 @@
         "noShoutyConstants": "warn",
         "noSubstr": "warn",
         "noTernary": "off",
+        "noTopLevelLiterals": "warn",
         "noUnusedTemplateLiteral": "warn",
         "noUselessElse": "warn",
         "noValueAtRule": "warn",
@@ -211,6 +223,7 @@
         },
         "useConsistentMethodSignatures": "warn",
         "useConsistentObjectDefinitions": "warn",
+        "useConsistentTestIt": "warn",
         "useConsistentTypeDefinitions": {
           "level": "error",
           "options": {
@@ -220,6 +233,7 @@
         "useDefaultParameterLast": "warn",
         "useDefaultSwitchClause": "warn",
         "useDestructuring": "warn",
+        "useDomQuerySelector": "warn",
         "useEnumInitializers": "warn",
         "useErrorCause": "warn",
         "useExplicitLengthCheck": "warn",
@@ -236,8 +250,10 @@
         "useGlobalThis": "warn",
         "useGraphqlNamingConvention": "warn",
         "useGroupedAccessorPairs": "warn",
+        "useImportsFirst": "warn",
         "useInputName": "warn",
         "useLoneExecutableDefinition": "warn",
+        "useNamedCaptureGroup": "warn",
         "useNamingConvention": {
           "level": "warn",
           "options": {
@@ -251,6 +267,7 @@
         "useObjectSpread": "warn",
         "useReactFunctionComponents": "warn",
         "useReadonlyClassProperties": "warn",
+        "useReduceTypeParameter": "warn",
         "useSelfClosingElements": "warn",
         "useShorthandAssign": "warn",
         "useShorthandFunctionType": "warn",
@@ -258,10 +275,15 @@
         "useSpreadOverApply": "warn",
         "useSymbolDescription": "warn",
         "useTemplate": "warn",
+        "useTestHooksInOrder": "warn",
+        "useTestHooksOnTop": "warn",
+        "useThisInClassMethods": "warn",
         "useThrowNewError": "warn",
         "useThrowOnlyError": "warn",
         "useTrimStartEnd": "warn",
-        "useUnifiedTypeSignatures": "warn"
+        "useUnicodeRegex": "warn",
+        "useUnifiedTypeSignatures": "warn",
+        "useVarsOnTop": "warn"
       },
       "suspicious": {
         "noAlert": "warn",
@@ -272,11 +294,14 @@
         "noDuplicateFields": "warn",
         "noDuplicateGraphqlOperationName": "warn",
         "noDuplicateProperties": "off",
+        "noDuplicateSelectors": "warn",
         "noEmptyBlockStatements": "warn",
+        "noEmptyObjectKeys": "warn",
         "noEmptySource": "warn",
         "noEqualsToNull": "warn",
         "noEvolvingTypes": "warn",
         "noForIn": "warn",
+        "noLoopFunc": "warn",
         "noMisplacedAssertion": "warn",
         "noNestedPromises": "warn",
         "noParametersOnlyUsedInRecursion": "warn",
@@ -288,6 +313,7 @@
         "noUnusedExpressions": "warn",
         "noVar": "warn",
         "useAwait": "warn",
+        "useBaseline": "warn",
         "useDeprecatedDate": "warn",
         "useErrorMessage": "warn",
         "useGuardForIn": "warn",
@@ -298,81 +324,130 @@
       },
       "nursery": {
         "noBaseToString": "warn",
+        "noBufferConstructor": "warn",
         "noBunModules": "warn",
-        "noComponentHookFactories": "error",
-        "noConditionalExpect": "warn",
-        "noDuplicateFieldDefinitionNames": "warn",
-        "noDuplicateSelectors": "warn",
-        "noEmptyObjectKeys": "warn",
-        "noExcessiveNestedCallbacks": "warn",
-        "noExcessiveSelectorClasses": "warn",
+        "noDanglingUnderscore": "warn",
+        "noDisabledAttribute": "warn",
+        "noDynamicDelete": "warn",
+        "noDynamicRequire": "warn",
+        "noExcessiveNestedBlocks": "warn",
+        "noExcessiveSelectorComplexity": "warn",
+        "noExcessiveStatementsPerFunction": {
+          "level": "warn",
+          "options": {
+            "max": 30
+          }
+        },
         "noExtendNative": "warn",
         "noFloatingPromises": "warn",
-        "noIdenticalTestTitle": "warn",
-        "noInlineStyles": "warn",
         "noInvalidFileInputAccept": "error",
         "noInvalidPropertyInitValue": "warn",
-        "noJsRestrictedProperties": "warn",
-        "noJsxLeakedDollar": "warn",
-        "noJsxNamespace": "warn",
-        "noLoopFunc": "warn",
+        "noInvalidThis": "warn",
+        "noJsRestrictedProperties": {
+          "level": "warn",
+          "options": {
+            "entries": [
+              {
+                "object": "vi",
+                "property": "spyOn",
+                "message": "Wrap the original with `vi.fn()` instead."
+              }
+            ]
+          }
+        },
+        "noMagicArrayFlatDepth": "warn",
+        "noMapSpread": "off",
         "noMeaninglessVoidOperator": "warn",
         "noMisleadingReturnType": "warn",
+        "noMismatchedMapKey": "warn",
+        "noMissingScssInterpolation": "error",
         "noMisusedPromises": "warn",
+        "noMisusedSpread": "warn",
+        "noNegatedArrayPredicate": "off",
         "noNegationInEqualityCheck": "warn",
+        "noNestedSwitch": "warn",
+        "noNestedTemplateLiterals": "warn",
+        "noNewArray": "warn",
+        "noNewRequire": "warn",
         "noNonScalableViewport": "error",
+        "noNull": "off",
+        "noObjectConstructor": "warn",
         "noObsoleteTags": "warn",
-        "noPlaywrightElementHandle": "warn",
-        "noPlaywrightEval": "warn",
-        "noPlaywrightForceOption": "warn",
-        "noPlaywrightMissingAwait": "warn",
-        "noPlaywrightNetworkidle": "warn",
-        "noPlaywrightPagePause": "warn",
-        "noPlaywrightUselessAwait": "warn",
-        "noPlaywrightWaitForNavigation": "warn",
-        "noPlaywrightWaitForSelector": "warn",
-        "noPlaywrightWaitForTimeout": "warn",
+        "noPlaywrightNthMethods": "warn",
+        "noPlaywrightUnsafeReferences": "error",
+        "noProcessExit": "warn",
+        "noPromiseExecutorReturn": "warn",
+        "noPseudoElementInFunctionalPseudoClass": "error",
+        "noReactDirectStateMutation": "error",
         "noReactObjectTypeAsDefaultProp": "error",
-        "noReactStringRefs": "warn",
         "noRestrictedDependencies": "warn",
         "noReturnInFinally": "warn",
+        "noScssNullComparison": "warn",
         "noSelfImport": "error",
+        "noSelfNestedLayer": "warn",
+        "noSharedBranchCode": "warn",
+        "noShortTimeValues": "warn",
+        "noSyncMethods": "off",
         "noThisOutsideOfClass": "warn",
-        "noTopLevelLiterals": "warn",
         "noUndeclaredClasses": "warn",
         "noUndeclaredCustomProperties": "off",
         "noUnmodifiedLoopCondition": "warn",
-        "noUnnecessaryTemplateExpression": "warn",
+        "noUnnecessaryStringTrim": "warn",
+        "noUnreadableForOfExpression": "warn",
+        "noUnreadableIife": "warn",
+        "noUnresolvedDefaultImport": "error",
         "noUnsafePlusOperands": "warn",
+        "noUnsafeReturn": "warn",
         "noUnsafeTypeAssertion": "error",
-        "noUntrustedLicenses": "warn",
+        "noUnsafeUnaryMinus": "warn",
         "noUnusedClasses": "off",
+        "noUselessAwait": "warn",
+        "noUselessCall": "warn",
+        "noUselessLengthCheck": "warn",
+        "noUselessParameterPropertyAssignment": "warn",
+        "noUselessQualifier": "warn",
+        "noUselessRecursion": "warn",
+        "noUselessSpread": "warn",
+        "noUselessTypeAssertion": "warn",
         "noUselessTypeConversion": "warn",
-        "useArraySome": "warn",
+        "noZeroFractions": "warn",
+        "noZeroLengthUnit": "warn",
+        "useAccessorPairs": "warn",
+        "useAtomicUpdates": "warn",
         "useAwaitThenable": "warn",
-        "useBaseline": "warn",
         "useBetterDomTraversing": "warn",
+        "useBlockStatementOverIife": "warn",
+        "useCalledWith": "warn",
+        "useCatchErrorName": "warn",
+        "useConsistentBooleanName": "warn",
+        "useConsistentFontWeightNotation": "warn",
         "useConsistentFunctionStyle": "warn",
-        "useConsistentTestIt": "warn",
+        "useConsistentHeadingLevel": "warn",
+        "useConsistentJsonFileRead": "warn",
+        "useConsistentLightnessNotation": "warn",
+        "useConsistentTupleLabels": "warn",
+        "useConsistentUnicodeBom": "warn",
         "useControlLabel": "error",
         "useDisposables": "warn",
-        "useDomNodeTextContent": "warn",
-        "useDomQuerySelector": "warn",
         "useExhaustiveSwitchCases": "warn",
-        "useExpect": "warn",
+        "useExpectToContain": "warn",
+        "useExpectToHaveBeenCalled": "warn",
+        "useExpectToHaveBeenCalledTimes": "warn",
         "useExplicitReturnType": "off",
         "useExplicitType": "off",
-        "useIframeSandbox": "warn",
-        "useImportsFirst": "warn",
+        "useFencedCodeLanguage": "warn",
         "useIncludes": "warn",
+        "useIteratorZip": "warn",
         "useLayeredStyles": "off",
         "useLogicalProperties": "warn",
-        "useNamedCaptureGroup": "warn",
+        "useLowercaseTestTitle": "warn",
+        "useMatchingFunctionName": "warn",
+        "useNamedFunction": "warn",
         "useNamedLayer": "warn",
         "useNullishCoalescing": "warn",
-        "usePlaywrightValidDescribeCallback": "warn",
+        "usePackageJsonCpu": "off",
+        "usePackageJsonEngines": "warn",
         "usePromiseRejectErrors": "warn",
-        "useReactAsyncServerFunction": "warn",
         "useReactCompiler": "warn",
         "useReactFunctionComponentDefinition": {
           "level": "warn",
@@ -381,18 +456,18 @@
           }
         },
         "useReactNamingConvention": "warn",
-        "useReduceTypeParameter": "warn",
         "useRegexpExec": "warn",
-        "useRegexpTest": "warn",
-        "useSortedClasses": "warn",
+        "useSimplifiedBooleanReturn": "warn",
+        "useSingleTopLevelHeading": "warn",
+        "useSpyOn": "off",
         "useStrictBooleanExpressions": "off",
         "useStringStartsEndsWith": "warn",
-        "useTestHooksInOrder": "warn",
-        "useTestHooksOnTop": "warn",
-        "useThisInClassMethods": "warn",
-        "useUnicodeRegex": "warn",
+        "useTanstackQueryStableQueryClient": "error",
+        "useTopLevelHeading": "warn",
+        "useTopLevelRequire": "warn",
+        "useValidNamespaceImports": "error",
         "useValidTestTitle": "off",
-        "useVarsOnTop": "warn"
+        "useWhileLoopCondition": "warn"
       }
     }
   },
@@ -459,6 +534,10 @@
           },
           "style": {
             "noProcessEnv": "off"
+          },
+          "nursery": {
+            "noProcessExit": "off",
+            "noUnsafeReturn": "off"
           }
         }
       }
@@ -481,7 +560,8 @@
             "noExcessiveLinesPerFunction": "off"
           },
           "correctness": {
-            "useUniqueElementIds": "off"
+            "useUniqueElementIds": "off",
+            "noComponentHookFactories": "off"
           },
           "performance": {
             "useTopLevelRegex": "off"
@@ -517,10 +597,7 @@
                   }
                 ]
               }
-            }
-          },
-          "nursery": {
-            "noComponentHookFactories": "off",
+            },
             "useNamedCaptureGroup": "off"
           }
         }
@@ -559,9 +636,7 @@
                   }
                 ]
               }
-            }
-          },
-          "nursery": {
+            },
             "useConsistentTestIt": {
               "level": "error",
               "options": {

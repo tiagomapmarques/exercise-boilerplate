@@ -29,7 +29,7 @@ export type LocaleProviderProps = PropsWithChildren<
 export const LocaleProvider = ({
   initialLocale,
   initialMessages,
-  fallback = null,
+  fallback,
   children,
 }: LocaleProviderProps) => {
   const [i18n, setI18n] = useState<I18n | null>(() => {

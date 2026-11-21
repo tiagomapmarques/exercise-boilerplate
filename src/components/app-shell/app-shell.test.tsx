@@ -258,8 +258,8 @@ describe(AppShell, () => {
 
       await act(() => router.navigate({ to: '/about' }));
 
-      expect(start).toHaveBeenCalledOnce();
-      expect(complete).toHaveBeenCalledOnce();
+      expect(start).toHaveBeenCalledExactlyOnceWith();
+      expect(complete).toHaveBeenCalledExactlyOnceWith();
     });
 
     it('does not move the progress bar when navigating to the current route', async () => {
@@ -301,8 +301,8 @@ describe(AppShell, () => {
 
       await act(() => router.navigate({ to: '/about' }));
 
-      expect(start).toHaveBeenCalledOnce();
-      expect(complete).toHaveBeenCalledOnce();
+      expect(start).toHaveBeenCalledExactlyOnceWith();
+      expect(complete).toHaveBeenCalledExactlyOnceWith();
     });
   });
 

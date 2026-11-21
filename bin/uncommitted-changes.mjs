@@ -1,17 +1,17 @@
 #!/usr/bin/env node
 import { execSync } from 'node:child_process';
 
-import { error, log, warn } from './common/logs.mjs';
+import { log, logError, logWarning } from './common/logs.mjs';
 
 try {
   execSync('git --version');
 } catch {
-  error('git not found in PATH');
+  logError('git not found in PATH');
   process.exit(1);
 }
 
 const projectRoot = `${import.meta.dirname}/..`;
-const errorOnWarnings = process.argv.includes('--error-on-warnings');
+const shouldErrorOnWarnings = process.argv.includes('--error-on-warnings');
 const output = execSync('git status --porcelain -- .', { cwd: projectRoot })
   .toString()
   .trim();
@@ -23,8 +23,8 @@ if (!output) {
 
 const message = `\nUncommitted changes found:\n  ${output.replaceAll('\n', '\n  ')}\n`;
 
-if (errorOnWarnings) {
-  error(message);
+if (shouldErrorOnWarnings) {
+  logError(message);
   process.exit(1);
 }
-warn(message);
+logWarning(message);

@@ -57,17 +57,19 @@ describe(LocaleProvider, () => {
       { providers: { i18n: false, mantine: false } },
     );
 
-    expect(loadLocale).toHaveBeenCalledOnce();
-    const [i18n] = vi.mocked(loadLocale).mock.calls[0];
-
-    expect(i18n?.locale).toBe('');
-    expect(i18n?.messages).toEqual({});
+    expect(loadLocale).toHaveBeenCalledExactlyOnceWith(
+      expect.objectContaining({ locale: '', messages: {} }),
+    );
     expect(screen.queryByTestId('Content')).not.toBeInTheDocument();
 
     await act(() => loader.resolve());
 
-    expect(i18n?.locale).toBe('custom-locale');
-    expect(i18n?.messages).toEqual({ 'mock-key': 'Mock Value' });
+    expect(loadLocale).toHaveBeenCalledExactlyOnceWith(
+      expect.objectContaining({
+        locale: 'custom-locale',
+        messages: { 'mock-key': 'Mock Value' },
+      }),
+    );
     expect(screen.getByTestId('Content')).toBeVisible();
   });
 
@@ -98,7 +100,7 @@ describe(LocaleProvider, () => {
 
     await act(() => loader.resolve());
 
-    expect(loadLocale).toHaveBeenCalledOnce();
+    expect(loadLocale).toHaveBeenCalledExactlyOnceWith(expect.anything());
 
     rerender(
       <LocaleProvider>
@@ -106,7 +108,7 @@ describe(LocaleProvider, () => {
       </LocaleProvider>,
     );
 
-    expect(loadLocale).toHaveBeenCalledOnce();
+    expect(loadLocale).toHaveBeenCalledExactlyOnceWith(expect.anything());
   });
 
   it('accepts initial locale and messages', () => {
@@ -226,9 +228,7 @@ describe(LocaleProvider, () => {
     const errorObject = new Error('Custom error');
 
     beforeEach(() => {
-      vi.mocked(loadLocale).mockImplementation(
-        () => new Promise((_, reject) => reject(errorObject)),
-      );
+      vi.mocked(loadLocale).mockRejectedValue(errorObject);
     });
 
     it('handles errors loading locale/messages', async () => {

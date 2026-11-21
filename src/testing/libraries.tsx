@@ -1,6 +1,7 @@
 /** biome-ignore-all lint/style/noRestrictedImports: Sub-module imports intentional */
 import type { ReactNode } from 'react';
 import {
+  act,
   render as baseRender,
   renderHook as baseRenderHook,
   type RenderHookOptions,
@@ -9,7 +10,6 @@ import {
 import type { UserEventTabOptions } from 'vitest/browser';
 import { userEvent as baseUserEvent } from 'vitest/browser';
 
-import { act } from './act';
 import {
   type CreateWrapperProps,
   createWrapper,
@@ -21,8 +21,6 @@ export * from '@testing-library/react';
 export * from 'vitest';
 export type { PrettyDOMOptions } from 'vitest/browser';
 export * from 'vitest/browser';
-
-export { act } from './act';
 
 /** `userEvent` from `vitest/browser` with every method wrapped in `act` to flush React state updates before assertions. */
 export const userEvent: typeof baseUserEvent = new Proxy(baseUserEvent, {
@@ -92,6 +90,8 @@ export const renderHook = <HookReturn, HookProps>(
 /** Waits `timeout` milliseconds inside `act`, so any state update in that time is flushed. */
 export const waitForTimeout = async (timeout: number) => {
   await act(async () => {
-    await new Promise((resolve) => setTimeout(resolve, timeout));
+    await new Promise((resolve) => {
+      setTimeout(resolve, timeout);
+    });
   });
 };

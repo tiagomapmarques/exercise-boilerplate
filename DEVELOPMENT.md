@@ -15,7 +15,7 @@ each other, one of them is a defect - decide which, then fix it.
 
 ## Project structure
 
-```
+```text
 src/
   components/   Reusable UI components
   pages/        Page components that own a route's logic
@@ -199,12 +199,12 @@ namespace that best describes the string's role. This convention applies to
 production keys only - test message keys are free-form. Use `generic` as the
 context for strings reused across multiple features.
 
-| Namespace | Used for |
-|---|---|
-| `pages.<page>.<slot>` | Page-specific strings - `title`, `content`, `instructions` |
-| `labels.<context>.<name>` | Short UI labels that name an element - app name, menu |
-| `messages.<context>.<name>` | Status and feedback messages - loading, error |
-| `actions.<context>.<name>` | Interactive labels - button text, link text |
+| Namespace                   | Used for                                                   |
+| --------------------------- | ---------------------------------------------------------- |
+| `pages.<page>.<slot>`       | Page-specific strings - `title`, `content`, `instructions` |
+| `labels.<context>.<name>`   | Short UI labels that name an element - app name, menu      |
+| `messages.<context>.<name>` | Status and feedback messages - loading, error              |
+| `actions.<context>.<name>`  | Interactive labels - button text, link text                |
 
 ## Styling
 
@@ -273,7 +273,7 @@ own are free to return a plain flag.
 
 A typical provider module looks like this:
 
-```
+```text
 providers/my-feature/
   context.ts               Context object and type definitions
   my-feature-provider.tsx  Provider component
@@ -555,7 +555,7 @@ are fine - it is the render itself that stays in plain sight.
 Pass the hook directly - never wrap it in an arrow function:
 
 ```ts
-renderHook(useMyHook, options);         // correct
+renderHook(useMyHook, options); // correct
 renderHook(() => useMyHook(), options); // wrong
 ```
 

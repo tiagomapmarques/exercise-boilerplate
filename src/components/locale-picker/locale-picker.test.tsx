@@ -144,10 +144,10 @@ describe(LocalePicker, () => {
       screen.getByRole('menuitem', { name: 'Great Britain English (GB)' }),
     );
 
-    expect(start).toHaveBeenCalledOnce();
+    expect(start).toHaveBeenCalledExactlyOnceWith();
 
     await waitFor(() => {
-      expect(complete).toHaveBeenCalledOnce();
+      expect(complete).toHaveBeenCalledExactlyOnceWith();
     });
   });
 

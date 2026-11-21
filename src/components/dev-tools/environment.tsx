@@ -14,12 +14,12 @@ import classes from './environment.module.css';
 export const Environment = () => {
   const environment = Object.entries({ ...import.meta.env }).toSorted(
     ([left], [right]) => {
-      const leftStarts = left.startsWith('VITE_');
-      const rightStarts = right.startsWith('VITE_');
-      if (leftStarts === rightStarts) {
+      const isLeftVite = left.startsWith('VITE_');
+      const isRightVite = right.startsWith('VITE_');
+      if (isLeftVite === isRightVite) {
         return 0;
       }
-      return leftStarts ? -1 : 1;
+      return isLeftVite ? -1 : 1;
     },
   );
 

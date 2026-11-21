@@ -77,7 +77,7 @@ describe(BurgerMenu, () => {
 
     await userEvent.click(screen.getByRole('button', { name: 'Menu' }));
 
-    expect(setOpened).toHaveBeenCalledOnce();
+    expect(setOpened).toHaveBeenCalledExactlyOnceWith(expect.any(Function));
     expect(setOpened.mock.results[0].value).toBe(true);
 
     setOpened.mockImplementation((update) => update(true));

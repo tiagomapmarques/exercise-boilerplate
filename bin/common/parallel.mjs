@@ -4,7 +4,7 @@ const concurrency = availableParallelism();
 
 /** Maps `items` through `mapper` with a sensible concurrency limit. */
 export const parallelMap = async (items, mapper) => {
-  const results = new Array(items.length);
+  const results = Array.from({ length: items.length });
   let cursor = 0;
 
   const next = async () => {
